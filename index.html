@@ -1,0 +1,1738 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#2742C2">
+<title>مسار A1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Readex+Pro:wght@300;400;500;600;700&display=swap">
+<style>
+:root{
+  --paper:#F3F5FA; --card:#FFFFFF; --sunk:#E9EDF5; --ink:#141D33; --ink2:#4B5670; --ink3:#7B859C; --line:#D9DFEA;
+  --accent:#2742C2; --accent-ink:#FFFFFF; --accent-soft:#E3E8FB;
+  --hi:#FFD84A; --hi-ink:#231A00;
+  --ok:#17875A; --ok-soft:#DDF3E8; --bad:#C63A3A; --bad-soft:#FBE3E3; --warn:#B26A00; --warn-soft:#FFF0D6;
+  --t-memo:#6D3FD0; --t-memo-bg:#EDE6FB; --t-und:#1F63C4; --t-und-bg:#E1ECFB; --t-rep:#C45F0C; --t-rep-bg:#FCEBDC;
+  --t-focus:#0B7F80; --t-focus-bg:#DCF2F2; --t-bg:#5F6A84; --t-bg-bg:#E8EBF1; --t-read:#2C7A2C; --t-read-bg:#E3F2E0;
+  --t-write:#B3336D; --t-write-bg:#F9E2EC; --t-test:#141D33; --t-test-bg:#DDE1EA;
+  --shadow:0 1px 2px rgba(20,29,51,.06),0 6px 24px -12px rgba(20,29,51,.18);
+  --r:14px; --r-sm:10px;
+  --f-ar:"IBM Plex Sans Arabic","Readex Pro",Tahoma,"Segoe UI",sans-serif;
+  --f-disp:"Readex Pro","IBM Plex Sans Arabic",Tahoma,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --paper:#0D1220; --card:#161D31; --sunk:#1D2640; --ink:#E9EDF7; --ink2:#A7B1C9; --ink3:#7C87A1; --line:#28324E;
+    --accent:#8FA2FF; --accent-ink:#0D1220; --accent-soft:#232E55;
+    --hi:#F5CD3D; --hi-ink:#1D1600;
+    --ok:#4CC990; --ok-soft:#133A2A; --bad:#FF7A7A; --bad-soft:#402020; --warn:#F2B04C; --warn-soft:#3A2C12;
+    --t-memo:#B79BFF; --t-memo-bg:#2B2250; --t-und:#83B3FF; --t-und-bg:#1B2B4B; --t-rep:#FFAD6B; --t-rep-bg:#3B2717;
+    --t-focus:#5FD6D6; --t-focus-bg:#113536; --t-bg:#A9B3CB; --t-bg-bg:#252D44; --t-read:#83D683; --t-read-bg:#1B3620;
+    --t-write:#FF8DBD; --t-write-bg:#3E1D2E; --t-test:#E9EDF7; --t-test-bg:#2E3753;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 28px -14px rgba(0,0,0,.6);
+  }
+}
+:root[data-theme="dark"]{
+    color-scheme:dark;
+    --paper:#0D1220; --card:#161D31; --sunk:#1D2640; --ink:#E9EDF7; --ink2:#A7B1C9; --ink3:#7C87A1; --line:#28324E;
+    --accent:#8FA2FF; --accent-ink:#0D1220; --accent-soft:#232E55;
+    --hi:#F5CD3D; --hi-ink:#1D1600;
+    --ok:#4CC990; --ok-soft:#133A2A; --bad:#FF7A7A; --bad-soft:#402020; --warn:#F2B04C; --warn-soft:#3A2C12;
+    --t-memo:#B79BFF; --t-memo-bg:#2B2250; --t-und:#83B3FF; --t-und-bg:#1B2B4B; --t-rep:#FFAD6B; --t-rep-bg:#3B2717;
+    --t-focus:#5FD6D6; --t-focus-bg:#113536; --t-bg:#A9B3CB; --t-bg-bg:#252D44; --t-read:#83D683; --t-read-bg:#1B3620;
+    --t-write:#FF8DBD; --t-write-bg:#3E1D2E; --t-test:#E9EDF7; --t-test-bg:#2E3753;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 28px -14px rgba(0,0,0,.6);
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+img{max-width:100%}
+body{margin:0}
+.btn.rec{background:var(--bad);border-color:var(--bad);color:#fff;animation:pulse 1.2s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.75}}
+audio{vertical-align:middle}
+html,body{background:var(--paper)}
+body{color:var(--ink);font-family:var(--f-ar);font-size:15px;line-height:1.65;-webkit-font-smoothing:antialiased;padding-bottom:calc(76px + env(safe-area-inset-bottom,0px))}
+button,input,textarea,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2.5px solid var(--accent);outline-offset:2px;border-radius:6px}
+a{color:var(--accent)}
+.en{font-family:var(--f-disp);direction:ltr;unicode-bidi:isolate;text-align:left}
+.wrap{max-width:760px;margin:0 auto;padding-inline:16px}
+.num{font-variant-numeric:tabular-nums}
+
+/* header */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--paper);background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:10px;padding-block:10px}
+.brand{font-family:var(--f-disp);font-weight:700;font-size:18px;letter-spacing:-.01em;display:flex;align-items:center;gap:8px}
+.brand .mark{display:inline-grid;place-items:center;height:28px;padding-inline:7px;border-radius:8px;background:var(--hi);color:var(--hi-ink);font-size:14px;font-weight:700;direction:ltr}
+.sync{margin-inline-start:auto;font-size:12px;color:var(--ink3);display:flex;align-items:center;gap:6px;white-space:nowrap}
+.sync i{width:8px;height:8px;border-radius:50%;background:var(--ink3);display:inline-block}
+.sync.cloud i{background:var(--ok)} .sync.local i{background:var(--warn)} .sync.err i{background:var(--bad)}
+.icon-btn{border:1px solid var(--line);background:var(--card);border-radius:10px;height:34px;min-width:34px;padding-inline:9px;display:inline-grid;place-items:center;font-size:13px;color:var(--ink2)}
+
+/* bottom nav */
+.nav{position:fixed;bottom:0;inset-inline:0;z-index:30;background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+.nav .wrap{display:grid;grid-template-columns:repeat(5,1fr);padding-inline:6px}
+.nav button{border:0;background:none;padding:8px 2px 9px;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11.5px;color:var(--ink3);font-weight:500}
+.nav button svg{width:22px;height:22px}
+.nav button[aria-current="page"]{color:var(--accent)}
+.nav button[aria-current="page"] svg{stroke-width:2.2}
+
+main{padding-block:18px 28px}
+.stack{display:flex;flex-direction:column;gap:14px}
+h1,h2,h3{font-family:var(--f-disp);text-wrap:balance;margin:0;line-height:1.3}
+h2{font-size:19px;font-weight:600}
+h3{font-size:16px;font-weight:600}
+.muted{color:var(--ink2)} .small{font-size:13px} .tiny{font-size:12px;color:var(--ink3)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px}
+.card.lift{box-shadow:var(--shadow)}
+.row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.between{justify-content:space-between}
+.grow{flex:1 1 auto;min-width:0}
+.eyebrow{font-size:12px;letter-spacing:.04em;color:var(--ink3);font-weight:600}
+
+/* day hero */
+.dayhero{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center}
+.daynum{isolation:isolate;font-family:var(--f-disp);font-weight:700;font-size:56px;line-height:.9;letter-spacing:-.04em;direction:ltr;position:relative;padding:4px 6px 0}
+.daynum::after{content:"";position:absolute;inset-inline:0;bottom:6px;height:16px;background:var(--hi);opacity:.85;z-index:-1;border-radius:3px}
+.daynum small{font-size:15px;color:var(--ink3);letter-spacing:0;font-weight:500}
+.dayhero .topic{font-size:20px;font-family:var(--f-disp);font-weight:600}
+.bar{height:8px;border-radius:99px;background:var(--sunk);overflow:hidden}
+.bar b{display:block;height:100%;background:var(--accent);border-radius:99px;transition:width .4s}
+.bar.ok b{background:var(--ok)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.stat{background:var(--sunk);border-radius:var(--r-sm);padding:10px 12px}
+.stat b{display:block;font-family:var(--f-disp);font-size:20px;font-weight:600;font-variant-numeric:tabular-nums}
+.stat span{font-size:12px;color:var(--ink2)}
+
+/* segmented */
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;background:var(--sunk);padding:4px;border-radius:12px}
+.seg button{border:0;background:none;border-radius:9px;padding:8px 4px;font-weight:600;font-size:14px;color:var(--ink2);line-height:1.3}
+.seg button small{display:block;font-weight:400;font-size:11.5px;color:var(--ink3)}
+.seg button[aria-pressed="true"]{background:var(--card);color:var(--ink);box-shadow:var(--shadow)}
+
+/* tags */
+.tag{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:600;border-radius:99px;padding:1px 9px;white-space:nowrap;line-height:1.7}
+.tag.memo{color:var(--t-memo);background:var(--t-memo-bg)} .tag.und{color:var(--t-und);background:var(--t-und-bg)}
+.tag.rep{color:var(--t-rep);background:var(--t-rep-bg)} .tag.focus{color:var(--t-focus);background:var(--t-focus-bg)}
+.tag.bg{color:var(--t-bg);background:var(--t-bg-bg)} .tag.read{color:var(--t-read);background:var(--t-read-bg)}
+.tag.write{color:var(--t-write);background:var(--t-write-bg)} .tag.test{color:var(--t-test);background:var(--t-test-bg)}
+.tag.min{color:var(--ink2);background:transparent;border:1px solid var(--line);font-weight:500}
+
+/* tasks */
+.group-h{display:flex;align-items:baseline;gap:8px;margin:4px 2px -4px}
+.group-h h3{font-size:15px}
+.tasks{display:flex;flex-direction:column;background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.task{display:grid;grid-template-columns:auto 1fr;gap:12px;padding:13px 14px;border-top:1px solid var(--line)}
+.task:first-child{border-top:0}
+.task .chk{width:26px;height:26px;border-radius:8px;border:2px solid var(--line);background:var(--card);display:grid;place-items:center;margin-top:2px;padding:0}
+.task .chk svg{width:16px;height:16px;opacity:0;color:var(--accent-ink)}
+.task.done .chk{background:var(--ok);border-color:var(--ok)}
+.task.done .chk svg{opacity:1}
+.task.done .t-title{text-decoration:line-through;text-decoration-color:var(--ink3);color:var(--ink2)}
+.t-title{font-weight:600;font-size:15px}
+.t-how{font-size:13.5px;color:var(--ink2);margin-top:2px}
+.t-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;align-items:center}
+.t-act{margin-top:8px;display:flex;gap:8px;flex-wrap:wrap}
+
+.btn{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:7px 13px;font-weight:600;font-size:14px;display:inline-flex;align-items:center;gap:6px;text-decoration:none;color:var(--ink);line-height:1.4}
+.btn svg{width:16px;height:16px}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.hi{background:var(--hi);border-color:var(--hi);color:var(--hi-ink)}
+.btn.ok{background:var(--ok);border-color:var(--ok);color:#fff}
+.btn.ghost{border-color:transparent;background:transparent;color:var(--ink2)}
+.btn.lg{padding:11px 18px;font-size:15.5px;border-radius:12px}
+.btn.block{width:100%;justify-content:center}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+.ext::after{content:"↗";font-size:12px;opacity:.7}
+
+.spk{border:0;background:var(--accent-soft);color:var(--accent);width:32px;height:32px;border-radius:50%;display:inline-grid;place-items:center;flex:none;padding:0}
+.spk svg{width:17px;height:17px}
+.spk.lg{width:64px;height:64px}
+.spk.lg svg{width:30px;height:30px}
+
+/* lesson */
+.sec-h{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.how{font-size:13.5px;color:var(--ink2);background:var(--sunk);border-radius:10px;padding:8px 12px;margin-bottom:12px}
+.how b{color:var(--ink)}
+.rule{font-family:var(--f-disp);direction:ltr;text-align:center;font-weight:600;font-size:16.5px;background:var(--hi);color:var(--hi-ink);border-radius:10px;padding:10px 12px;margin:10px 0}
+.ex{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:center;padding:8px 0;border-top:1px dashed var(--line)}
+.ex:first-child{border-top:0}
+.ex .en{font-size:16px;font-weight:500}
+.ex .ar{font-size:13.5px;color:var(--ink2)}
+.mis{display:grid;gap:4px;border-radius:10px;padding:10px 12px;background:var(--bad-soft);margin-top:10px;font-size:14px}
+.mis .wrong{text-decoration:line-through;color:var(--bad)}
+.mis .right{color:var(--ok);font-weight:600}
+.words{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px}
+.word{display:flex;align-items:center;gap:10px;background:var(--sunk);border-radius:10px;padding:8px 10px}
+.word .en{font-weight:600;font-size:15.5px}
+.word .ar{font-size:13px;color:var(--ink2);line-height:1.4}
+.word .lk{font-size:11.5px;color:var(--ink3);text-decoration:none}
+.dlg{display:flex;flex-direction:column;gap:8px}
+.bub{max-width:88%;padding:9px 12px;border-radius:14px;background:var(--sunk)}
+.bub.B{align-self:flex-end;background:var(--accent-soft)}
+.bub .en{font-size:15.5px}
+.bub .ar{font-size:13px;color:var(--ink2)}
+.hideAr .bub .ar{display:none}
+textarea,input[type=text]{width:100%;border:1.5px solid var(--line);background:var(--card);border-radius:12px;padding:10px 12px;font-size:16px;resize:vertical}
+textarea.en,input.en{font-family:var(--f-disp)}
+textarea:focus,input:focus{border-color:var(--accent);outline:none}
+.fb{border-radius:12px;padding:12px 14px;font-size:14px}
+.fb.ok{background:var(--ok-soft)} .fb.bad{background:var(--bad-soft)} .fb.warn{background:var(--warn-soft)} .fb.info{background:var(--sunk)}
+.diff span{padding:0 2px;border-radius:4px}
+.diff .hit{background:var(--ok-soft);color:var(--ok)}
+.diff .miss{background:var(--bad-soft);color:var(--bad);text-decoration:underline wavy}
+
+/* quiz */
+.qwrap{max-width:620px;margin:0 auto}
+.qhead{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.qbody{min-height:300px}
+.qprompt{font-size:14px;color:var(--ink2);margin-bottom:10px}
+.qmain{font-family:var(--f-disp);direction:ltr;text-align:left;font-size:22px;font-weight:500;margin-bottom:14px;display:flex;align-items:center;gap:12px}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{border:1.5px solid var(--line);background:var(--card);border-radius:12px;padding:12px 14px;text-align:start;font-size:16px;font-weight:500}
+.opt.en{text-align:left}
+.opt:hover:not([disabled]){border-color:var(--accent)}
+.opt.right{border-color:var(--ok);background:var(--ok-soft)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.passage{background:var(--sunk);border-radius:12px;padding:12px 14px;font-size:15.5px;line-height:1.7;max-height:260px;overflow:auto;margin-bottom:12px}
+.skill{display:grid;grid-template-columns:90px 1fr 46px;gap:10px;align-items:center;font-size:13.5px}
+.big-score{font-family:var(--f-disp);font-size:64px;font-weight:700;line-height:1;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+
+/* cards */
+.flash{min-height:230px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;cursor:pointer;user-select:none}
+.flash .front{font-family:var(--f-disp);font-size:34px;font-weight:600;direction:ltr}
+.flash .front.arf{font-family:var(--f-ar);direction:rtl}
+.flash .back{font-size:19px;color:var(--ink2)}
+
+/* grid */
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.cal button{aspect-ratio:1;max-width:100%;border-radius:10px;border:1px solid var(--line);background:var(--card);font-family:var(--f-disp);font-weight:600;font-size:14px;color:var(--ink3);padding:0}
+.cal .pass{background:var(--ok);border-color:var(--ok);color:#fff}
+.cal .open{border:2px solid var(--accent);color:var(--accent)}
+.cal .lock{background:var(--sunk);border-color:transparent;opacity:.6}
+.cal .rev{border-style:dashed}
+.chat{display:flex;flex-direction:column;gap:10px}
+.msg{max-width:90%;padding:10px 13px;border-radius:14px;font-size:15.5px}
+.msg.me{align-self:flex-end;background:var(--accent);color:var(--accent-ink)}
+.msg.ai{align-self:flex-start;background:var(--card);border:1px solid var(--line)}
+.msg .corr{margin-top:8px;padding-top:8px;border-top:1px dashed var(--line);font-size:13.5px;color:var(--warn);direction:rtl;text-align:right;font-family:var(--f-ar)}
+.legend{display:grid;gap:10px}
+.legend .item{display:grid;grid-template-columns:110px 1fr;gap:10px;align-items:start;font-size:14px}
+.res{display:grid;grid-template-columns:1fr auto;gap:8px 12px;align-items:center;padding:12px 0;border-top:1px solid var(--line)}
+.res:first-child{border-top:0}
+.player-now{text-align:center;padding:18px 8px}
+.player-now .en{text-align:center;font-size:26px;font-weight:600}
+.player-now .ar{font-size:15px;color:var(--ink2);margin-top:6px}
+.opt-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+select{border:1.5px solid var(--line);background:var(--card);border-radius:10px;padding:7px 10px}
+label.ck{display:flex;gap:8px;align-items:center;font-size:14px}
+.toast{position:fixed;bottom:calc(86px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:9px 16px;border-radius:12px;font-size:14px;z-index:50;box-shadow:var(--shadow);max-width:calc(100% - 32px)}
+details summary{cursor:pointer;font-weight:600}
+.pill-row{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+.pill-row button{flex:none;border:1px solid var(--line);background:var(--card);border-radius:99px;padding:4px 12px;font-size:13px;font-weight:600;color:var(--ink2)}
+.pill-row button[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+@media (max-width:480px){
+  .daynum{font-size:46px}
+  .stats{grid-template-columns:repeat(3,1fr);gap:6px}
+  .stat b{font-size:17px}
+  .legend .item{grid-template-columns:1fr}
+  .qmain{font-size:20px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+<div id="app" dir="rtl" lang="ar"></div>
+<script>
+// ================= CURRICULUM DATA =================
+const BC = "https://learnenglish.britishcouncil.org/free-resources/";
+const VOA = {
+1:"https://learningenglish.voanews.com/a/lets-learn-english-lesson-one/3111026.html",
+2:"https://learningenglish.voanews.com/a/lets-learn-english-lesson-2-hello/3113733.html",
+3:"https://learningenglish.voanews.com/a/lets-learn-english-lesson-3-i-am-here/3126527.html",
+4:"https://learningenglish.voanews.com/a/lets-learn-english-lesson-4/3168920.html",
+5:"https://learningenglish.voanews.com/a/lets-learn-english-lesson-5-where-are-you/3168971.html",
+6:"https://learningenglish.voanews.com/a/lets-learn-english-lesson-6-where-is-the-gym/3225958.html",
+7:"https://learningenglish.voanews.com/a/lets-learn-english-lesson-7-what-are-you-doing/3240468.html",
+8:"https://learningenglish.voanews.com/a/lets-learn-english-lesson-8-are-you-busy/3253185.html",
+9:"https://learningenglish.voanews.com/a/lets-learn-english-lesson-9-is-it-cold/3261789.html",
+10:"https://learningenglish.voanews.com/a/lets-learn-english-lesson-10/3285228.html",
+11:"https://learningenglish.voanews.com/a/lets-learn-english-lesson-11-this-is-my-neighborhood/3293986.html",
+12:"https://learningenglish.voanews.com/a/lets-learn-english-lesson-12-meet-my-family/3301733.html",
+13:"https://learningenglish.voanews.com/a/lets-learn-english-lesson-13-happy-birthday-william-shakespeare/3312239.html",
+14:"https://learningenglish.voanews.com/a/lets-learn-english-lesson-14-how-about-this/3323771.html",
+15:"https://learningenglish.voanews.com/a/lets-learn-english-lesson-15-i-love-people-watching/3343720.html",
+16:"https://learningenglish.voanews.com/a/lets-learn-english-lesson-16-where-are-you-from/3355849.html",
+17:"https://learningenglish.voanews.com/a/are-you-free-on-friday-lets-learn-english/3355785.html",
+18:"https://learningenglish.voanews.com/a/lets-learn-english-lesson-18-she-always-does-that/3357748.html",
+19:"https://learningenglish.voanews.com/a/lets-learn-english-lesson-19-when-do-you-start/3357760.html",
+20:"https://learningenglish.voanews.com/a/lets-learn-english-lesson-20-what-can-you-do/3384429.html",
+21:"https://learningenglish.voanews.com/a/lets-learn-english-lesson-21-can-you-come-to-the-party/3406732.html",
+22:"https://learningenglish.voanews.com/a/lets-learn-english-lesson-22/3397314.html",
+23:"https://learningenglish.voanews.com/a/lets-learn-english-lesson-23-what-do-you-want/3413753.html",
+24:"https://learningenglish.voanews.com/a/lets-learn-english-lesson-24-yesterday-was-amazing/3439164.html",
+25:"https://learningenglish.voanews.com/a/lets-learn-english-lesson-25-watch-out/3431138.html",
+26:"https://learningenglish.voanews.com/a/lets-learn-english-lesson-26-this-game-is-fun/3457248.html",
+27:"https://learningenglish.voanews.com/a/lets-learn-english-lesson-27-i-cant-come-in/3457316.html",
+28:"https://learningenglish.voanews.com/a/lets-learn-english-lesson-28-i-passed-it/3487865.html",
+29:"https://learningenglish.voanews.com/a/lets-learn-english-lesson-29-a-long-time-ago/3509519.html",
+30:"https://learningenglish.voanews.com/a/lets-learn-english-lesson-30-rolling-river/3522798.html"
+};
+const VOA_TITLES = {1:"Welcome!",2:"Hello, I'm Anna!",3:"I'm Here!",4:"What Is It?",5:"Where Are You?",6:"Where Is the Gym?",7:"What Are You Doing?",8:"Are You Busy?",9:"Is It Cold?",10:"Come Over to My Place",11:"This Is My Neighborhood",12:"Meet My Family",13:"Happy Birthday, William Shakespeare!",14:"How About This?",15:"I Love People-Watching!",16:"Where Are You From?",17:"Are You Free on Friday?",18:"She Always Does That",19:"When Do I Start?",20:"What Can You Do?",21:"Can You Come to the Party?",22:"Next Summer...",23:"What Do You Want?",24:"Yesterday Was Amazing!",25:"Watch Out!",26:"This Game Is Fun!",27:"I Can't Come In",28:"I Passed It!",29:"A Long Time Ago",30:"Rolling on the River"};
+
+// resource kinds: listen, read, write, speak, grammar
+const RES = {
+  bcListenIndex: "https://learnenglish.britishcouncil.org/skills/listening/a1-listening",
+  bcReadIndex: "https://learnenglish.britishcouncil.org/skills/reading/a1-reading",
+  bcWriteIndex: "https://learnenglish.britishcouncil.org/skills/writing/a1-writing",
+  bcSpeakIndex: "https://learnenglish.britishcouncil.org/skills/speaking/a1-speaking",
+  bcGrammarIndex: "https://learnenglish.britishcouncil.org/grammar/a1-a2-grammar",
+  voaIndex: "https://www.manythings.org/voa/lessons/1/",
+  voaPlaylist: "https://www.youtube.com/playlist?list=PLD-YxwW2jAGxkWvZggEXJgV0bmJNRUdM7",
+  easyStories: "https://easystoriesinenglish.com/",
+  easyStoriesApple: "https://podcasts.apple.com/us/podcast/easy-stories-in-english/id1448201565",
+  newsLevels: "https://www.newsinlevels.com/level/level-1/",
+  bne0: "https://breakingnewsenglish.com/easy-news-english.html",
+  efQuick: "https://www.efset.org/quick-check/",
+  ef50: "https://www.efset.org/ef-set-50/",
+  cambridgeTest: "https://www.cambridgeenglish.org/test-your-english/general-english/",
+  oxford3000: "https://www.oxfordlearnersdictionaries.com/wordlists/oxford3000-5000",
+  youglish: w => "https://youglish.com/pronounce/" + encodeURIComponent(w) + "/english",
+  cambridgeDict: w => "https://dictionary.cambridge.org/dictionary/english-arabic/" + encodeURIComponent(w.toLowerCase().replace(/ /g,"-"))
+};
+
+// Pronunciation tips targeted at Arabic speakers
+const PRON = {
+ 1:{t:"حرف P مقابل B",d:"العربية ليس فيها P، فنقولها B. الـP تُنطق بنفخة هواء بدون اهتزاز الحنجرة. ضع يدك أمام فمك: مع pen تشعر بالهواء، ومع Ben لا.",w:["pen","Ben","park","bark","pay","bay"]},
+ 2:{t:"صوت TH",d:"اخرج طرف لسانك قليلاً بين أسنانك. three / thank بدون صوت (مثل ث)، و this / the بصوت (مثل ذ). لا تقلها «تري» أو «زِس».",w:["three","thank you","thirteen","this","the","mother"]},
+ 3:{t:"حرف V مقابل F",d:"العربية ليس فيها V. الـV مثل الـF تماماً في وضع الفم (الأسنان العليا على الشفة السفلى) لكن مع صوت واهتزاز.",w:["very","fine","five","live","have","view"]},
+ 4:{t:"الحركات القصيرة والطويلة",d:"sheep (ي طويلة) ليست ship (كسرة قصيرة). full ليست fool. المدّة تغيّر المعنى في الإنجليزية.",w:["sheep","ship","leave","live","fool","full"]},
+ 5:{t:"a / an ونطق the",d:"قبل صوت متحرك نقول an و «ذي»: an apple, the apple (ذي). وقبل صوت ساكن: a book, the book (ذَ).",w:["an apple","the egg","a book","the book","an hour","a university"]},
+ 6:{t:"الحروف الساكنة المتتالية",d:"العربي يضيف حركة قبل الحرفين الساكنين: «إستريت». قلها street مباشرة بدون همزة في البداية.",w:["street","school","sleep","small","black","green"]},
+ 8:{t:"-s في نهاية الفعل",d:"works (س) · lives (ز) · watches (إز). لا تنسَها مع he/she/it — هي أكثر خطأ عند المبتدئين.",w:["works","lives","watches","goes","plays","washes"]},
+ 9:{t:"نطق الأيام",d:"Wednesday تنطق «وِنزدي» (حرف d الأول صامت). Tuesday «تيوزدي» أو «تُوزدي».",w:["Wednesday","Tuesday","Thursday","Saturday","o'clock","hour"]},
+ 10:{t:"الضغط على المقطع",d:"كل كلمة لها مقطع أقوى: underSTAND, BREAKfast, TEAcher. استمع وقلّد القوة، لا الحروف فقط.",w:["understand","breakfast","teacher","coffee","hotel","computer"]},
+ 11:{t:"الربط بين الكلمات",d:"الإنجليز يصلون الكلمات: What do you → «وادَيو». an apple → «أنابل». لا تقطع كل كلمة وحدها.",w:["What do you do?","an apple","Come on","Get up","Turn off","Look at it"]},
+ 12:{t:"صوت W",d:"الـW تبدأ بضم الشفتين مثل «و» ولا تتحول لـV: water ليست «ڤاتر».",w:["water","what","would","vegetables","wine","very well"]},
+ 13:{t:"الأرقام -teen و -ty",d:"thirTEEN (الضغط في الآخر) مقابل THIRty (الضغط في الأول). مهم جداً مع الأسعار.",w:["thirteen","thirty","fifteen","fifty","eighteen","eighty"]},
+ 15:{t:"صوت ER / IR",d:"bird, girl, work: صوت واحد بدون «ي» ولا «ا» — افتح الفم قليلاً.",w:["bird","girl","work","first","world","turn"]},
+ 16:{t:"صوت O في left و hot",d:"قارن: hot (أوه قصيرة) / hat (آ مفتوحة) / hut (أ). ثلاث كلمات مختلفة.",w:["hot","hat","hut","stop","shop","straight"]},
+ 17:{t:"can و can't",d:"can في الجملة تُنطق خفيفة «كِن»، و can't قوية «كانت». الفرق في القوة وليس فقط في الـt.",w:["I can swim","I can't swim","Can you help me?","She can drive","He can't come"]},
+ 18:{t:"-ing",d:"لا تنطق الـg منفصلة: «رِيدِنْق» خطأ. قلها كصوت أنفي واحد مثل sing.",w:["reading","waiting","morning","sing","thing","long"]},
+ 19:{t:"الحروف الصامتة",d:"كثير من الحروف لا تُنطق: autumn (n صامتة)، know (k صامتة)، write (w صامتة)، hour (h صامتة).",w:["autumn","know","write","hour","listen","half"]},
+ 20:{t:"نطق الوظائف",d:"engineer: الضغط في الآخر «إنجِنير». doctor: «داكتر» بأمريكي. manager: «مانِجر».",w:["engineer","doctor","manager","accountant","employee","lawyer"]},
+ 22:{t:"was و were",d:"في الجملة: was تُنطق خفيفة «وَز» و were «وَر». في الإجابة القصيرة تُنطق كاملة: Yes, I was.",w:["I was at home","They were here","Where were you?","Yes, I was","It was great"]},
+ 23:{t:"نطق -ed",d:"ثلاث طرق: worked (ت)، played (د)، visited / wanted (إد). فقط بعد t أو d نقول «إد».",w:["worked","watched","played","called","visited","wanted"]},
+ 24:{t:"الأفعال الشاذة",d:"bought و thought و caught كلها تنتهي بصوت «ووت». saw «سوو». read في الماضي تُنطق «رِد».",w:["bought","thought","saw","read","ate","said"]},
+ 25:{t:"gonna",d:"في الكلام السريع going to تُسمع «قونا». افهمها عند السماع، واكتبها دائماً going to.",w:["I'm going to","We're going to","Are you going to","What are you going to do?"]},
+ 26:{t:"الجمع الشاذ",d:"foot → feet، tooth → teeth، child → children، man → men، woman → women (ويمِن).",w:["feet","teeth","children","women","men","stomach"]},
+ 27:{t:"التنغيم في الأسئلة",d:"أسئلة نعم/لا يرتفع الصوت في آخرها ↗ (Do you like it?). أسئلة wh ينخفض ↘ (What do you like?).",w:["Do you like it?","What do you like?","Are you ready?","Where do you live?","Can you come?"]}
+};
+
+// kind: learn | review | mock | final
+const DAYS = {
+1:{kind:"learn",week:1,topic:"التحية والتعارف",en:"Hello!",
+ g:{t:"I am / You are — فعل الكينونة (1)",ar:"في العربية نقول «أنا طالب» بلا فعل. في الإنجليزية لا بد من فعل to be بين الفاعل وما بعده. مع I نستخدم am، ومع you نستخدم are. وفي الكلام نختصرها: I'm و you're.",rule:"I + am  ·  You + are",ex:[["I am Ahmed.","أنا أحمد."],["I'm a student.","أنا طالب."],["You are my friend.","أنت صديقي."],["You're welcome.","عفواً."]],mis:["I student.","I am a student.","لا تحذف am أبداً."]},
+ words:["hello|مرحباً","hi|أهلاً","goodbye|مع السلامة","bye|باي / مع السلامة","name|اسم","my|ـي (ملكي)","your|ـك (ملكك)","yes|نعم","no|لا","please|من فضلك","thank you|شكراً","sorry|آسف","nice|لطيف","meet|يقابل / يتعرّف","good morning|صباح الخير","good evening|مساء الخير","good night|تصبح على خير","friend|صديق","teacher|معلّم","student|طالب"],
+ phrases:["Hello, my name is Ahmed.|مرحباً، اسمي أحمد.","What's your name?|ما اسمك؟","Nice to meet you.|تشرفت بمعرفتك.","How are you?|كيف حالك؟","I'm fine, thank you.|أنا بخير، شكراً.","See you later.|أراك لاحقاً."],
+ dlg:[["A","Hello! My name is Sam. What's your name?","مرحباً! اسمي سام. ما اسمك؟"],["B","Hi, I'm Ahmed.","أهلاً، أنا أحمد."],["A","Nice to meet you, Ahmed.","تشرفت بمعرفتك يا أحمد."],["B","Nice to meet you too. How are you?","وأنا كذلك. كيف حالك؟"],["A","I'm fine, thank you. Are you a student?","بخير، شكراً. هل أنت طالب؟"],["B","Yes, I am.","نعم."]],
+ gq:[["I ___ a student.",["am","is","are"],0],["You ___ my friend.",["am","is","are"],2],["___ name is Sara.",["My","I","Me"],0]],
+ w:"اكتب 3 جمل: تحية، اسمك، وهل أنت طالب أو موظف.",chat:"Greet the learner, ask their name and how they are.",
+ bc:[["speak","Meeting new people","speaking/a1/meeting-new-people"],["grammar","Present simple: to be","grammar/a1-a2/present-simple-be"]]},
+2:{kind:"learn",week:1,topic:"الأرقام والحروف",en:"Numbers & spelling",
+ g:{t:"to be كاملاً: he / she / it / we / they",ar:"he (هو) و she (هي) و it (للأشياء والحيوانات) تأخذ is. و we (نحن) و they (هم) تأخذ are. الاختصار: he's, she's, it's, we're, they're.",rule:"he / she / it + is  ·  we / you / they + are",ex:[["She is a doctor.","هي طبيبة."],["It's a phone.","إنه هاتف."],["We are friends.","نحن أصدقاء."],["They're students.","هم طلاب."]],mis:["She are my sister.","She is my sister.","he/she/it دائماً مع is."]},
+ words:["one|واحد","two|اثنان","three|ثلاثة","four|أربعة","five|خمسة","six|ستة","seven|سبعة","eight|ثمانية","nine|تسعة","ten|عشرة","eleven|أحد عشر","twelve|اثنا عشر","thirteen|ثلاثة عشر","fifteen|خمسة عشر","twenty|عشرون","number|رقم","phone|هاتف","old|كبير في السن / قديم","age|عمر","spell|يتهجّى"],
+ phrases:["How do you spell it?|كيف تتهجّاها؟","What's your phone number?|ما رقم هاتفك؟","How old are you?|كم عمرك؟","I'm twenty years old.|عمري عشرون سنة.","Can you repeat, please?|هل يمكنك الإعادة من فضلك؟","It's five.|إنه خمسة."],
+ dlg:[["A","What's your phone number?","ما رقم هاتفك؟"],["B","It's five, five, two, nine, eight, one, three.","هو 5 5 2 9 8 1 3."],["A","Can you repeat, please?","هل يمكنك الإعادة؟"],["B","Sure. Five, five, two, nine, eight, one, three.","طبعاً. 5 5 2 9 8 1 3."],["A","Thank you. And how do you spell your name?","شكراً. وكيف تتهجّى اسمك؟"],["B","A-H-M-E-D.","A-H-M-E-D."]],
+ gq:[["She ___ a doctor.",["am","is","are"],1],["They ___ my friends.",["is","am","are"],2],["It ___ cold today.",["is","are","am"],0],["We ___ from Egypt.",["is","are","am"],1]],
+ w:"اكتب رقم هاتف (خيالي) بالكلمات، وعمرك بجملة كاملة، وتهجئة اسمك.",chat:"Ask the learner their age, phone number (fake is fine) and to spell their name.",
+ bc:[["listen","Business cards","listening/a1/business-cards"]]},
+3:{kind:"learn",week:1,topic:"البلدان والجنسيات",en:"Where are you from?",
+ g:{t:"النفي والسؤال مع to be",ar:"للنفي نضيف not بعد الفعل: I'm not, he isn't, they aren't. وللسؤال نقدّم الفعل على الفاعل: Are you...? Is he...? والإجابة القصيرة: Yes, I am. / No, I'm not.",rule:"النفي: am/is/are + not  ·  السؤال: Are you...? / Is she...?",ex:[["I'm not Egyptian.","أنا لست مصرياً."],["He isn't from Riyadh.","هو ليس من الرياض."],["Are you Saudi? Yes, I am.","هل أنت سعودي؟ نعم."],["Is she a teacher? No, she isn't.","هل هي معلمة؟ لا."]],mis:["You are Saudi?","Are you Saudi?","في السؤال الفعل أولاً."]},
+ words:["country|بلد","city|مدينة","from|من","where|أين","Saudi Arabia|السعودية","Saudi|سعودي","Egypt|مصر","Egyptian|مصري","America|أمريكا","American|أمريكي","Britain|بريطانيا","British|بريطاني","Arabic|اللغة العربية","English|الإنجليزية","language|لغة","speak|يتكلم","live|يعيش / يسكن","world|العالم","a little|قليلاً","capital|عاصمة"],
+ phrases:["Where are you from?|من أين أنت؟","I'm from Saudi Arabia.|أنا من السعودية.","I live in Riyadh.|أعيش في الرياض.","Are you Egyptian? No, I'm not.|هل أنت مصري؟ لا.","Do you speak English? A little.|هل تتكلم الإنجليزية؟ قليلاً.","Where do you live?|أين تسكن؟"],
+ dlg:[["A","Where are you from?","من أين أنت؟"],["B","I'm from Saudi Arabia. And you?","أنا من السعودية. وأنت؟"],["A","I'm from Britain. Are you from Riyadh?","أنا من بريطانيا. هل أنت من الرياض؟"],["B","No, I'm not. I'm from Jeddah, but I live in Riyadh.","لا. أنا من جدة لكن أعيش في الرياض."],["A","Do you speak English?","هل تتكلم الإنجليزية؟"],["B","A little. I speak Arabic.","قليلاً. أتكلم العربية."]],
+ gq:[["___ you from Jordan?",["Is","Are","Am"],1],["I ___ not a teacher.",["am","is","are"],0],["He's from Jeddah. He ___ from Riyadh.",["isn't","aren't","not"],0],["Is she British? No, she ___.",["isn't","aren't","not is"],0]],
+ w:"اكتب 4 جمل: من أين أنت، أين تسكن، ما اللغات التي تتكلمها، وجملة نفي (I'm not...).",chat:"Ask where the learner is from, where they live and what languages they speak.",
+ bc:[["speak","Talking about where you're from","speaking/a1/talking-about-where-youre"]]},
+4:{kind:"learn",week:1,topic:"العائلة",en:"My family",
+ g:{t:"صفات الملكية و 's",ar:"my (ـي)، your (ـك)، his (ـه للمذكر)، her (ـها)، our (ـنا)، their (ـهم) وتأتي قبل الاسم. ولملكية الأسماء نضيف 's: Ali's car = سيارة علي.",rule:"my · your · his · her · our · their + اسم  ·  Ali's + اسم",ex:[["This is my brother.","هذا أخي."],["Her name is Mona.","اسمها منى."],["Our house is big.","بيتنا كبير."],["Ali's son is ten.","ابن علي عمره عشر سنوات."]],mis:["Sara is he sister.","Sara is his sister.","he = هو (فاعل)، his = ـه (ملكية)."]},
+ words:["family|عائلة","father|أب","mother|أم","parents|الوالدان","brother|أخ","sister|أخت","son|ابن","daughter|ابنة","husband|زوج","wife|زوجة","child|طفل","children|أطفال","baby|رضيع","grandfather|جدّ","grandmother|جدّة","uncle|عمّ / خال","aunt|عمّة / خالة","cousin|ابن/ابنة العم أو الخال","married|متزوج","single|أعزب"],
+ phrases:["This is my brother.|هذا أخي.","Her name is Mona.|اسمها منى.","I have two sisters.|عندي أختان.","Are you married?|هل أنت متزوج؟","How many children do you have?|كم طفلاً عندك؟","His wife is a teacher.|زوجته معلمة."],
+ dlg:[["A","Is this your family?","هل هذه عائلتك؟"],["B","Yes. This is my father and this is my mother.","نعم. هذا أبي وهذه أمي."],["A","Who is this?","من هذا؟"],["B","That's my brother, Omar. His wife is a teacher.","هذا أخي عمر. زوجته معلمة."],["A","Are you married?","هل أنت متزوج؟"],["B","No, I'm single.","لا، أنا أعزب."]],
+ gq:[["This is ___ father. (أنا)",["my","I","me"],0],["Sara is ___ sister. (هو)",["he","his","him"],1],["___ car is new. (نحن)",["We","Us","Our"],2],["This is Omar___ phone.",["'s","s'","is"],0]],
+ w:"اكتب 4 جمل عن عائلتك: الأب/الأم، الإخوة، أسماؤهم. استخدم my و his و her.",chat:"Ask the learner about their family: parents, brothers, sisters, names.",
+ bc:[["speak","Talking about other people","speaking/a1/talking-about-other-people"],["grammar","Possessive 's","grammar/a1-a2/possessive-s"]]},
+5:{kind:"learn",week:1,topic:"الأشياء من حولك",en:"What is this?",
+ g:{t:"a / an والجمع و this / that / these / those",ar:"a قبل الصوت الساكن (a book) و an قبل الصوت المتحرك (an apple). الجمع غالباً بإضافة s (books) وأحياناً es (boxes). this/these للقريب، that/those للبعيد.",rule:"a + ساكن · an + متحرك  ·  this/that (مفرد) · these/those (جمع)",ex:[["This is an apple.","هذه تفاحة."],["What are these? They're keys.","ما هذه؟ إنها مفاتيح."],["Is that your bag?","هل تلك حقيبتك؟"],["Those are my books.","تلك كتبي."]],mis:["This are my keys.","These are my keys.","الجمع مع these و are."]},
+ words:["book|كتاب","pen|قلم","bag|حقيبة","key|مفتاح","table|طاولة","chair|كرسي","door|باب","window|نافذة","car|سيارة","apple|تفاحة","egg|بيضة","box|صندوق","watch|ساعة يد","glasses|نظارة","cup|فنجان","bottle|زجاجة","thing|شيء","this|هذا","that|ذلك","these|هؤلاء / هذه (جمع)"],
+ phrases:["What is this? It's a pen.|ما هذا؟ إنه قلم.","What are these? They're keys.|ما هذه؟ إنها مفاتيح.","Is that your bag?|هل تلك حقيبتك؟","This is an apple.|هذه تفاحة.","Those are my books.|تلك كتبي.","Where is my phone?|أين هاتفي؟"],
+ dlg:[["A","Where is my phone?","أين هاتفي؟"],["B","Is this your phone?","هل هذا هاتفك؟"],["A","No, it isn't. My phone is black.","لا. هاتفي أسود."],["B","What about that? On the table.","وماذا عن ذلك؟ على الطاولة."],["A","Yes! That's my phone. And these are my keys!","نعم! هذا هاتفي. وهذه مفاتيحي!"],["B","OK, good.","حسناً، جيد."]],
+ gq:[["I have ___ apple.",["a","an","the a"],1],["___ are my keys. (قريبة)",["This","These","That"],1],["One box, two ___.",["boxs","boxes","box"],1],["One child, two ___.",["childs","children","childes"],1]],
+ w:"انظر حولك واكتب 5 جمل: This is a... / These are... / That is an...",chat:"Play a game: ask the learner what things are around them (This is a..., These are...).",
+ bc:[["grammar","Articles: a, an, the","grammar/a1-a2-grammar/articles-a-an-the"],["read","Dictionary definitions","reading/a1/dictionary-definitions"]]},
+6:{kind:"learn",week:1,topic:"الألوان والصفات",en:"Colours & adjectives",
+ g:{t:"مكان الصفة و very",ar:"الصفة تأتي قبل الاسم (عكس العربية): a red car = سيارة حمراء. أو بعد فعل to be: The car is red. والصفة لا تُجمع: two red cars. و very (جداً) تأتي قبل الصفة.",rule:"صفة + اسم (a big house)  ·  be + صفة (It is big)  ·  very + صفة",ex:[["It's a big house.","إنه بيت كبير."],["My car is white.","سيارتي بيضاء."],["I'm very tired.","أنا متعب جداً."],["They are new phones.","إنها هواتف جديدة."]],mis:["a car red","a red car","الصفة قبل الاسم دائماً."]},
+ words:["red|أحمر","blue|أزرق","green|أخضر","yellow|أصفر","black|أسود","white|أبيض","colour|لون","big|كبير","small|صغير","new|جديد","good|جيد","bad|سيئ","beautiful|جميل","happy|سعيد","sad|حزين","tired|متعب","hot|حار","cold|بارد","very|جداً","favourite|المفضّل"],
+ phrases:["What colour is it?|ما لونه؟","My car is white.|سيارتي بيضاء.","It's a big house.|إنه بيت كبير.","I'm very tired.|أنا متعب جداً.","The weather is hot today.|الجو حار اليوم.","My favourite colour is blue.|لوني المفضل الأزرق."],
+ dlg:[["A","Is this your new car?","هل هذه سيارتك الجديدة؟"],["B","Yes, it is. Do you like it?","نعم. هل تعجبك؟"],["A","It's very beautiful! What colour is it? Blue?","جميلة جداً! ما لونها؟ أزرق؟"],["B","No, it's green. My favourite colour is green.","لا، أخضر. لوني المفضل الأخضر."],["A","And your old car?","وسيارتك القديمة؟"],["B","It was small and white.","كانت صغيرة وبيضاء."]],
+ gq:[["She has a ___.",["car red","red car","reds car"],1],["I'm ___ tired.",["very","much","many"],0],["They are ___ phones.",["news","new","a new"],1]],
+ w:"صف 4 أشياء تملكها باللون والحجم: My phone is black and small...",chat:"Ask the learner to describe things they own: colour, size, new or old.",
+ bc:[["listen","Meeting other students","listening/a1/meeting-other-students"]]},
+7:{kind:"review",week:1,topic:"مراجعة الأسبوع الأول + اختبار",en:"Week 1 review"},
+8:{kind:"learn",week:2,topic:"روتينك اليومي",en:"My day",
+ g:{t:"المضارع البسيط (I / you / we / they)",ar:"نستخدمه للعادات والأشياء المتكررة. مع I و you و we و they يبقى الفعل كما هو بدون إضافة: I work, they live. ولا نستخدم am/is/are مع الفعل هنا.",rule:"I / you / we / they + الفعل الأصلي",ex:[["I wake up at seven.","أستيقظ في السابعة."],["We eat breakfast at home.","نأكل الفطور في البيت."],["They live in Jeddah.","يعيشون في جدة."],["I study English every day.","أدرس الإنجليزية كل يوم."]],mis:["I am work in a bank.","I work in a bank.","لا تضع am مع الفعل العادي."]},
+ words:["wake up|يستيقظ","get up|ينهض من السرير","eat|يأكل","drink|يشرب","go|يذهب","work|يعمل / عمل","study|يدرس","sleep|ينام","breakfast|فطور","lunch|غداء","dinner|عشاء","shower|دُش / يستحم","home|البيت","school|مدرسة","office|مكتب","every day|كل يوم","morning|صباح","afternoon|بعد الظهر","evening|مساء","night|ليل"],
+ phrases:["I wake up at seven.|أستيقظ في السابعة.","I go to work by car.|أذهب إلى العمل بالسيارة.","I eat breakfast at home.|آكل الفطور في البيت.","I study English every day.|أدرس الإنجليزية كل يوم.","I go to bed at eleven.|أنام في الحادية عشرة.","What do you do in the morning?|ماذا تفعل في الصباح؟"],
+ dlg:[["A","What do you do in the morning?","ماذا تفعل في الصباح؟"],["B","I wake up at six and I take a shower.","أستيقظ في السادسة وأستحم."],["A","Do you eat breakfast?","هل تأكل الفطور؟"],["B","Yes. I eat breakfast at home with my family.","نعم. آكل الفطور في البيت مع عائلتي."],["A","And then?","ثم؟"],["B","I go to work by car. I work in an office.","أذهب إلى العمل بالسيارة. أعمل في مكتب."]],
+ gq:[["I ___ coffee every morning.",["drink","drinks","am drink"],0],["They ___ in Jeddah.",["lives","live","are live"],1],["We ___ work at eight.",["starts","start","are start"],1]],
+ w:"اكتب 5 جمل عن روتينك: متى تستيقظ، ماذا تأكل، كيف تذهب للعمل، متى تنام.",chat:"Ask the learner about their daily routine: wake up time, breakfast, work, bedtime.",
+ bc:[["read","A study timetable","reading/a1/study-timetable"],["grammar","Present simple","grammar/a1-a2/present-simple"]]},
+9:{kind:"learn",week:2,topic:"الوقت والأيام",en:"Time & days",
+ g:{t:"he / she / it + s  و at / on / in للوقت",ar:"مع he و she و it نضيف s للفعل: she works, he lives، ومع الأفعال المنتهية بـ o/sh/ch نضيف es: goes, watches. للوقت: at للساعة (at 5)، on لليوم (on Monday)، in للشهر والسنة (in May).",rule:"he/she/it + فعل+s  ·  at الساعة · on اليوم · in الشهر",ex:[["She works on Sunday.","تعمل يوم الأحد."],["The class starts at nine.","الحصة تبدأ في التاسعة."],["He goes to the gym in the evening.","يذهب إلى النادي في المساء."],["My birthday is in May.","عيد ميلادي في مايو."]],mis:["He work in a bank.","He works in a bank.","لا تنسَ الـs مع he/she/it."]},
+ words:["time|وقت","o'clock|تماماً (للساعة)","half past|والنصف","quarter|ربع","hour|ساعة (مدة)","week|أسبوع","Monday|الاثنين","Tuesday|الثلاثاء","Wednesday|الأربعاء","Thursday|الخميس","Friday|الجمعة","Saturday|السبت","Sunday|الأحد","today|اليوم","tomorrow|غداً","weekend|نهاية الأسبوع","early|مبكراً","late|متأخر","start|يبدأ","finish|ينتهي / ينهي"],
+ phrases:["What time is it?|كم الساعة؟","It's three o'clock.|الساعة الثالثة تماماً.","It's half past seven.|الساعة السابعة والنصف.","She works on Sunday.|تعمل يوم الأحد.","See you tomorrow.|أراك غداً.","Sorry, I'm late!|آسف، تأخرت!"],
+ dlg:[["A","What time is it?","كم الساعة؟"],["B","It's half past eight.","الثامنة والنصف."],["A","Oh no, I'm late! My class starts at nine.","لا! تأخرت! حصتي تبدأ في التاسعة."],["B","Do you have class every day?","هل عندك حصة كل يوم؟"],["A","No. On Monday and Wednesday. My sister studies on Tuesday.","لا. الاثنين والأربعاء. أختي تدرس الثلاثاء."],["B","OK, go! See you tomorrow.","حسناً، اذهب! أراك غداً."]],
+ gq:[["He ___ in a bank.",["work","works","working"],1],["I study ___ Monday.",["in","at","on"],2],["The meeting is ___ five o'clock.",["at","on","in"],0],["My birthday is ___ May.",["on","in","at"],1]],
+ w:"اكتب جدول أسبوعك في 5 جمل: On Sunday I... وجملتين عن شخص آخر (He/She + s).",chat:"Ask the learner what time they do things and which days they work or study.",
+ bc:[["write","A message to say you're late","writing/a1/message-say-youre-late"],["grammar","Prepositions of time: at, in, on","grammar/a1-a2-grammar/prepositions-of-time-at-in-on"]]},
+10:{kind:"learn",week:2,topic:"ما تحبه وما لا تحبه",en:"Do you like...?",
+ g:{t:"النفي والسؤال بـ do / does",ar:"للسؤال: Do you...? و Does he/she...? وللنفي: don't و doesn't. انتبه: بعد does و doesn't يعود الفعل لأصله بدون s: She doesn't like (وليس likes).",rule:"Do + I/you/we/they · Does + he/she/it  ·  don't / doesn't + فعل أصلي",ex:[["Do you like coffee? Yes, I do.","هل تحب القهوة؟ نعم."],["I don't understand.","لا أفهم."],["Does she drive? No, she doesn't.","هل تقود؟ لا."],["He doesn't like fish.","لا يحب السمك."]],mis:["She doesn't likes tea.","She doesn't like tea.","الـs تنتقل إلى does."]},
+ words:["like|يحب / يعجبه","love|يحب جداً","hate|يكره","want|يريد","need|يحتاج","know|يعرف","understand|يفهم","have|يملك / عنده","watch|يشاهد","listen|يستمع","read|يقرأ","write|يكتب","play|يلعب","cook|يطبخ","drive|يقود","music|موسيقى","TV|تلفاز","football|كرة القدم","tea|شاي","coffee|قهوة"],
+ phrases:["Do you like coffee? Yes, I do.|هل تحب القهوة؟ نعم.","I don't understand.|لا أفهم.","Does she drive? No, she doesn't.|هل تقود؟ لا.","What do you want?|ماذا تريد؟","I don't know.|لا أعرف.","I love football.|أحب كرة القدم كثيراً."],
+ dlg:[["A","Do you like football?","هل تحب كرة القدم؟"],["B","Yes, I love it! Do you?","نعم، أحبها كثيراً! وأنت؟"],["A","No, I don't. I like music.","لا. أحب الموسيقى."],["B","Does your brother like football?","هل أخوك يحب كرة القدم؟"],["A","Yes, he does. He watches every match on TV.","نعم. يشاهد كل مباراة على التلفاز."],["B","Great! I need a friend for the match.","رائع! أحتاج صديقاً للمباراة."]],
+ gq:[["___ you like tea?",["Do","Does","Are"],0],["She ___ like fish.",["don't","doesn't","isn't"],1],["___ he play football?",["Do","Is","Does"],2],["I ___ understand.",["doesn't","don't","not"],1]],
+ w:"اكتب 3 أشياء تحبها و3 لا تحبها، وسؤالين بـ Do you...?",chat:"Ask the learner what they like and don't like (food, sports, music). Use Do you like...?",
+ bc:[["listen","The first English class","listening/a1/first-english-class"],["grammar","Question forms","grammar/a1-a2/question-forms"]]},
+11:{kind:"learn",week:2,topic:"الهوايات ووقت الفراغ",en:"Free time",
+ g:{t:"ظروف التكرار",ar:"always (دائماً 100%) · usually (عادةً) · often (غالباً) · sometimes (أحياناً) · never (أبداً 0%). مكانها قبل الفعل العادي (I always drink tea) لكن بعد فعل to be (She is never late).",rule:"فاعل + always/never + فعل  ·  فاعل + am/is/are + always/never",ex:[["I always drink tea in the morning.","دائماً أشرب الشاي صباحاً."],["I never eat fast food.","لا آكل الوجبات السريعة أبداً."],["She is usually happy.","هي عادةً سعيدة."],["How often do you travel?","كم مرة تسافر؟"]],mis:["I go always to the gym.","I always go to the gym.","الظرف قبل الفعل."]},
+ words:["always|دائماً","usually|عادةً","often|غالباً","sometimes|أحياناً","never|أبداً","hobby|هواية","free time|وقت الفراغ","swim|يسبح","run|يجري","walk|يمشي","travel|يسافر","shopping|التسوّق","game|لعبة","sport|رياضة","gym|نادٍ رياضي","movie|فيلم","park|حديقة عامة","beach|شاطئ","visit|يزور","friends|أصدقاء"],
+ phrases:["What do you do in your free time?|ماذا تفعل في وقت فراغك؟","I sometimes go to the gym.|أحياناً أذهب إلى النادي.","I always drink tea in the morning.|دائماً أشرب الشاي صباحاً.","I never eat fast food.|لا آكل الوجبات السريعة أبداً.","How often do you travel?|كم مرة تسافر؟","I usually visit my friends on Friday.|عادةً أزور أصدقائي يوم الجمعة."],
+ dlg:[["A","What do you do in your free time?","ماذا تفعل في وقت فراغك؟"],["B","I usually go to the gym. And I sometimes swim.","عادةً أذهب إلى النادي. وأحياناً أسبح."],["A","Do you go to the beach?","هل تذهب إلى الشاطئ؟"],["B","Yes, often. I love the beach. And you?","نعم، غالباً. أحب الشاطئ. وأنت؟"],["A","I never swim! I always watch movies at home.","لا أسبح أبداً! دائماً أشاهد الأفلام في البيت."],["B","That's OK. Movies are fun too.","لا بأس. الأفلام ممتعة أيضاً."]],
+ gq:[["Choose the correct sentence:",["I go usually to the gym.","I usually go to the gym.","Usually I go the gym."],1],["She ___ late.",["never is","is never","never"],1],["How ___ do you travel?",["often","always","many"],0]],
+ w:"اكتب 5 جمل عن هواياتك مستخدماً always و usually و sometimes و never.",chat:"Ask the learner about hobbies and how often they do them.",
+ bc:[["write","Social media posts","writing/a1/social-media-posts"]]},
+12:{kind:"learn",week:2,topic:"الطعام والطلب في المطعم",en:"Food & drink",
+ g:{t:"some / any والمعدود وغير المعدود و would like",ar:"المعدود يُجمع (apples)، وغير المعدود لا يُجمع (water, rice, milk). some في الإثبات، any في النفي والسؤال. للطلب بأدب: I'd like... (= I would like) بدل I want.",rule:"some (+) · any (− ?)  ·  I'd like + اسم",ex:[["I'd like a coffee, please.","أريد قهوة من فضلك."],["Is there any milk?","هل يوجد حليب؟"],["I have some apples.","عندي بعض التفاح."],["We don't have any bread.","ليس عندنا خبز."]],mis:["I want a water.","I'd like some water.","الماء غير معدود ولا يأخذ a، و I'd like أكثر أدباً."]},
+ words:["food|طعام","water|ماء","bread|خبز","rice|أرز","chicken|دجاج","meat|لحم","fish|سمك","milk|حليب","sugar|سكر","salt|ملح","fruit|فاكهة","vegetables|خضروات","juice|عصير","restaurant|مطعم","menu|قائمة الطعام","hungry|جائع","thirsty|عطشان","delicious|لذيذ","bill|الفاتورة","order|يطلب"],
+ phrases:["I'd like a coffee, please.|أريد قهوة من فضلك.","Can I have the menu, please?|ممكن قائمة الطعام؟","Is there any milk?|هل يوجد حليب؟","I'm hungry.|أنا جائع.","The bill, please.|الحساب من فضلك.","It's delicious!|إنه لذيذ!"],
+ dlg:[["A","Hello. Can I have the menu, please?","مرحباً. ممكن القائمة؟"],["B","Here you are. What would you like?","تفضل. ماذا تريد؟"],["A","I'd like chicken and rice, please.","أريد دجاجاً وأرزاً من فضلك."],["B","And to drink?","وللشرب؟"],["A","Some orange juice. No sugar, please.","عصير برتقال. بدون سكر من فضلك."],["B","OK. Anything else?","حسناً. شيء آخر؟"]],
+ gq:[["Is there ___ sugar?",["some","any","a"],1],["I have ___ apples.",["any","some","a"],1],["I'd ___ a juice, please.",["like","want","likes"],0],["We don't have ___ bread.",["some","any","an"],1]],
+ w:"اكتب طلبك في مطعم (4-5 جمل) باستخدام I'd like و Can I have.",chat:"Role-play: you are a waiter in a restaurant. Take the learner's order.",
+ bc:[["listen","Ordering in a café","listening/a1/ordering-cafe"],["read","A restaurant menu","reading/a1/restaurant-menu"],["grammar","Nouns: countable and uncountable","grammar/a1-a2/nouns-countable-uncountable"]]},
+13:{kind:"learn",week:2,topic:"التسوّق والأسعار",en:"Shopping",
+ g:{t:"How much / How many و too",ar:"How much للسعر ولغير المعدود (How much water?)، و How many للمعدود (How many shirts?). و too + صفة = زيادة عن المطلوب: too expensive (غالٍ جداً أكثر من اللازم).",rule:"How much + غير معدود/السعر  ·  How many + جمع  ·  too + صفة",ex:[["How much is this shirt?","بكم هذا القميص؟"],["It's fifty riyals.","بخمسين ريالاً."],["How many shirts do you want?","كم قميصاً تريد؟"],["It's too expensive.","إنه غالٍ جداً."]],mis:["How many is it?","How much is it?","للسعر دائماً How much."]},
+ words:["shop|متجر","buy|يشتري","pay|يدفع","money|نقود","price|سعر","cheap|رخيص","expensive|غالٍ","cash|نقداً","card|بطاقة","size|مقاس","clothes|ملابس","shirt|قميص","shoes|حذاء","dress|فستان","trousers|بنطال","hundred|مئة","thousand|ألف","thirty|ثلاثون","fifty|خمسون","market|سوق"],
+ phrases:["How much is this shirt?|بكم هذا القميص؟","It's fifty riyals.|بخمسين ريالاً.","Can I pay by card?|هل أستطيع الدفع بالبطاقة؟","It's too expensive.|إنه غالٍ جداً.","Do you have a bigger size?|هل عندك مقاس أكبر؟","I'll take it.|سآخذه."],
+ dlg:[["A","Excuse me, how much is this shirt?","لو سمحت، بكم هذا القميص؟"],["B","It's one hundred riyals.","بمئة ريال."],["A","That's too expensive. Do you have a cheap one?","غالٍ جداً. هل عندك واحد رخيص؟"],["B","This blue shirt is thirty riyals.","هذا القميص الأزرق بثلاثين."],["A","Great. Do you have a bigger size?","رائع. هل عندك مقاس أكبر؟"],["B","Yes, here you are. Cash or card?","نعم، تفضل. نقداً أم بطاقة؟"]],
+ gq:[["How ___ money do you have?",["many","much","often"],1],["How ___ shirts do you want?",["much","many","old"],1],["It's ___ expensive for me.",["too","very much","many"],0]],
+ w:"اكتب حواراً قصيراً (4 أسطر) بينك وبين بائع: السعر، المقاس، الدفع.",chat:"Role-play: you are a shop assistant in a clothes shop.",
+ bc:[["listen","Shopping for clothes","listening/a1/shopping-clothes"]]},
+14:{kind:"review",week:2,topic:"مراجعة الأسبوع الثاني + اختبار",en:"Week 2 review"},
+15:{kind:"learn",week:3,topic:"البيت والغرف",en:"My home",
+ g:{t:"There is / There are",ar:"لقول «يوجد»: There is + مفرد، There are + جمع. النفي: There isn't / There aren't any. السؤال: Is there...? / Are there...?",rule:"There is + مفرد · There are + جمع  ·  Is there...? / Are there...?",ex:[["There is a big kitchen.","يوجد مطبخ كبير."],["There are three bedrooms.","توجد ثلاث غرف نوم."],["Is there a garden? No, there isn't.","هل توجد حديقة؟ لا."],["There aren't any chairs.","لا توجد كراسي."]],mis:["There is two bedrooms.","There are two bedrooms.","الجمع مع are."]},
+ words:["house|بيت","apartment|شقة","room|غرفة","bedroom|غرفة نوم","bathroom|حمّام","kitchen|مطبخ","living room|غرفة المعيشة","garden|حديقة","bed|سرير","sofa|كنبة","fridge|ثلاجة","lamp|مصباح","wall|جدار","stairs|درج","cupboard|خزانة","mirror|مرآة","clean|نظيف","dirty|متّسخ","quiet|هادئ","floor|أرضية / طابق"],
+ phrases:["There is a big kitchen.|يوجد مطبخ كبير.","There are three bedrooms.|توجد ثلاث غرف نوم.","Is there a garden? No, there isn't.|هل توجد حديقة؟ لا.","My apartment is small but nice.|شقتي صغيرة لكنها جميلة.","I live on the second floor.|أسكن في الطابق الثاني.","The bathroom is next to the bedroom.|الحمام بجانب غرفة النوم."],
+ dlg:[["A","Tell me about your new apartment.","حدثني عن شقتك الجديدة."],["B","It's small but very nice. There are two bedrooms.","صغيرة لكنها جميلة جداً. فيها غرفتا نوم."],["A","Is there a big kitchen?","هل فيها مطبخ كبير؟"],["B","No, the kitchen is small. But there is a big living room.","لا، المطبخ صغير. لكن فيها غرفة معيشة كبيرة."],["A","Is there a garden?","هل فيها حديقة؟"],["B","No, there isn't. I live on the fifth floor!","لا. أسكن في الطابق الخامس!"]],
+ gq:[["There ___ two beds.",["is","are","be"],1],["There ___ a sofa in the room.",["is","are","am"],0],["___ there a lamp?",["Are","Is","Do"],1],["There aren't ___ chairs.",["some","any","a"],1]],
+ w:"صف بيتك في 5 جمل باستخدام There is و There are.",chat:"Ask the learner to describe their home: rooms, furniture, big or small.",
+ bc:[["read","Holiday home adverts","reading/a1/holiday-home-adverts"],["grammar","Using there is and there are","grammar/a1-a2/using-there-there-are"]]},
+16:{kind:"learn",week:3,topic:"المدينة والاتجاهات",en:"Directions",
+ g:{t:"حروف المكان وصيغة الأمر",ar:"next to (بجانب)، opposite (مقابل)، between (بين)، behind (خلف)، in front of (أمام)، on (على)، in (في). وللأمر نبدأ بالفعل مباشرة: Go straight. Turn left. وللنهي: Don't...",rule:"الأمر = فعل في أول الجملة (Turn left)  ·  It's next to / opposite / between...",ex:[["Go straight and turn left.","امشِ مباشرة ثم انعطف يساراً."],["The bank is next to the hotel.","البنك بجانب الفندق."],["It's between the pharmacy and the mosque.","إنه بين الصيدلية والمسجد."],["The keys are on the table.","المفاتيح على الطاولة."]],mis:["You go straight.","Go straight.","في الأمر لا نذكر you."]},
+ words:["street|شارع","bank|بنك","hospital|مستشفى","pharmacy|صيدلية","supermarket|سوبرماركت","mosque|مسجد","hotel|فندق","station|محطة","airport|مطار","left|يسار","right|يمين","straight|مباشرة للأمام","turn|ينعطف","next to|بجانب","opposite|مقابل","between|بين","behind|خلف","in front of|أمام","near|قريب","far|بعيد"],
+ phrases:["Excuse me, where is the bank?|لو سمحت، أين البنك؟","Go straight and turn left.|امشِ مباشرة ثم يساراً.","It's next to the hotel.|إنه بجانب الفندق.","Is it far? No, it's near.|هل هو بعيد؟ لا، قريب.","Turn right at the station.|انعطف يميناً عند المحطة.","Is there a pharmacy near here?|هل توجد صيدلية قريبة؟"],
+ dlg:[["A","Excuse me, is there a pharmacy near here?","لو سمحت، هل توجد صيدلية قريبة؟"],["B","Yes. Go straight and turn right at the bank.","نعم. امشِ مباشرة وانعطف يميناً عند البنك."],["A","Turn right at the bank. OK.","يميناً عند البنك. حسناً."],["B","The pharmacy is between the supermarket and the mosque.","الصيدلية بين السوبرماركت والمسجد."],["A","Is it far?","هل هي بعيدة؟"],["B","No, it's very near. Five minutes.","لا، قريبة جداً. خمس دقائق."]],
+ gq:[["The pharmacy is ___ the bank and the hotel.",["between","next","opposite of"],0],["___ left at the station.",["Turn","Turns","You turn"],0],["The keys are ___ the table.",["on","at","to"],0],["The hotel is ___ the bank. (مقابل)",["opposite","between","behind of"],0]],
+ w:"اكتب وصفاً لطريق من بيتك إلى أقرب مسجد أو متجر (4-5 جمل بصيغة الأمر).",chat:"Role-play: the learner is a tourist asking for directions; you give simple directions, then swap.",
+ bc:[["listen","Finding the library","listening/a1/finding-library"],["grammar","Prepositions of place: in, on, at","grammar/a1-a2/prepositions-place"]]},
+17:{kind:"learn",week:3,topic:"القدرة والطلب: can",en:"Can you...?",
+ g:{t:"can / can't",ar:"can = يستطيع، و can't = لا يستطيع. بعدها فعل أصلي بدون to ولا s: She can drive. للسؤال: Can you...? وتُستخدم أيضاً للطلب بأدب: Can you help me?",rule:"فاعل + can / can't + فعل أصلي  ·  Can + فاعل + فعل؟",ex:[["I can swim, but I can't dance.","أستطيع السباحة لكن لا أستطيع الرقص."],["Can you help me?","هل يمكنك مساعدتي؟"],["Can you speak slowly, please?","هل يمكنك التحدث ببطء؟"],["She can speak three languages.","تستطيع التحدث بثلاث لغات."]],mis:["He can to drive.","He can drive.","لا to ولا s بعد can."]},
+ words:["can|يستطيع","can't|لا يستطيع","help|يساعد","open|يفتح","close|يغلق","carry|يحمل","borrow|يستعير","repeat|يكرر","slowly|ببطء","again|مرة أخرى","fast|بسرعة","well|جيداً","sing|يغني","dance|يرقص","draw|يرسم","fix|يصلح","ride|يركب","bike|دراجة","question|سؤال","answer|إجابة / يجيب"],
+ phrases:["Can you help me?|هل يمكنك مساعدتي؟","I can swim, but I can't dance.|أستطيع السباحة لكن لا أستطيع الرقص.","Can you speak slowly, please?|هل يمكنك التحدث ببطء؟","Can I open the window?|هل أستطيع فتح النافذة؟","Sorry, I can't.|آسف، لا أستطيع.","Can you say that again?|هل يمكنك قولها مرة أخرى؟"],
+ dlg:[["A","Can you help me? I can't open this door.","هل تساعدني؟ لا أستطيع فتح هذا الباب."],["B","Sure. Oh, it's closed. Can I see the key?","طبعاً. آه، إنه مقفل. أرني المفتاح."],["A","Here you are.","تفضل."],["B","OK, it's open now!","حسناً، انفتح الآن!"],["A","Thank you! Can you speak English well?","شكراً! هل تتكلم الإنجليزية جيداً؟"],["B","A little. I can understand, but I can't speak fast.","قليلاً. أفهم لكن لا أتكلم بسرعة."]],
+ gq:[["She ___ speak three languages.",["can","cans","can to"],0],["___ you help me?",["Do","Can","Are"],1],["He can ___.",["drives","drive","to drive"],1]],
+ w:"اكتب 3 أشياء تستطيع فعلها و3 لا تستطيع، وطلبين مهذبين بـ Can you...?",chat:"Ask the learner what they can and can't do (sports, languages, cooking).",
+ bc:[["speak","Checking understanding","speaking/a1/checking-understanding"]]},
+18:{kind:"learn",week:3,topic:"ماذا تفعل الآن؟",en:"Right now",
+ g:{t:"المضارع المستمر",ar:"لشيء يحدث الآن: am/is/are + فعل+ing. I am reading = أنا أقرأ الآن. السؤال: What are you doing? النفي: I'm not working.",rule:"am / is / are + فعل+ing",ex:[["What are you doing? I'm cooking.","ماذا تفعل؟ أطبخ."],["I'm waiting for the bus.","أنتظر الحافلة."],["She is talking on the phone.","إنها تتكلم في الهاتف."],["They aren't sleeping.","إنهم لا ينامون."]],mis:["I cooking now.","I am cooking now.","لا تحذف am/is/are."]},
+ words:["now|الآن","at the moment|في هذه اللحظة","wait|ينتظر","talk|يتحدث","call|يتصل","look at|ينظر إلى","look for|يبحث عن","sit|يجلس","stand|يقف","wear|يرتدي","busy|مشغول","message|رسالة","send|يرسل","meeting|اجتماع","happen|يحدث","rain|يمطر / مطر","doing|يفعل (الآن)","bus|حافلة","phone call|مكالمة","wait for|ينتظر (شخصاً/شيئاً)"],
+ phrases:["What are you doing?|ماذا تفعل (الآن)؟","I'm waiting for the bus.|أنتظر الحافلة.","She is talking on the phone.|إنها تتكلم في الهاتف.","Are you busy? Yes, I'm working.|هل أنت مشغول؟ نعم، أعمل.","I'm looking for my keys.|أبحث عن مفاتيحي.","It's raining now.|إنها تمطر الآن."],
+ dlg:[["A","Hi! What are you doing?","أهلاً! ماذا تفعل؟"],["B","I'm waiting for the bus. And you?","أنتظر الحافلة. وأنت؟"],["A","I'm sitting in a café. Are you busy tonight?","أجلس في مقهى. هل أنت مشغول الليلة؟"],["B","No. Why?","لا. لماذا؟"],["A","My brother is visiting. Come for dinner!","أخي يزورنا. تعال للعشاء!"],["B","Great! Oh, the bus is coming. Bye!","رائع! آه، الحافلة قادمة. باي!"]],
+ gq:[["I ___ reading now.",["am","is","are"],0],["They ___ watching TV.",["is","am","are"],2],["She is ___ at the moment.",["sleep","sleeping","sleeps"],1],["What ___ you doing?",["do","are","is"],1]],
+ w:"اكتب 5 جمل عن ما يحدث حولك الآن: أنا، عائلتي، الطقس.",chat:"Ask the learner what they and people around them are doing right now.",
+ bc:[["read","Text messages to a friend","reading/a1/text-messages-friend"]]},
+19:{kind:"learn",week:3,topic:"الطقس والفصول والشهور",en:"Weather",
+ g:{t:"البسيط مقابل المستمر",ar:"البسيط للعادة والحقيقة: It rains a lot in winter. المستمر لما يحدث الآن: Look! It's raining. كلمات البسيط: always, every day, usually. كلمات المستمر: now, at the moment, Look!",rule:"عادة ← I work · الآن ← I'm working",ex:[["It usually rains in winter.","عادةً تمطر في الشتاء."],["Look! It's raining.","انظر! إنها تمطر."],["I drink tea every morning.","أشرب الشاي كل صباح."],["I'm drinking coffee now.","أشرب قهوة الآن."]],mis:["I'm going to work every day.","I go to work every day.","مع every day نستخدم البسيط."]},
+ words:["weather|الطقس","sunny|مشمس","rainy|ماطر","cloudy|غائم","windy|عاصف","warm|دافئ","cool|معتدل البرودة","season|فصل","summer|الصيف","winter|الشتاء","spring|الربيع","autumn|الخريف","January|يناير","February|فبراير","March|مارس","April|أبريل","June|يونيو","July|يوليو","September|سبتمبر","December|ديسمبر"],
+ phrases:["What's the weather like?|كيف الطقس؟","It's sunny and hot.|مشمس وحار.","It's raining now.|إنها تمطر الآن.","In winter it is cold.|في الشتاء الجو بارد.","My birthday is in March.|عيد ميلادي في مارس.","I love spring.|أحب الربيع."],
+ dlg:[["A","What's the weather like in Riyadh?","كيف الطقس في الرياض؟"],["B","In summer it's very hot. But in winter it's cool.","في الصيف حار جداً. لكن في الشتاء معتدل."],["A","Does it rain?","هل تمطر؟"],["B","Sometimes, in winter. What about London?","أحياناً في الشتاء. وماذا عن لندن؟"],["A","It often rains. Look, it's raining now!","كثيراً ما تمطر. انظر، إنها تمطر الآن!"],["B","I love rain!","أحب المطر!"]],
+ gq:[["It usually ___ in winter.",["rains","is raining","rain"],0],["Look! It ___.",["rains","is raining","rain"],1],["I ___ my homework now.",["do","am doing","does"],1]],
+ w:"صف الطقس في مدينتك في الصيف والشتاء، وكيف هو اليوم الآن (5 جمل).",chat:"Talk about weather and seasons in the learner's city, and today's weather.",
+ bc:[["write","A text message invitation","writing/a1/text-message-invitation"]]},
+20:{kind:"learn",week:3,topic:"الوظائف والعمل",en:"Jobs",
+ g:{t:"أدوات الاستفهام (Wh- questions)",ar:"What (ماذا/ما) · Where (أين) · When (متى) · Who (من) · Why (لماذا) · How (كيف). الترتيب: أداة + do/does أو am/is/are + فاعل + فعل. ومع الوظيفة نستخدم a/an: I'm an engineer.",rule:"Wh + do/does + فاعل + فعل?  ·  Wh + be + فاعل?",ex:[["What do you do? I'm an engineer.","ما عملك؟ أنا مهندس."],["Where do you work?","أين تعمل؟"],["Who is your manager?","من مديرك؟"],["Why do you like your job?","لماذا تحب عملك؟"]],mis:["I am engineer.","I am an engineer.","لا تنسَ a/an قبل الوظيفة."]},
+ words:["job|وظيفة","doctor|طبيب","nurse|ممرض/ة","engineer|مهندس","driver|سائق","manager|مدير","police officer|شرطي","lawyer|محامٍ","accountant|محاسب","pilot|طيار","farmer|مزارع","employee|موظف","company|شركة","boss|رئيس العمل","salary|راتب","team|فريق","customer|عميل","why|لماذا","who|من","when|متى"],
+ phrases:["What do you do? I'm an engineer.|ما عملك؟ أنا مهندس.","Where do you work?|أين تعمل؟","I work for a big company.|أعمل في شركة كبيرة.","Who is your manager?|من مديرك؟","Why do you like your job?|لماذا تحب عملك؟","When do you start work?|متى تبدأ العمل؟"],
+ dlg:[["A","What do you do?","ما عملك؟"],["B","I'm an accountant. I work for a big company.","محاسب. أعمل في شركة كبيرة."],["A","Do you like your job?","هل تحب عملك؟"],["B","Yes. My team is great. What about you?","نعم. فريقي رائع. وأنت؟"],["A","I'm a nurse. I work at the hospital.","أنا ممرض. أعمل في المستشفى."],["B","When do you start work?","متى تبدأ العمل؟"]],
+ gq:[["___ do you live?",["Where","Who","Why"],0],["___ is your boss? Mr. Khan.",["What","Who","When"],1],["He is ___ engineer.",["a","an","the a"],1],["___ do you start work? At eight.",["When","Who","Where"],0]],
+ w:"اكتب عن عملك أو دراستك (5 جمل)، ثم اكتب 3 أسئلة بـ Where / When / Why.",chat:"Ask the learner about their job or studies using wh- questions.",
+ bc:[["listen","Meeting a new team member","listening/a1/meeting-new-team-member"],["read","Job adverts","reading/a1/job-adverts"]]},
+21:{kind:"review",week:3,topic:"مراجعة الأسبوع الثالث + اختبار",en:"Week 3 review"},
+22:{kind:"learn",week:4,topic:"الماضي: was / were",en:"Yesterday",
+ g:{t:"ماضي to be: was / were",ar:"I/he/she/it + was · you/we/they + were. النفي: wasn't / weren't. السؤال: Were you...? Was it...? ونستخدم معه: yesterday, last night, last week, ago.",rule:"I/he/she/it + was · you/we/they + were",ex:[["Where were you yesterday?","أين كنت أمس؟"],["I was at home.","كنت في البيت."],["It was a great party.","كانت حفلة رائعة."],["We weren't busy last week.","لم نكن مشغولين الأسبوع الماضي."]],mis:["I were tired.","I was tired.","مع I نستخدم was."]},
+ words:["was|كان (مفرد)","were|كانوا / كنت","yesterday|أمس","last night|الليلة الماضية","last week|الأسبوع الماضي","last year|السنة الماضية","ago|منذ","born|وُلد","before|قبل","after|بعد","then|ثم","sick|مريض","at home|في البيت","trip|رحلة","party|حفلة","fun|ممتع","boring|ممل","interesting|مثير للاهتمام","great|رائع","wedding|عرس"],
+ phrases:["Where were you yesterday?|أين كنت أمس؟","I was at home.|كنت في البيت.","It was a great party.|كانت حفلة رائعة.","I was born in 1995.|وُلدت عام 1995.","We weren't busy last week.|لم نكن مشغولين الأسبوع الماضي.","Was it interesting?|هل كان ممتعاً؟"],
+ dlg:[["A","Where were you last night?","أين كنت الليلة الماضية؟"],["B","I was at my cousin's wedding.","كنت في عرس ابن عمي."],["A","Was it fun?","هل كان ممتعاً؟"],["B","Yes, it was great! There were many people.","نعم، كان رائعاً! كان هناك كثير من الناس."],["A","I was at home. I was sick.","كنت في البيت. كنت مريضاً."],["B","Oh, sorry. Are you OK now?","آه، سلامتك. هل أنت بخير الآن؟"]],
+ gq:[["I ___ tired yesterday.",["was","were","am"],0],["They ___ at school.",["was","were","is"],1],["___ you at work yesterday?",["Was","Were","Did"],1],["She ___ at the party. (نفي)",["weren't","wasn't","didn't"],1]],
+ w:"اكتب 5 جمل عن أمس: أين كنت، مع من، كيف كان (was great/boring...).",chat:"Ask the learner where they were yesterday and last weekend, and how it was.",
+ bc:[["listen","A voicemail message","listening/a1/voicemail-message"]]},
+23:{kind:"learn",week:4,topic:"الماضي البسيط (الأفعال المنتظمة)",en:"Past simple",
+ g:{t:"الماضي البسيط: -ed و did",ar:"للأفعال المنتظمة نضيف ed: work → worked، وإن انتهى بـ e نضيف d: like → liked، وإن انتهى بـ ساكن+y: study → studied. للنفي والسؤال: didn't / Did + فعل أصلي (بدون ed).",rule:"فعل+ed  ·  didn't + أصلي  ·  Did + فاعل + أصلي؟",ex:[["I watched a movie last night.","شاهدت فيلماً الليلة الماضية."],["She called me yesterday.","اتصلت بي أمس."],["Did you finish? Yes, I did.","هل انتهيت؟ نعم."],["I didn't like it.","لم يعجبني."]],mis:["I didn't watched it.","I didn't watch it.","بعد didn't فعل أصلي."]},
+ words:["worked|عمل","played|لعب","watched|شاهد","visited|زار","cooked|طبخ","called|اتصل","walked|مشى","stayed|بقي","started|بدأ","finished|أنهى","wanted|أراد","liked|أحبّ","studied|درس","cleaned|نظّف","opened|فتح","arrived|وصل","helped|ساعد","talked|تحدث","listened|استمع","travelled|سافر"],
+ phrases:["I watched a movie last night.|شاهدت فيلماً الليلة الماضية.","She called me yesterday.|اتصلت بي أمس.","Did you finish? Yes, I did.|هل انتهيت؟ نعم.","I didn't like it.|لم يعجبني.","We stayed at home.|بقينا في البيت.","I arrived late.|وصلت متأخراً."],
+ dlg:[["A","Did you work yesterday?","هل عملت أمس؟"],["B","No, I didn't. I stayed at home.","لا. بقيت في البيت."],["A","What did you do?","ماذا فعلت؟"],["B","I cleaned my room and I cooked dinner.","نظفت غرفتي وطبخت العشاء."],["A","Nice! I visited my grandmother.","جميل! أنا زرت جدتي."],["B","Did she like the visit?","هل أعجبتها الزيارة؟"]],
+ gq:[["I ___ my uncle yesterday.",["visit","visited","visiting"],1],["___ you call him?",["Do","Did","Was"],1],["He didn't ___ yesterday.",["worked","works","work"],2],["She ___ English last year.",["studyed","studied","studies"],1]],
+ w:"اكتب 5 جمل عن عطلة نهاية الأسبوع الماضية بأفعال -ed، وجملة نفي بـ didn't.",chat:"Ask the learner what they did last weekend. Encourage -ed verbs.",
+ bc:[["write","A thank-you email","writing/a1/thank-you-email"]]},
+24:{kind:"learn",week:4,topic:"الأفعال الشاذة في الماضي",en:"Irregular verbs",
+ g:{t:"الماضي الشاذ",ar:"أفعال كثيرة شائعة لا تأخذ ed بل لها شكل خاص يجب حفظه: go → went، eat → ate، see → saw. لكن في النفي والسؤال نعود للأصل: Did you go? I didn't see.",rule:"احفظ الشكل الثاني: go→went · eat→ate · see→saw · buy→bought",ex:[["I went to Jeddah last week.","ذهبت إلى جدة الأسبوع الماضي."],["We ate pizza.","أكلنا بيتزا."],["She bought a new phone.","اشترت هاتفاً جديداً."],["What did you do at the weekend?","ماذا فعلت في عطلة نهاية الأسبوع؟"]],mis:["I goed to the mall.","I went to the mall.","go فعل شاذ."]},
+ words:["went|ذهب (go)","came|جاء (come)","ate|أكل (eat)","drank|شرب (drink)","saw|رأى (see)","had|كان عنده / تناول (have)","got|حصل / وصل (get)","made|صنع (make)","bought|اشترى (buy)","took|أخذ (take)","gave|أعطى (give)","said|قال (say)","told|أخبر (tell)","met|قابل (meet)","slept|نام (sleep)","wrote|كتب (write)","read|قرأ (read) — تُنطق «رِد»","left|غادر (leave)","found|وجد (find)","knew|عرف (know)"],
+ phrases:["I went to Jeddah last week.|ذهبت إلى جدة الأسبوع الماضي.","We ate pizza.|أكلنا بيتزا.","I saw my friend at the mall.|رأيت صديقي في المول.","She bought a new phone.|اشترت هاتفاً جديداً.","What did you do at the weekend?|ماذا فعلت في عطلة نهاية الأسبوع؟","I had a good time.|قضيت وقتاً ممتعاً."],
+ dlg:[["A","What did you do at the weekend?","ماذا فعلت في العطلة؟"],["B","I went to the mall with my brother.","ذهبت إلى المول مع أخي."],["A","Did you buy anything?","هل اشتريت شيئاً؟"],["B","Yes, I bought new shoes. Then we ate at a restaurant.","نعم، اشتريت حذاءً جديداً. ثم أكلنا في مطعم."],["A","Did you see Ali?","هل رأيت علي؟"],["B","Yes! We met him there. We had a great time.","نعم! قابلناه هناك. قضينا وقتاً رائعاً."]],
+ gq:[["Yesterday I ___ to work.",["goed","went","go"],1],["She ___ a car last year.",["buyed","bought","buy"],1],["Did you ___ him?",["saw","see","seen"],1],["We ___ dinner at nine.",["ate","eated","eat"],0]],
+ w:"اكتب قصة قصيرة (6 جمل) عن يوم ممتع مضى، استخدم 5 أفعال شاذة على الأقل.",chat:"Ask the learner about a recent trip or fun day. Encourage irregular past verbs.",
+ bc:[["write","Online course introductions","writing/a1/online-course-introductions"]]},
+25:{kind:"learn",week:4,topic:"المستقبل والخطط",en:"Plans",
+ g:{t:"going to للخطط",ar:"للخطة المقررة: am/is/are + going to + فعل أصلي. I'm going to travel = سأسافر (قررت). النفي: I'm not going to... السؤال: Are you going to...?",rule:"am/is/are + going to + فعل أصلي",ex:[["I'm going to visit my family.","سأزور عائلتي."],["What are you going to do tonight?","ماذا ستفعل الليلة؟"],["We're going to travel next month.","سنسافر الشهر القادم."],["I'm not going to work tomorrow.","لن أعمل غداً."]],mis:["I going to travel.","I'm going to travel.","لا تحذف am."]},
+ words:["going to|سـ (للخطة)","plan|خطة / يخطط","next week|الأسبوع القادم","next month|الشهر القادم","next year|السنة القادمة","tonight|الليلة","soon|قريباً","later|لاحقاً","holiday|إجازة","ticket|تذكرة","book|يحجز","learn|يتعلم","future|المستقبل","dream|حلم","hope|يأمل","maybe|ربما","sure|متأكد","ready|جاهز","stay|يبقى / يقيم","abroad|في الخارج"],
+ phrases:["I'm going to visit my family.|سأزور عائلتي.","What are you going to do tonight?|ماذا ستفعل الليلة؟","We're going to travel next month.|سنسافر الشهر القادم.","I'm not going to work tomorrow.|لن أعمل غداً.","Maybe I'm going to learn French.|ربما سأتعلم الفرنسية.","Are you ready?|هل أنت جاهز؟"],
+ dlg:[["A","What are you going to do in the holiday?","ماذا ستفعل في الإجازة؟"],["B","I'm going to travel to Turkey with my family.","سأسافر إلى تركيا مع عائلتي."],["A","Great! Did you book the tickets?","رائع! هل حجزت التذاكر؟"],["B","Yes, and we're going to stay in a hotel near the sea.","نعم، وسنقيم في فندق قرب البحر."],["A","What are you going to do there?","ماذا ستفعلون هناك؟"],["B","We're going to swim, eat and relax!","سنسبح ونأكل ونرتاح!"]],
+ gq:[["I ___ going to study.",["am","is","are"],0],["She is going to ___.",["travels","travel","travelled"],1],["___ they going to come?",["Is","Do","Are"],2]],
+ w:"اكتب 5 خطط لك في الشهر القادم باستخدام going to، وجملة نفي.",chat:"Ask the learner about their plans for tonight, the weekend and next month.",
+ bc:[["listen","Booking a table","listening/a1/booking-table"],["speak","Making suggestions","speaking/a1/making-suggestions"]]},
+26:{kind:"learn",week:4,topic:"الجسم والصحة",en:"Health",
+ g:{t:"have / has + ألم، والجمع الشاذ",ar:"للمرض نستخدم have/has: I have a headache، She has a fever. وللألم: My back hurts. وبعض الجمع شاذ: foot → feet، tooth → teeth.",rule:"I/you/we/they have · he/she has  ·  My ... hurts",ex:[["What's the matter?","ما بك؟"],["I have a headache.","عندي صداع."],["My back hurts.","ظهري يؤلمني."],["She has a fever.","عندها حمّى."]],mis:["I am headache.","I have a headache.","المرض مع have."]},
+ words:["head|رأس","eye|عين","ear|أذن","nose|أنف","mouth|فم","hand|يد","arm|ذراع","leg|ساق / رِجل","foot|قدم","feet|قدمان","back|ظهر","stomach|معدة","tooth|سن","teeth|أسنان","headache|صداع","fever|حمّى","a cold|زكام","medicine|دواء","hurt|يؤلم","feel|يشعر"],
+ phrases:["What's the matter?|ما بك؟","I have a headache.|عندي صداع.","My back hurts.|ظهري يؤلمني.","I feel sick.|أشعر بالمرض.","Take this medicine.|خذ هذا الدواء.","Get well soon!|أتمنى لك الشفاء العاجل!"],
+ dlg:[["A","Good morning. What's the matter?","صباح الخير. ما بك؟"],["B","I feel sick. I have a fever and a headache.","أشعر بالمرض. عندي حمّى وصداع."],["A","Does your stomach hurt?","هل معدتك تؤلمك؟"],["B","No, but my throat hurts.","لا، لكن حلقي يؤلمني."],["A","OK. Take this medicine three times a day.","حسناً. خذ هذا الدواء ثلاث مرات يومياً."],["B","Thank you, doctor.","شكراً يا دكتور."]],
+ gq:[["She ___ a fever.",["have","has","is"],1],["My eyes ___.",["hurt","hurts","hurting"],0],["One foot, two ___.",["foots","feet","feets"],1]],
+ w:"اكتب حواراً عند الطبيب (5 أسطر): ما المشكلة وماذا يؤلمك.",chat:"Role-play: you are a doctor. Ask the learner what's the matter.",
+ bc:[["read","Notes at work","reading/a1/notes-work"]]},
+27:{kind:"learn",week:4,topic:"التعبير عن الرغبات والأشخاص",en:"I want to...",
+ g:{t:"like + ing و want to وضمائر المفعول",ar:"بعد like/love/hate نضع فعلاً+ing: I love reading. وبعد want/would like نضع to + فعل: I want to learn. وضمائر المفعول (بعد الفعل): me, you, him, her, us, them: Call me.",rule:"like/love + ing  ·  want + to + فعل  ·  فعل + me/him/her/us/them",ex:[["I love reading.","أحب القراءة."],["I want to learn English.","أريد أن أتعلم الإنجليزية."],["Call me later.","اتصل بي لاحقاً."],["Do you know him?","هل تعرفه؟"]],mis:["I want learn English.","I want to learn English.","بعد want لا بد من to."]},
+ words:["me|ـني / ـي (مفعول)","him|ـه (مفعول)","us|ـنا (مفعول)","them|ـهم (مفعول)","enjoy|يستمتع","prefer|يفضّل","different|مختلف","same|نفس","easy|سهل","difficult|صعب","slow|بطيء","together|معاً","alone|وحيداً","also|أيضاً","too|أيضاً (آخر الجملة)","because|لأن","but|لكن","and|و","or|أو","so|لذلك"],
+ phrases:["I love reading.|أحب القراءة.","I want to learn English.|أريد أن أتعلم الإنجليزية.","Call me later.|اتصل بي لاحقاً.","Do you know him?|هل تعرفه؟","My favourite food is rice because it's delicious.|طعامي المفضل الأرز لأنه لذيذ.","I prefer tea, but my wife prefers coffee.|أفضّل الشاي لكن زوجتي تفضّل القهوة."],
+ dlg:[["A","Why do you want to learn English?","لماذا تريد أن تتعلم الإنجليزية؟"],["B","Because I want to travel and I like meeting people.","لأني أريد السفر وأحب مقابلة الناس."],["A","Is English difficult for you?","هل الإنجليزية صعبة عليك؟"],["B","It was difficult, but now it's easy! I enjoy it.","كانت صعبة، لكنها الآن سهلة! أستمتع بها."],["A","Do you study alone?","هل تدرس وحدك؟"],["B","No. My friend and I study together. I help him and he helps me.","لا. أدرس مع صديقي. أساعده ويساعدني."]],
+ gq:[["I like ___.",["swim","swimming","to swimming"],1],["Call ___ later. (أنا)",["I","me","my"],1],["I want ___ travel.",["to","for","-"],0],["This is Ali. I like ___.",["he","his","him"],2]],
+ w:"اكتب 5 جمل: أشياء تحب فعلها (+ing)، شيء تريد تعلمه (want to)، واستخدم because مرة.",chat:"Ask the learner what they want to do in the future and why (because...).",
+ bc:[["write","An email to book a hotel","writing/a1/email-book-hotel"],["grammar","Verbs followed by -ing or infinitive","grammar/a1-a2/verbs-followed-ing-or-infinitive"]]},
+28:{kind:"review",week:4,topic:"مراجعة الأسبوع الرابع + اختبار",en:"Week 4 review"},
+29:{kind:"mock",week:5,topic:"المراجعة الشاملة + اختبار تجريبي",en:"Full review"},
+30:{kind:"final",week:5,topic:"الاختبار النهائي A1",en:"Final A1 exam"}
+};
+
+const READING = {
+ 1:{title:"Omar",text:"My name is Omar. I am from Saudi Arabia, but I live in Egypt. I am a student. I am twenty years old. My family is big. I have two brothers and one sister. My sister's name is Nora. She is ten years old. My father is a teacher. My favourite colour is blue, but my car is white. It is small and old.",
+  q:[["Where is Omar from?",["Egypt","Saudi Arabia","Britain"],1],["How many brothers does he have?",["one","two","three"],1],["How old is Nora?",["ten","twelve","twenty"],0],["What colour is his car?",["blue","black","white"],2]]},
+ 2:{title:"Lina's day",text:"Lina is a student. She gets up at six o'clock every day. She has breakfast with her mother. She usually drinks tea, but she never drinks coffee. She goes to university by bus. Her classes start at eight. On Friday she doesn't study. She goes to the market with her friends. She likes shopping, but she doesn't like expensive shops.",
+  q:[["When does Lina get up?",["at six","at seven","at eight"],0],["What does she never drink?",["tea","coffee","juice"],1],["How does she go to university?",["by car","by bus","she walks"],1],["What does she do on Friday?",["She studies.","She goes to the market.","She works."],1]]},
+ 3:{title:"Khaled's message",text:"Hi Sam, I'm writing from my new apartment! It's small but very nice. There are two bedrooms and a big kitchen. There isn't a garden, but there is a balcony. The apartment is on King Street, next to a supermarket and opposite a pharmacy. It's raining now and I'm drinking hot tea. I work at a bank near here, so I can walk to work. See you soon! Khaled",
+  q:[["How many bedrooms are there?",["one","two","three"],1],["Is there a garden?",["Yes, there is.","No, there isn't."],1],["What is next to the apartment?",["a pharmacy","a supermarket","a bank"],1],["How does Khaled go to work?",["by car","he walks","by bus"],1],["What is Khaled doing now?",["cooking","drinking tea","sleeping"],1]]},
+ 4:{title:"Last weekend",text:"Last weekend was great. On Thursday night I went to my uncle's house. We ate dinner together and talked a lot. On Friday morning I was tired, so I stayed at home. In the afternoon I visited my friend Ali. We watched a football match on TV. My team didn't win, but it was fun. Next month I'm going to travel to London. I'm going to visit museums and practise my English!",
+  q:[["Where did he go on Thursday night?",["to the cinema","to his uncle's house","to the mall"],1],["Why did he stay at home on Friday morning?",["He was tired.","He was sick.","It was raining."],0],["Did his team win?",["Yes, it did.","No, it didn't."],1],["Where is he going to travel?",["Dubai","Paris","London"],2]]},
+ 5:{title:"An email to a new friend",text:"Hi Maria, my name is Sara and I'm your new pen friend. I'm twenty-five and I live in Jeddah with my parents and my little brother. I'm a nurse. I work at a big hospital from Sunday to Thursday. I start work at seven in the morning, so I get up very early! In my free time I love cooking and I sometimes go to the beach with my friends. Last week I made a big cake for my brother's birthday. It was delicious! Next summer I'm going to visit Spain. Can you tell me about your city? Write soon! Sara",
+  q:[["What is Sara's job?",["a teacher","a nurse","a doctor"],1],["Who does she live with?",["alone","her parents and brother","her friends"],1],["Why does she get up early?",["She starts work at seven.","She goes to the beach.","She cooks breakfast."],0],["What did she do last week?",["She visited Spain.","She made a cake.","She went to hospital."],1],["What is she going to do next summer?",["visit Spain","buy a cake","start a new job"],2]]}
+};
+
+const TAGS = {
+ memo:{ar:"احفظ",d:"ليصبح في ذاكرتك: الكلمة ومعناها ونطقها. عبر البطاقات والتكرار المتباعد."},
+ und:{ar:"افهم فقط",d:"اقرأ وافهم الفكرة. لا تحفظ الشرح، سيثبت بالتطبيق والاختبار."},
+ rep:{ar:"كرّر بصوتك",d:"قل الجملة بصوت مسموع مقلداً النطق (Shadowing). لا تكتفِ بالقراءة الصامتة."},
+ focus:{ar:"استمع بتركيز",d:"سماعات، بلا أي نشاط آخر. أول مرة بدون نص، ثم مع النص."},
+ bg:{ar:"في الخلفية",d:"أثناء القيادة أو الطبخ أو المشي. لا يهم أن تفهم كل كلمة؛ الهدف تعويد الأذن."},
+ read:{ar:"اقرأ",d:"اقرأ النص مرة للفكرة العامة، ثم مرة للتفاصيل."},
+ write:{ar:"اكتب",d:"اكتب بنفسك دون ترجمة آلية، ثم صحّح."},
+ test:{ar:"اختبر",d:"قِس نفسك. لا تنتقل إلا بعد النجاح."}
+};
+const MODES = {
+ busy:{ar:"مشغول",min:25,d:"الحد الأدنى الذي يحافظ على تقدمك: كلمات + قاعدة مختصرة + جمل + اختبار."},
+ normal:{ar:"يوم عادي",min:65,d:"الوضع الموصى به: يضيف حلقة الفيديو والحوار والنطق."},
+ free:{ar:"متفرغ",min:120,d:"الأسرع: يضيف الكتابة المصححة والمحادثة ومصادر إضافية."}
+};
+
+// ================= APP =================
+const DAY = 86400000;
+const LK = "a1path.v1";
+const INT = [0, 1, 2, 4, 8, 16];
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const sp = s => { const i = s.indexOf("|"); return [s.slice(0, i), s.slice(i + 1)]; };
+const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const pick = (a, n) => shuffle(a).slice(0, n);
+const wait = ms => new Promise(r => setTimeout(r, ms));
+const todayKey = () => { const d = new Date(); return d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate(); };
+
+const IC = {
+  spk: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg>',
+  check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5 9-10"/></svg>',
+  today: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M3 9h18M8 2v4M16 2v4"/><path d="m9 15 2 2 4-4"/></svg>',
+  lesson: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2 2 2 0 0 0 2 2h13"/><path d="M9 7h6M9 11h4"/></svg>',
+  cards: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="14" height="15" rx="2"/><path d="M7 3h12a2 2 0 0 1 2 2v12"/></svg>',
+  listen: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 14v-2a9 9 0 0 1 18 0v2"/><rect x="3" y="14" width="4" height="7" rx="1.5"/><rect x="17" y="14" width="4" height="7" rx="1.5"/></svg>',
+  prog: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>',
+  play: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.4-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/></svg>',
+  pause: '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4.5" height="16" rx="1"/><rect x="13.5" y="4" width="4.5" height="16" rx="1"/></svg>'
+};
+
+// ---------- state ----------
+function blank() {
+  return { v: 1, updatedAt: 0, started: Date.now(), unlocked: 1, mode: "normal", done: {}, tests: {}, srs: {}, log: {}, journal: [], voice: [], rate: 0.85, cardDir: "en", finished: false, settings: { remind: true, remindHour: 20, report: true } };
+}
+let S = blank();
+try { const raw = localStorage.getItem(LK); if (raw) S = Object.assign(blank(), JSON.parse(raw)); } catch (e) {}
+const UI = { view: "today", day: Math.min(S.unlocked, 30), quiz: null, chat: null, card: null, flipped: false, listenSrc: "day", toast: null };
+
+const API = "https://script.google.com/macros/s/AKfycbx49HqI6MC3c7iYTNYQqm-4qK0HZd2l8s-3-8SRYPorxLaz7BjKyh4U205JgDOl1GU/exec";
+const AUTH_K = "a1path.auth";
+let AUTH = null; try { AUTH = JSON.parse(localStorage.getItem(AUTH_K) || "null"); } catch (e) {}
+if (!AUTH) UI.view = "login";
+const OWNER_HINT = "ahmed0944asd1@gmail.com";
+const store = { kind: "local", saving: false, again: false, timer: null, ai: false };
+async function api(action, data = {}) {
+  const r = await fetch(API, { method: "POST", credentials: "omit", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(Object.assign({ action, email: AUTH && AUTH.email, pin: AUTH && AUTH.pin }, data)) });
+  const j = await r.json();
+  if (!j.ok && j.error === "auth" && action !== "login") logout(true);
+  return j;
+}
+function save(render_ = true) {
+  S.updatedAt = Date.now();
+  try { localStorage.setItem(LK, JSON.stringify(S)); } catch (e) {}
+  if (AUTH) { clearTimeout(store.timer); store.timer = setTimeout(flush, 1200); }
+  if (render_) render();
+}
+async function flush() {
+  if (!AUTH) return;
+  if (store.saving) { store.again = true; return; }
+  store.saving = true;
+  try { S.summary = summary(); const j = await api("save", { state: S, appUrl: location.href.split("#")[0].split("?")[0] }); setSync(j.ok ? "cloud" : "err"); }
+  catch (e) { setSync("err"); }
+  store.saving = false;
+  if (store.again) { store.again = false; flush(); }
+}
+function setSync(k) {
+  store.kind = k;
+  const el = $("#sync"); if (!el) return;
+  el.className = "sync " + k;
+  el.querySelector("span").textContent = k === "cloud" ? "محفوظ على إيميلك" : k === "err" ? "غير متصل، سيُحفظ لاحقاً" : k === "wait" ? "يتصل…" : "على هذا الجهاز فقط";
+}
+function logActivity() { const k = todayKey(); S.log[k] = (S.log[k] || 0) + 1; }
+function markDone(day, id, on = true) {
+  S.done["d" + day] = S.done["d" + day] || {};
+  if (on) S.done["d" + day][id] = Date.now(); else delete S.done["d" + day][id];
+}
+const isDone = (day, id) => !!(S.done["d" + day] && S.done["d" + day][id]);
+function summary() {
+  const d = Math.min(S.unlocked, 30);
+  const left = tasksFor(d).filter(t => MODE_SET[S.mode].includes(t.mode) && !isDone(d, t.id)).map(t => t.t);
+  const agg = {}; Object.values(S.tests).forEach(t => Object.entries(t.skills || {}).forEach(([k, v]) => { (agg[k] = agg[k] || []).push(v); }));
+  const skills = {}; Object.keys(agg).forEach(k => skills[k] = Math.round(agg[k].reduce((a, b) => a + b, 0) / agg[k].length));
+  let week = 0; const x = new Date(); for (let i = 0; i < 7; i++) { const k = x.getFullYear() + "-" + (x.getMonth() + 1) + "-" + x.getDate(); if (S.log[k]) week++; x.setDate(x.getDate() - 1); }
+  return { day: d, topic: DAYS[d].topic, left, due: dueList().length, streak: streak(), learned: learnedCount(), passed: Object.keys(DAYS).filter(k => passedDay(+k)).length, skills, week, dayPassedToday: S.lastPass === todayKey() };
+}
+async function connect() {
+  if (!AUTH) { setSync("local"); render(); return; }
+  setSync("wait");
+  try {
+    const j = await api("load");
+    if (!j.ok) { setSync("err"); render(); return; }
+    store.ai = !!j.ai;
+    const remote = j.state || {};
+    if ((remote.updatedAt || 0) > (S.updatedAt || 0)) {
+      S = Object.assign(blank(), remote);
+      try { localStorage.setItem(LK, JSON.stringify(S)); } catch (e) {}
+      UI.day = Math.min(S.unlocked, 30);
+    } else if (S.updatedAt) await flush();
+    setSync("cloud");
+  } catch (e) { setSync("err"); }
+  if (!["quiz", "chat", "quizResult"].includes(UI.view)) render();
+}
+document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible" && AUTH && !["quiz", "chat", "quizResult"].includes(UI.view)) connect(); });
+function logout(expired) {
+  AUTH = null; try { localStorage.removeItem(AUTH_K); } catch (e) {}
+  UI.view = "login"; UI.loginErr = expired ? "انتهت الجلسة أو تغيّر رمز الدخول. سجّل الدخول مرة أخرى." : null; render();
+}
+
+// ---------- microphone ----------
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+const MIC = { r: null, on: false, ctx: null, live: "" };
+function micListen(ctx, onDone) {
+  if (!SR) { toast("متصفحك لا يدعم التعرف على الكلام. استخدم Chrome أو Safari، أو ميكروفون الكيبورد."); return; }
+  if (MIC.on) { try { MIC.r.stop(); } catch (e) {} return; }
+  hush();
+  const r = new SR(); r.lang = "en-US"; r.interimResults = true; r.maxAlternatives = 5; r.continuous = false;
+  let alts = [], err = null;
+  r.onresult = e => { const R = e.results[e.results.length - 1]; alts = Array.from(R).map(a => a.transcript); MIC.live = alts[0] || ""; const el = document.getElementById("mic-live"); if (el) el.textContent = MIC.live; };
+  r.onerror = e => { err = e.error; };
+  r.onend = () => { MIC.on = false; MIC.r = null; clearTimeout(MIC.t); if (err && err !== "no-speech" && err !== "aborted") toast(err === "not-allowed" || err === "service-not-allowed" ? "اسمح للموقع باستخدام الميكروفون من أيقونة القفل بجانب الرابط." : "تعذّر السماع، حاول مرة أخرى."); onDone(alts, err); render(); };
+  MIC.r = r; MIC.on = true; MIC.ctx = ctx; MIC.live = "";
+  try { r.start(); } catch (e) { MIC.on = false; toast("تعذّر تشغيل الميكروفون."); return; }
+  MIC.t = setTimeout(() => { try { r.stop(); } catch (e) {} }, 12000);
+  render();
+}
+function bestOf(target, alts) { let best = null; (alts || []).forEach(a => { const r = compare(target, a); if (!best || r.score > best.score) best = Object.assign(r, { said: a }); }); return best; }
+const IC_MIC = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 17v5M8 22h8"/></svg>';
+function micBtn(ctx, label) {
+  const on = MIC.on && MIC.ctx === ctx;
+  if (!SR) return `<span class="tiny">الميكروفون المباشر غير مدعوم هنا. استخدم ميكروفون الكيبورد في الخانة.</span>`;
+  return `<button class="btn ${on ? "rec" : "hi"} lg" data-act="mic" data-ctx="${ctx}">${IC_MIC}${on ? "يستمع… اضغط للإيقاف" : (label || "اضغط وتكلم")}</button>${on ? `<span id="mic-live" class="en small muted"></span>` : ""}`;
+}
+// recorder
+const RECD = { mr: null, on: false, t: null };
+async function recStart(maxMs, onStop) {
+  if (!navigator.mediaDevices || !window.MediaRecorder) { toast("التسجيل غير مدعوم في هذا المتصفح."); return; }
+  let stream;
+  try { stream = await navigator.mediaDevices.getUserMedia({ audio: true }); } catch (e) { toast("اسمح للموقع باستخدام الميكروفون من أيقونة القفل بجانب الرابط."); return; }
+  hush();
+  const mime = ["audio/webm;codecs=opus", "audio/mp4", "audio/webm", "audio/ogg"].find(m => MediaRecorder.isTypeSupported(m)) || "";
+  const mr = new MediaRecorder(stream, mime ? { mimeType: mime } : undefined), chunks = [];
+  mr.ondataavailable = e => { if (e.data && e.data.size) chunks.push(e.data); };
+  mr.onstop = () => { stream.getTracks().forEach(t => t.stop()); RECD.on = false; clearTimeout(RECD.t); onStop(new Blob(chunks, { type: (mr.mimeType || "audio/webm").split(";")[0] })); render(); };
+  mr.start(); RECD.mr = mr; RECD.on = true; RECD.t = setTimeout(recStop, maxMs); render();
+}
+function recStop() { clearTimeout(RECD.t); if (RECD.mr && RECD.mr.state !== "inactive") RECD.mr.stop(); }
+const toB64 = blob => new Promise((res, rej) => { const fr = new FileReader(); fr.onload = () => res(String(fr.result).split(",")[1]); fr.onerror = rej; fr.readAsDataURL(blob); });
+async function toWav(blob) {
+  const Ctx = window.AudioContext || window.webkitAudioContext, ctx = new Ctx();
+  const buf = await ctx.decodeAudioData(await blob.arrayBuffer());
+  const rate = 16000, off = new OfflineAudioContext(1, Math.max(1, Math.ceil(buf.duration * rate)), rate);
+  const src = off.createBufferSource(); src.buffer = buf; src.connect(off.destination); src.start();
+  const d = (await off.startRendering()).getChannelData(0); try { ctx.close(); } catch (e) {}
+  const b = new ArrayBuffer(44 + d.length * 2), v = new DataView(b), w = (o, t) => { for (let i = 0; i < t.length; i++) v.setUint8(o + i, t.charCodeAt(i)); };
+  w(0, "RIFF"); v.setUint32(4, 36 + d.length * 2, true); w(8, "WAVE"); w(12, "fmt "); v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, 1, true);
+  v.setUint32(24, rate, true); v.setUint32(28, rate * 2, true); v.setUint16(32, 2, true); v.setUint16(34, 16, true); w(36, "data"); v.setUint32(40, d.length * 2, true);
+  for (let i = 0; i < d.length; i++) { const x = Math.max(-1, Math.min(1, d[i])); v.setInt16(44 + i * 2, x < 0 ? x * 0x8000 : x * 0x7fff, true); }
+  return new Blob([b], { type: "audio/wav" });
+}
+
+// ---------- speech ----------
+const TTS = { en: null, ar: null };
+function loadVoices() {
+  if (!("speechSynthesis" in window)) return;
+  const v = speechSynthesis.getVoices(); if (!v.length) return;
+  const pref = ["Samantha", "Google US English", "Microsoft Aria", "Microsoft Jenny", "Microsoft Guy", "Ava", "Allison", "Google UK English Female", "Daniel", "Karen"];
+  TTS.en = pref.map(n => v.find(x => x.name.includes(n) && /^en/i.test(x.lang))).find(Boolean) || v.find(x => /^en[-_]US/i.test(x.lang)) || v.find(x => /^en/i.test(x.lang)) || null;
+  TTS.ar = v.find(x => /^ar/i.test(x.lang)) || null;
+}
+if ("speechSynthesis" in window) { loadVoices(); speechSynthesis.onvoiceschanged = loadVoices; }
+function say(text, o = {}) {
+  return new Promise(res => {
+    if (!("speechSynthesis" in window)) return res(false);
+    const u = new SpeechSynthesisUtterance(text);
+    if (o.lang === "ar") { if (!TTS.ar) return res(false); u.voice = TTS.ar; u.lang = TTS.ar.lang; u.rate = 1; }
+    else { if (TTS.en) { u.voice = TTS.en; u.lang = TTS.en.lang; } else u.lang = "en-US"; u.rate = o.rate || S.rate || 0.85; }
+    let done = false; const fin = ok => { if (!done) { done = true; res(ok); } };
+    u.onend = () => fin(true); u.onerror = () => fin(false);
+    setTimeout(() => fin(true), 4000 + text.length * 180);
+    speechSynthesis.speak(u);
+  });
+}
+function hush() { try { speechSynthesis.cancel(); } catch (e) {} }
+const spk = (t, cls = "") => `<button class="spk ${cls}" data-act="say" data-t="${esc(t)}" aria-label="استمع">${IC.spk}</button>`;
+
+// ---------- text comparison ----------
+const NUMW = ["zero","one","two","three","four","five","six","seven","eight","nine","ten","eleven","twelve","thirteen","fourteen","fifteen","sixteen","seventeen","eighteen","nineteen","twenty"];
+const CONTR = {"i'm":"i am","you're":"you are","he's":"he is","she's":"she is","it's":"it is","we're":"we are","they're":"they are","don't":"do not","doesn't":"does not","can't":"cannot","isn't":"is not","aren't":"are not","what's":"what is","i'd":"i would","didn't":"did not","wasn't":"was not","weren't":"were not","that's":"that is","there's":"there is","where's":"where is","i'll":"i will","let's":"let us","how's":"how is","im":"i am","dont":"do not","doesnt":"does not","cant":"cannot","isnt":"is not","arent":"are not","didnt":"did not","whats":"what is","youre":"you are","theyre":"they are","wasnt":"was not","werent":"were not"};
+function toks(s) {
+  s = String(s).toLowerCase().replace(/[’‘`]/g, "'");
+  s = s.replace(/[a-z']+/g, w => CONTR[w] || w).replace(/can not/g, "cannot");
+  return s.replace(/[^a-z0-9' ]+/g, " ").split(/\s+/).filter(Boolean).map(w => /^\d+$/.test(w) && +w <= 20 ? NUMW[+w] : w.replace(/'/g, ""));
+}
+function compare(target, said) {
+  const a = toks(target), b = toks(said);
+  if (!a.length || !b.length) return { score: 0, hits: a.map(() => false), a };
+  const m = a.length, n = b.length, L = Array.from({ length: m + 1 }, () => new Array(n + 1).fill(0));
+  for (let i = m - 1; i >= 0; i--) for (let j = n - 1; j >= 0; j--) L[i][j] = a[i] === b[j] ? L[i + 1][j + 1] + 1 : Math.max(L[i + 1][j], L[i][j + 1]);
+  const hits = new Array(m).fill(false); let i = 0, j = 0;
+  while (i < m && j < n) { if (a[i] === b[j]) { hits[i] = true; i++; j++; } else if (L[i + 1][j] >= L[i][j + 1]) i++; else j++; }
+  return { score: Math.round(200 * L[0][0] / (m + n)), hits, a };
+}
+const diffHTML = r => `<div class="diff en">${r.a.map((w, i) => `<span class="${r.hits[i] ? "hit" : "miss"}">${esc(w)}</span>`).join(" ")}</div>`;
+
+// ---------- curriculum helpers ----------
+const learnDays = (from = 1, to = 28) => Object.keys(DAYS).map(Number).filter(d => d >= from && d <= to && DAYS[d].kind === "learn");
+const weekDays = w => learnDays((w - 1) * 7 + 1, w * 7);
+const wordsOf = d => (DAYS[d].words || []).map((s, i) => { const [en, ar] = sp(s); return { key: d + ":" + i, en, ar, d }; });
+const phrasesOf = d => (DAYS[d].phrases || []).map(s => { const [en, ar] = sp(s); return { en, ar, d }; });
+const unlockedLearn = () => learnDays(1, Math.min(S.unlocked, 28));
+function testKey(d) { const D = DAYS[d]; return D.kind === "learn" ? "d" + d : D.kind === "review" ? "w" + D.week : D.kind; }
+const PASS = { learn: 80, review: 75, mock: 70, final: 70 };
+const bcLink = p => BC + p;
+const KIND_TAG = { listen: "focus", read: "read", write: "write", speak: "rep", grammar: "und" };
+const KIND_AR = { listen: "استماع", read: "قراءة", write: "كتابة", speak: "محادثة", grammar: "قواعد" };
+
+function tasksFor(d) {
+  const D = DAYS[d], T = [];
+  const voa = { id: "voa", mode: "normal", tag: "focus", min: 15, t: "حلقة فيديو: Let's Learn English — Lesson " + d, sub: VOA_TITLES[d], how: "شاهدها مرة بتركيز مع الترجمة الإنجليزية (زر CC)، ثم مرة ثانية بدونها. لا تحفظ شيئاً، فقط افهم القصة.", link: VOA[d] };
+  const bgSelf = { id: "bgself", mode: "bg", tag: "bg", min: 15, t: "مشغّل الاستماع: كلمات وجمل اليوم", how: "شغّله أثناء الطبخ أو المشي أو القيادة (اترك الشاشة مفتوحة). كرر بصوت خافت إن استطعت.", go: "listen" };
+  const bgPod = d % 2
+    ? { id: "bgpod", mode: "bg", tag: "bg", min: 10, t: "بودكاست Easy Stories in English — مستوى L1 Beginner", how: "قصص بطيئة للمبتدئين. اسمع أي حلقة من L1 في الخلفية. لا تقلق إن فهمت 30% فقط.", link: RES.easyStories, link2: RES.easyStoriesApple, l2: "Apple Podcasts" }
+    : { id: "bgpod", mode: "bg", tag: "bg", min: 5, t: "خبر اليوم: News in Levels — Level 1", how: "خبر قصير بكلمات أساسية مع صوت. اسمعه أولاً في الخلفية، وإن تفرغت اقرأه وأنت تسمع.", link: RES.newsLevels };
+  if (D.kind === "learn") {
+    T.push({ id: "words", mode: "busy", tag: "memo", min: 10, t: "كلمات اليوم (" + D.words.length + " كلمة)", how: "في البطاقات: اسمع الكلمة، قلها بصوتك مرتين، ثم اقلب البطاقة. احفظ المعنى والنطق معاً.", go: "cards" });
+    T.push({ id: "grammar", mode: "busy", tag: "und", min: 6, t: "قاعدة اليوم: " + D.g.t, how: "افهم الشرح ولا تحفظه. احفظ فقط السطر الأصفر (القاعدة).", go: "lesson#grammar" });
+    T.push({ id: "phrases", mode: "busy", tag: "rep", min: 5, t: "جمل اليوم الجاهزة (" + D.phrases.length + ")", how: "احفظ كل جملة كقطعة واحدة. شغّلها وكرر خلفها 3 مرات بنفس السرعة.", go: "lesson#phrases" });
+    T.push({ id: "quiz", mode: "busy", tag: "test", min: 6, t: "اختبار اليوم", how: "80% أو أكثر يفتح اليوم التالي. يمكنك الإعادة بلا حدود.", quiz: testKey(d) });
+    T.push(voa);
+    T.push({ id: "dialogue", mode: "normal", tag: "focus", min: 8, t: "حوار اليوم", how: "استمع أولاً بدون قراءة وخمّن المعنى، ثم اقرأ مع الصوت، ثم أخفِ الترجمة وكرر دور B.", go: "lesson#dialogue" });
+    if (PRON[d]) T.push({ id: "pron", mode: "normal", tag: "rep", min: 5, t: "نطق اليوم: " + PRON[d].t, how: "مخصص لأخطاء العرب في النطق. اسمع كل كلمة وقلدها بصوت عالٍ.", go: "lesson#pron" });
+    T.push({ id: "speak", mode: "normal", tag: "rep", min: 5, t: "تحدي النطق بالميكروفون", how: "اضغط «اضغط وتكلم» وقل جمل اليوم. التطبيق يسمعك ويقيس وضوح نطقك، وتقدر تسجّل صوتك وتقارنه بالنطق الصحيح.", go: "lesson#speak" });
+    T.push({ id: "write", mode: "free", tag: "write", min: 12, t: "كتابة: " + D.w, how: "اكتب بنفسك بلا مترجم، ثم اضغط «صحّح لي».", go: "lesson#write" });
+    T.push({ id: "chat", mode: "free", tag: "rep", min: 12, t: "محادثة مع شريك ذكي عن موضوع اليوم", how: "تكلم بالميكروفون أو اكتب. الشريك يرد بصوت ويصحح أخطاءك بالعربي. 4 ردود على الأقل.", chat: true });
+    (D.bc || []).forEach((b, i) => T.push({ id: "bc" + i, mode: "free", tag: KIND_TAG[b[0]], min: 12, t: KIND_AR[b[0]] + " إضافي: " + b[1], how: "درس من British Council مستوى A1 فيه نشاط وتمارين تفاعلية. " + (b[0] === "grammar" ? "افهم فقط وحل التمارين." : "حل التمارين المرفقة."), link: bcLink(b[2]) }));
+    T.push(bgSelf, bgPod, { id: "bgvoa", mode: "bg", tag: "bg", min: 10, t: "أعد حلقة الفيديو كصوت فقط", how: "بعد أن شاهدتها بتركيز، شغّلها مرة أخرى كصوت وأنت تفعل شيئاً آخر.", link: VOA[d] });
+  } else if (D.kind === "review") {
+    const w = D.week;
+    T.push({ id: "words", mode: "busy", tag: "memo", min: 12, t: "راجع بطاقات الأسبوع المستحقة", how: "البطاقات تعرض لك الكلمات التي بدأت تنساها فقط.", go: "cards" });
+    T.push({ id: "rules", mode: "busy", tag: "und", min: 5, t: "لخص قواعد الأسبوع (صفحة واحدة)", how: "اقرأ القواعد الصفراء للأسبوع. إن لم تتذكر قاعدة فافتح يومها.", go: "lesson" });
+    T.push({ id: "quiz", mode: "busy", tag: "test", min: 20, t: "اختبار الأسبوع " + w + " (المهارات الأربع)", how: "مفردات وقواعد واستماع وقراءة ونطق. 75% يفتح الأسبوع التالي.", quiz: testKey(d) });
+    T.push(voa);
+    T.push({ id: "voice", mode: "normal", tag: "rep", min: 5, t: "سجّل «بصمة صوتك» لهذا الأسبوع", how: "من صفحة «تقدّمي» اضغط «سجّل الآن» وتكلم دقيقة عن نفسك بما تعلمته. يُحفظ على إيميلك وستقارن تسجيلاتك في النهاية.", go: "progress#voice" });
+    T.push({ id: "weak", mode: "normal", tag: "rep", min: 10, t: "أعد أضعف يوم في الأسبوع", how: "افتح اليوم الأقل درجة وأعد اختباره حتى 90%.", weak: w });
+    T.push({ id: "write", mode: "free", tag: "write", min: 15, t: "كتابة: فقرة (6-8 جمل) تجمع موضوعات الأسبوع", how: "اكتب عن نفسك بكل ما تعلمته هذا الأسبوع، ثم صحّحها.", go: "lesson#write" });
+    T.push({ id: "chat", mode: "free", tag: "rep", min: 15, t: "محادثة مراجعة شاملة للأسبوع", how: "شريك المحادثة يسألك عن كل موضوعات الأسبوع.", chat: true });
+    T.push({ id: "bcx", mode: "free", tag: "focus", min: 15, t: "استماع إضافي: أي درس من British Council A1", how: "اختر درساً لم تسمعه وحل تمارينه.", link: RES.bcListenIndex });
+    T.push({ id: "bgweek", mode: "bg", tag: "bg", min: 20, t: "مشغّل الاستماع: كل حوارات الأسبوع", how: "اختر «الأسبوع» في صفحة الاستماع وشغّله أثناء انشغالك.", go: "listen" }, bgPod);
+  } else if (D.kind === "mock") {
+    T.push({ id: "words", mode: "busy", tag: "memo", min: 15, t: "راجع كل البطاقات المستحقة", how: "ركز على البطاقات الصعبة.", go: "cards" });
+    T.push({ id: "quiz", mode: "busy", tag: "test", min: 30, t: "الاختبار التجريبي الشامل", how: "نسخة مصغرة من الاختبار النهائي. 70% يفتح الاختبار النهائي.", quiz: "mock" });
+    T.push(voa);
+    T.push({ id: "weak", mode: "normal", tag: "rep", min: 15, t: "عالج أضعف مهارة", how: "انظر نتيجة كل مهارة في الاختبار التجريبي وارجع لأيامها.", go: "progress" });
+    T.push({ id: "write", mode: "free", tag: "write", min: 15, t: "كتابة تجريبية: عرّف بنفسك في 8 جمل (حاضر + ماضٍ + مستقبل)", how: "هذا نفس نوع سؤال الكتابة في الاختبار النهائي.", go: "lesson#write" });
+    T.push({ id: "chat", mode: "free", tag: "rep", min: 15, t: "مقابلة تجريبية بالإنجليزية", how: "شريك المحادثة يجري معك مقابلة مستوى A1.", chat: true });
+    T.push({ id: "cam", mode: "free", tag: "test", min: 15, t: "اختبار خارجي سريع: Cambridge Test your English", how: "اختبار مجاني من كامبريدج لتقدير مستواك. أجب بصدق بدون مساعدة.", link: RES.cambridgeTest });
+    T.push({ id: "bgall", mode: "bg", tag: "bg", min: 30, t: "مشغّل الاستماع: كل ما تعلمته", how: "اختر «كل ما تعلمته» وشغّله في الخلفية طوال اليوم.", go: "listen" }, bgPod);
+  } else {
+    T.push({ id: "quiz", mode: "busy", tag: "test", min: 45, t: "الاختبار النهائي A1 (المهارات الأربع)", how: "النجاح = 70% أو أكثر في كل مهارة على حدة.", quiz: "final" });
+    T.push({ id: "voice", mode: "busy", tag: "rep", min: 5, t: "سجّل بصمة صوتك الأخيرة وقارنها بالأولى", how: "نفس الموضوع: عرّف بنفسك دقيقة. ثم استمع لتسجيل الأسبوع الأول.", go: "progress#voice" });
+    T.push({ id: "efq", mode: "normal", tag: "test", min: 15, t: "تحقق خارجي: EF SET Quick Check", how: "اختبار مجاني من 20 سؤالاً بمعايير CEFR. تأكيد مستقل لمستواك.", link: RES.efQuick });
+    T.push(voa);
+    T.push({ id: "ef50", mode: "free", tag: "test", min: 50, t: "شهادة مجانية: EF SET 50 دقيقة", how: "قراءة واستماع، ويعطيك شهادة CEFR مجانية. لا تحبط إن ظهر A1 أو A2 منخفض: هذا هو الهدف.", link: RES.ef50 });
+    T.push({ id: "bgall", mode: "bg", tag: "bg", min: 20, t: "استمع لكل ما تعلمته قبل الاختبار", how: "تهيئة للأذن قبل الاختبار.", go: "listen" });
+  }
+  return T;
+}
+const MODE_SET = { busy: ["busy"], normal: ["busy", "normal"], free: ["busy", "normal", "free"] };
+function dayProgress(d, mode = S.mode) {
+  const T = tasksFor(d).filter(t => MODE_SET[mode].includes(t.mode));
+  const n = T.filter(t => isDone(d, t.id)).length;
+  return { n, of: T.length, pct: T.length ? Math.round(100 * n / T.length) : 0 };
+}
+function passedDay(d) { const t = S.tests[testKey(d)]; return !!(t && t.passed); }
+
+// ---------- SRS ----------
+function ensureCards() {
+  let added = 0; const now = Date.now();
+  unlockedLearn().forEach(d => wordsOf(d).forEach(w => { if (!S.srs[w.key]) { S.srs[w.key] = [0, now]; added++; } }));
+  return added;
+}
+function allWords() { const m = {}; learnDays().forEach(d => wordsOf(d).forEach(w => m[w.key] = w)); return m; }
+const WORDS = allWords();
+function dueList() { const now = Date.now(); return Object.keys(S.srs).filter(k => WORDS[k] && S.srs[k][1] <= now).sort((a, b) => S.srs[a][1] - S.srs[b][1] || S.srs[a][0] - S.srs[b][0]); }
+function learnedCount() { return Object.values(S.srs).filter(v => v[0] >= 2).length; }
+function grade(key, ok) {
+  const c = S.srs[key] || [0, 0];
+  if (ok) { const b = Math.min(c[0] + 1, 5); S.srs[key] = [b, Date.now() + INT[b] * DAY - 3600000]; }
+  else S.srs[key] = [0, Date.now()];
+}
+function streak() {
+  let n = 0; const d = new Date();
+  const k = x => x.getFullYear() + "-" + (x.getMonth() + 1) + "-" + x.getDate();
+  if (!S.log[k(d)]) d.setDate(d.getDate() - 1);
+  while (S.log[k(d)]) { n++; d.setDate(d.getDate() - 1); }
+  return n;
+}
+
+// ---------- quiz builders ----------
+function mcVocab(w, pool, dir) {
+  const others = pick(pool.filter(x => x.ar !== w.ar && x.en !== w.en), 3);
+  const opts = shuffle([w, ...others]);
+  return dir === "en"
+    ? { type: "mc", skill: "vocab", prompt: "ما معنى هذه الكلمة؟", main: w.en, audio: w.en, opts: opts.map(o => o.ar), ans: opts.indexOf(w), wkey: w.key, reveal: w.en + " = " + w.ar }
+    : { type: "mc", skill: "vocab", prompt: "اختر الكلمة الإنجليزية لـ: «" + w.ar + "»", opts: opts.map(o => o.en), en: true, ans: opts.indexOf(w), wkey: w.key, reveal: w.en + " = " + w.ar };
+}
+function mcGrammar(g) { return { type: "mc", skill: "grammar", prompt: "اختر الإجابة الصحيحة", main: g[0], opts: g[1], en: true, ans: g[2], reveal: g[0].replace("___", g[1][g[2]]) }; }
+function mcListen(p, pool) {
+  const others = pick(pool.filter(x => x.en !== p.en), 3), opts = shuffle([p, ...others]);
+  return { type: "mc", skill: "listening", prompt: "استمع (بدون قراءة) واختر المعنى", hidden: true, audio: p.en, opts: opts.map(o => o.ar), ans: opts.indexOf(p), reveal: p.en };
+}
+const qType = p => ({ type: "type", skill: "listening", prompt: "استمع واكتب ما تسمعه بالإنجليزية", audio: p.en, target: p.en, ar: p.ar });
+const qSpeak = p => ({ type: "speak", skill: "speaking", prompt: "انطق هذه الجملة في ميكروفون الكيبورد", target: p.en, ar: p.ar });
+const qRead = (r, q) => ({ type: "mc", skill: "reading", prompt: "اقرأ النص وأجب", passage: r, main: q[0], opts: q[1], en: true, ans: q[2], reveal: q[1][q[2]] });
+
+function buildQuiz(key) {
+  let Q = [];
+  if (key[0] === "d") {
+    const d = +key.slice(1), W = wordsOf(d), P = phrasesOf(d);
+    const poolW = learnDays(1, d).flatMap(wordsOf), poolP = learnDays(1, d).flatMap(phrasesOf);
+    const ws = pick(W, 6);
+    ws.slice(0, 4).forEach(w => Q.push(mcVocab(w, poolW, "en")));
+    ws.slice(4).forEach(w => Q.push(mcVocab(w, poolW, "ar")));
+    DAYS[d].gq.forEach(g => Q.push(mcGrammar(g)));
+    const ps = pick(P, 4);
+    Q.push(mcListen(ps[0], poolP), mcListen(ps[1], poolP), qType(ps[2]), qSpeak(ps[3]));
+    if (d > 2) { const old = learnDays(1, d - 1); const od = old[Math.floor(Math.random() * old.length)]; Q.splice(6, 0, mcVocab(pick(wordsOf(od), 1)[0], poolW, "en")); }
+    return { key, title: "اختبار اليوم " + d, pass: PASS.learn, qs: Q };
+  }
+  if (key[0] === "w") {
+    const w = +key.slice(1), days = weekDays(w), W = days.flatMap(wordsOf), P = days.flatMap(phrasesOf);
+    const poolW = learnDays(1, w * 7).flatMap(wordsOf), poolP = learnDays(1, w * 7).flatMap(phrasesOf);
+    const ws = pick(W, 10);
+    ws.slice(0, 6).forEach(x => Q.push(mcVocab(x, poolW, "en"))); ws.slice(6).forEach(x => Q.push(mcVocab(x, poolW, "ar")));
+    pick(days.flatMap(d => DAYS[d].gq), 7).forEach(g => Q.push(mcGrammar(g)));
+    const ps = pick(P, 7);
+    Q.push(mcListen(ps[0], poolP), mcListen(ps[1], poolP), mcListen(ps[2], poolP), qType(ps[3]), qType(ps[4]));
+    READING[w].q.forEach(q => Q.push(qRead(READING[w], q)));
+    Q.push(qSpeak(ps[5]), qSpeak(ps[6]));
+    return { key, title: "اختبار الأسبوع " + w, pass: PASS.review, qs: Q };
+  }
+  const all = learnDays(), W = all.flatMap(wordsOf), P = all.flatMap(phrasesOf), G = all.flatMap(d => DAYS[d].gq);
+  const final = key === "final";
+  const ws = pick(W, final ? 12 : 10);
+  ws.forEach((x, i) => Q.push(mcVocab(x, W, i % 3 === 2 ? "ar" : "en")));
+  pick(G, final ? 12 : 10).forEach(g => Q.push(mcGrammar(g)));
+  const ps = pick(P, final ? 16 : 13);
+  let i = 0;
+  for (let k = 0; k < (final ? 6 : 5); k++) Q.push(mcListen(ps[i++], P));
+  for (let k = 0; k < 3; k++) Q.push(qType(ps[i++]));
+  const R = final ? READING[5] : READING[Math.random() < .5 ? 3 : 4];
+  R.q.forEach(q => Q.push(qRead(R, q)));
+  for (let k = 0; k < (final ? 5 : 4); k++) Q.push(qSpeak(ps[i++]));
+  Q.push({ type: "write", skill: "writing", prompt: final ? "اكتب 6 إلى 8 جمل عن نفسك: اسمك ومن أين أنت، عائلتك، يومك المعتاد، ماذا فعلت في آخر عطلة، وماذا ستفعل الأسبوع القادم." : "اكتب 5 إلى 6 جمل: عرّف بنفسك، وصف يومك، وماذا فعلت أمس.", weight: 6 });
+  return { key, title: final ? "الاختبار النهائي A1" : "الاختبار التجريبي", pass: final ? PASS.final : PASS.mock, perSkill: final, qs: Q };
+}
+const SKILL_AR = { vocab: "المفردات", grammar: "القواعد", listening: "الاستماع", reading: "القراءة", speaking: "التحدث", writing: "الكتابة" };
+
+function startQuiz(key) {
+  hush();
+  UI.quiz = Object.assign(buildQuiz(key), { i: 0, answers: [], state: null });
+  UI.view = "quiz"; render(); window.scrollTo(0, 0);
+}
+function recordAnswer(pts, max, extra = {}) {
+  const Z = UI.quiz, q = Z.qs[Z.i];
+  Z.answers[Z.i] = Object.assign({ pts, max, skill: q.skill }, extra);
+  if (q.wkey && S.srs[q.wkey] && pts < max) S.srs[q.wkey] = [0, Date.now()];
+}
+function finishQuiz() {
+  const Z = UI.quiz, by = {};
+  let got = 0, max = 0;
+  Z.answers.forEach(a => { if (!a || a.skip) return; got += a.pts; max += a.max; by[a.skill] = by[a.skill] || [0, 0]; by[a.skill][0] += a.pts; by[a.skill][1] += a.max; });
+  const pct = max ? Math.round(100 * got / max) : 0;
+  const skills = {}; Object.keys(by).forEach(k => skills[k] = Math.round(100 * by[k][0] / by[k][1]));
+  const skippedSpeak = Z.answers.some(a => a && a.skip);
+  let passed = Z.perSkill ? Object.values(skills).every(v => v >= Z.pass) && pct >= Z.pass && !skippedSpeak : pct >= Z.pass;
+  const prev = S.tests[Z.key] || { best: 0, n: 0 };
+  S.tests[Z.key] = { best: Math.max(prev.best || 0, pct), last: pct, n: (prev.n || 0) + 1, at: Date.now(), skills, passed: prev.passed || passed };
+  Z.result = { pct, skills, passed, skippedSpeak };
+  // unlocks
+  const dayOf = Object.keys(DAYS).map(Number).find(d => testKey(d) === Z.key);
+  if (passed && dayOf) {
+    markDone(dayOf, "quiz"); S.lastPass = todayKey();
+    if (dayOf < 30 && S.unlocked <= dayOf) S.unlocked = dayOf + 1;
+    if (dayOf === 30) S.finished = true;
+  }
+  logActivity(); ensureCards(); save(false);
+  UI.view = "quizResult"; render(); window.scrollTo(0, 0);
+}
+
+// ---------- AI ----------
+function aiErr(e) {
+  const c = e && (e.error || e.code);
+  if (c === "no_key") return "الذكاء الاصطناعي غير مفعّل بعد. أضف مفتاح Gemini من «تقدّمي ← الإعدادات».";
+  if (c === "key_invalid") return "مفتاح Gemini غير صالح. أنشئ مفتاحاً جديداً وضعه في الإعدادات.";
+  if (c === "rate_limited") return "وصلت للحد المجاني المؤقت لـ Gemini. انتظر دقيقة ثم أعد المحاولة.";
+  if (!navigator.onLine) return "لا يوجد اتصال بالإنترنت.";
+  return "تعذّر الاتصال الآن. حاول مرة أخرى.";
+}
+async function aiText(turns, json) {
+  const merged = [];
+  turns.forEach(t => { const last = merged[merged.length - 1]; if (last && last.role === t.role && !t.audio && !last.audio) last.text += "\n\n" + t.text; else merged.push(Object.assign({}, t)); });
+  const j = await api("ai", { turns: merged, json: !!json });
+  if (!j.ok) throw j;
+  return j.text;
+}
+async function aiJSON(prompt, extra) {
+  const t = await aiText([Object.assign({ role: "user", text: prompt }, extra || {})], true);
+  try { return JSON.parse(t); } catch (e) { const m = t.match(/\{[\s\S]*\}/); if (m) return JSON.parse(m[0]); throw { error: "bad_json" }; }
+}
+async function aiCorrect(task, text) {
+  const prompt = `You are a kind, precise English teacher for an Arabic-speaking beginner working toward CEFR A1.
+Writing task (given to the learner in Arabic): "${task}"
+Learner's text:
+"""${text.slice(0, 3000)}"""
+Evaluate it against A1 expectations (simple sentences, basic grammar, task completion). Reply with ONLY a JSON object:
+{"score": <integer 0-10>, "level": "below A1" | "A1" | "above A1", "corrected": "<the full text corrected, keeping the learner's ideas and simple level>", "mistakes": [{"wrong": "<exact wrong part>", "right": "<correction>", "why_ar": "<very short explanation in Arabic>"}], "praise_ar": "<one encouraging sentence in Arabic>", "tip_ar": "<one concrete tip in Arabic>"}
+At most 6 mistakes, most important first. If the text is not English or is empty, score 0 and explain in tip_ar.`;
+  return aiJSON(prompt);
+}
+async function aiPron(target, blob) {
+  const wav = await toWav(blob);
+  const audio = await toB64(wav);
+  const prompt = `You are an English pronunciation coach for an Arabic-speaking adult at CEFR A1.
+The learner tried to say exactly: "${target}"
+Listen carefully to the attached recording. Judge intelligibility for a native listener, and focus on typical Arabic-speaker issues (p/b, v/f, th, short vowels, dropped -s/-ed endings, extra vowels before consonant clusters, word stress).
+Reply with ONLY a JSON object:
+{"score": <integer 0-100 intelligibility>, "heard": "<what you actually heard>", "words": [{"word": "<word from the sentence>", "ok": <true|false>, "tip_ar": "<very short Arabic tip if not ok, else empty>"}], "feedback_ar": "<two short sentences in Arabic: what was good and the ONE most important thing to fix>"}
+If the audio is silent or not English, score 0 and say so in feedback_ar.`;
+  return aiJSON(prompt, { audio, mime: "audio/wav" });
+}
+function pronResultHTML(r) {
+  if (!r) return "";
+  const sc = Math.max(0, Math.min(100, +r.score || 0));
+  return `<div class="fb ${sc >= 80 ? "ok" : sc >= 60 ? "warn" : "bad"} stack" style="gap:6px">
+    <b class="num">تقييم النطق بالذكاء الاصطناعي: ${sc}%</b>
+    ${r.heard ? `<div class="small">سمعك تقول: <span class="en">${esc(r.heard)}</span></div>` : ""}
+    <div class="diff en">${(r.words || []).map(w => `<span class="${w.ok ? "hit" : "miss"}" title="${esc(w.tip_ar || "")}">${esc(w.word)}</span>`).join(" ")}</div>
+    ${(r.words || []).filter(w => !w.ok && w.tip_ar).map(w => `<div class="small"><span class="en" style="font-weight:600">${esc(w.word)}</span>: ${esc(w.tip_ar)}</div>`).join("")}
+    ${r.feedback_ar ? `<div class="small">${esc(r.feedback_ar)}</div>` : ""}
+  </div>`;
+}
+function writeResultHTML(r) {
+  if (!r) return "";
+  const sc = Math.max(0, Math.min(10, +r.score || 0));
+  return `<div class="fb ${sc >= 7 ? "ok" : sc >= 5 ? "warn" : "bad"} stack" style="gap:8px">
+    <div class="row between"><b>الدرجة: <span class="num">${sc}/10</span></b><span class="tag min">${esc(r.level || "")}</span></div>
+    ${r.praise_ar ? `<div>${esc(r.praise_ar)}</div>` : ""}
+    ${(r.mistakes || []).length ? `<div class="stack" style="gap:6px">${r.mistakes.map(m => `<div><span class="en" style="text-decoration:line-through;color:var(--bad)">${esc(m.wrong)}</span> ← <span class="en" style="color:var(--ok);font-weight:600">${esc(m.right)}</span><div class="small muted">${esc(m.why_ar)}</div></div>`).join("")}</div>` : ""}
+    ${r.corrected ? `<div><div class="tiny">النص بعد التصحيح</div><div class="en" style="font-size:15.5px">${esc(r.corrected)}</div><div class="row" style="margin-top:6px">${spk(r.corrected)}<span class="tiny">اسمعه واقرأه بصوتك مرة</span></div></div>` : ""}
+    ${r.tip_ar ? `<div class="small"><b>نصيحة:</b> ${esc(r.tip_ar)}</div>` : ""}
+  </div>`;
+}
+const SELF_CHECK = ["كل جملة فيها فاعل وفعل (I am / She works...)", "بدأت الجمل بحرف كبير وانتهت بنقطة", "استخدمت he/she/it مع is أو فعل+s", "استخدمت كلمات من دروس هذا الأسبوع", "كتبت العدد المطلوب من الجمل"];
+function chatRules(d) {
+  const D = DAYS[d];
+  const topic = D.kind === "learn" ? D.chat + " Today's grammar: " + D.g.t.replace(/[^\x00-\x7F]+/g, " ") + "." : D.kind === "review" ? "Review everything from week " + D.week + ": " + weekDays(D.week).map(x => DAYS[x].en).join(", ") + "." : "A friendly A1 speaking interview: name, origin, family, routine, likes, last weekend, next plans.";
+  return `You are a friendly English conversation partner for an Arabic-speaking adult learning English, level CEFR A1 (day ${d} of 30).
+Topic: ${topic}
+Rules:
+- Use only very simple A1 English. Max 2 short sentences, then ask ONE simple question.
+- If the learner's last message has a grammar or word mistake, add a final separate line starting exactly with "Correction:" then the corrected sentence, then " — " and a very short explanation in Arabic.
+- If there is no mistake, do not add a Correction line.
+- If the learner writes in Arabic, reply in simple English and gently ask them to try in English.
+- Never write long paragraphs.`;
+}
+
+// ---------- rendering ----------
+function tagHTML(t) { return `<span class="tag ${t}">${TAGS[t].ar}</span>`; }
+function nav() {
+  const items = [["today", "اليوم", IC.today], ["lesson", "الدرس", IC.lesson], ["cards", "البطاقات", IC.cards], ["listen", "استماع", IC.listen], ["progress", "تقدّمي", IC.prog]];
+  return `<nav class="nav" aria-label="التنقل"><div class="wrap">${items.map(([v, l, ic]) => `<button data-act="view" data-v="${v}" ${UI.view === v ? 'aria-current="page"' : ""}>${ic}<span>${l}</span></button>`).join("")}</div></nav>`;
+}
+function header() {
+  return `<header class="top"><div class="wrap">
+    <div class="brand"><span class="mark">A1</span>مسار</div>
+    <div id="sync" class="sync ${store.kind}"><i></i><span></span></div>
+    <button class="icon-btn" data-act="view" data-v="guide" aria-label="كيف يعمل النظام">كيف يعمل؟</button>
+  </div></header>`;
+}
+function daySwitcher() {
+  const d = UI.day;
+  return `<div class="row between">
+    <button class="btn ghost" data-act="day" data-d="${d - 1}" ${d <= 1 ? "disabled" : ""}>→ السابق</button>
+    <span class="tiny">اليوم ${d} من 30</span>
+    <button class="btn ghost" data-act="day" data-d="${d + 1}" ${d >= S.unlocked ? "disabled" : ""}>التالي ←</button>
+  </div>`;
+}
+function taskHTML(d, t) {
+  const done = isDone(d, t.id);
+  let act = "";
+  if (t.link) act += `<a class="btn ext" href="${esc(t.link)}" target="_blank" rel="noopener" data-act="linkdone" data-d="${d}" data-id="${t.id}">افتح</a>`;
+  if (t.link2) act += `<a class="btn ghost ext" href="${esc(t.link2)}" target="_blank" rel="noopener">${esc(t.l2)}</a>`;
+  if (t.go) act += `<button class="btn" data-act="go" data-go="${t.go}">افتح</button>`;
+  if (t.quiz) { const r = S.tests[t.quiz]; act += `<button class="btn ${r && r.passed ? "" : "pri"}" data-act="quiz" data-k="${t.quiz}">${r ? "أعد الاختبار" : "ابدأ الاختبار"}</button>${r ? `<span class="tiny num">أفضل نتيجة ${r.best}%${r.passed ? " · ناجح" : ""}</span>` : ""}`; }
+  if (t.chat) act += `<button class="btn" data-act="chat">ابدأ المحادثة</button>`;
+  if (t.weak) { const w = weakestDay(t.weak); act += w ? `<button class="btn" data-act="quiz" data-k="d${w}">اختبار اليوم ${w}</button><button class="btn ghost" data-act="day" data-d="${w}">افتح اليوم ${w}</button>` : ""; }
+  return `<div class="task ${done ? "done" : ""}">
+    <button class="chk" data-act="toggle" data-d="${d}" data-id="${t.id}" aria-pressed="${done}" aria-label="تم">${IC.check}</button>
+    <div class="grow">
+      <div class="t-title">${esc(t.t)}${t.sub ? ` <span class="en small muted">— ${esc(t.sub)}</span>` : ""}</div>
+      <div class="t-meta">${tagHTML(t.tag)}<span class="tag min num">${t.min} د</span></div>
+      <div class="t-how">${esc(t.how)}</div>
+      ${act ? `<div class="t-act">${act}</div>` : ""}
+    </div></div>`;
+}
+function weakestDay(w) { let best = null, low = 101; weekDays(w).forEach(d => { const r = S.tests["d" + d]; const v = r ? r.best : 0; if (v < low) { low = v; best = d; } }); return best; }
+
+function vToday() {
+  const d = UI.day, D = DAYS[d], T = tasksFor(d), p = dayProgress(d);
+  ensureCards();
+  const due = dueList().length, qk = testKey(d), qr = S.tests[qk];
+  const groups = [["busy", "الأساسي — لأي يوم مهما كنت مشغولاً"], ["normal", "إضافة اليوم العادي"], ["free", "إضافة يوم الفراغ"]].filter(([m]) => MODE_SET[S.mode].includes(m));
+  const mins = T.filter(t => MODE_SET[S.mode].includes(t.mode)).reduce((a, t) => a + t.min, 0);
+  const gate = D.kind === "final" ? "" : `<div class="fb ${qr && qr.passed ? "ok" : "info"} small">${qr && qr.passed ? `أحسنت، نجحت في ${D.kind === "learn" ? "اختبار اليوم" : "الاختبار"} (${qr.best}%). اليوم ${d + 1} مفتوح.` : `لتنتقل إلى اليوم ${d + 1}: انجح في ${D.kind === "learn" ? "اختبار اليوم" : "الاختبار"} بنسبة ${PASS[D.kind]}% أو أكثر.`}</div>`;
+  return `<div class="stack">
+    ${S.finished && d === 30 ? `<div class="fb ok"><b>مبروك! أنهيت مسار A1.</b> راجع نتيجتك في «تقدّمي» وأكمل بالتحقق الخارجي من EF SET.</div>` : ""}
+    <section class="card lift stack">
+      <div class="dayhero">
+        <div class="daynum" dir="ltr">${d}<small>/30</small></div>
+        <div class="stack" style="gap:6px">
+          <div class="eyebrow">${D.kind === "learn" ? "الأسبوع " + D.week : D.kind === "review" ? "يوم مراجعة" : D.kind === "mock" ? "استعداد" : "النهاية"}</div>
+          <div class="topic">${esc(D.topic)}</div>
+          <div class="row" style="gap:8px"><div class="bar grow ${p.pct === 100 ? "ok" : ""}"><b style="width:${p.pct}%"></b></div><span class="tiny num">${p.n}/${p.of}</span></div>
+        </div>
+      </div>
+      <div class="stats">
+        <div class="stat"><b class="num">${streak()}</b><span>أيام متتالية</span></div>
+        <div class="stat"><b class="num">${learnedCount()}</b><span>كلمة محفوظة</span></div>
+        <div class="stat"><b class="num">${due}</b><span>بطاقة للمراجعة</span></div>
+      </div>
+      ${daySwitcher()}
+    </section>
+    <section class="stack" style="gap:8px">
+      <div class="row between"><h2>كم عندك وقت اليوم؟</h2><span class="tiny num">≈ ${mins} دقيقة + الخلفية</span></div>
+      <div class="seg" role="group" aria-label="وضع اليوم">${Object.entries(MODES).map(([k, m]) => `<button data-act="mode" data-m="${k}" aria-pressed="${S.mode === k}">${m.ar}<small class="num">~${m.min} د</small></button>`).join("")}</div>
+      <div class="tiny">${esc(MODES[S.mode].d)}</div>
+    </section>
+    ${gate}
+    ${groups.map(([m, label]) => `<div class="group-h"><h3>${label}</h3></div><div class="tasks">${T.filter(t => t.mode === m).map(t => taskHTML(d, t)).join("")}</div>`).join("")}
+    <div class="group-h"><h3>أثناء انشغالك (في الخلفية)</h3><span class="tiny">لا تُحسب في النسبة، لكنها سر سرعة الأذن</span></div>
+    <div class="tasks">${T.filter(t => t.mode === "bg").map(t => taskHTML(d, t)).join("")}</div>
+  </div>`;
+}
+
+function secHead(title, tags, how, id) {
+  return `<div class="sec-h" id="${id || ""}"><h2>${title}</h2>${tags.map(tagHTML).join("")}</div>${how ? `<div class="how">${how}</div>` : ""}`;
+}
+function vLesson() {
+  const d = UI.day, D = DAYS[d];
+  if (D.kind !== "learn") return vLessonReview(d, D);
+  const W = wordsOf(d), P = phrasesOf(d), pr = PRON[d];
+  const wr = (S.journal || []).filter(j => j.day === d).slice(-1)[0];
+  return `<div class="stack">
+    <section class="card lift"><div class="eyebrow">اليوم ${d} · الأسبوع ${D.week}</div><h1 style="font-size:24px;margin-top:2px">${esc(D.topic)}</h1><div class="en muted" style="text-align:right">${esc(D.en)}</div><div style="margin-top:10px">${daySwitcher()}</div></section>
+
+    <section class="card">${secHead("القاعدة", ["und", "memo"], "<b>افهم</b> الشرح فقط. <b>احفظ</b> السطر الأصفر وحده.", "grammar")}
+      <h3>${esc(D.g.t)}</h3>
+      <p class="muted" style="margin:6px 0 0">${esc(D.g.ar)}</p>
+      <div class="rule">${esc(D.g.rule)}</div>
+      <div>${D.g.ex.map(e => `<div class="ex">${spk(e[0])}<div><div class="en">${esc(e[0])}</div><div class="ar">${esc(e[1])}</div></div></div>`).join("")}</div>
+      <div class="mis"><div class="tiny">الخطأ الشائع عند العرب</div><div class="en"><span class="wrong">${esc(D.g.mis[0])}</span> → <span class="right">${esc(D.g.mis[1])}</span></div><div class="small">${esc(D.g.mis[2])}</div></div>
+    </section>
+
+    <section class="card">${secHead("كلمات اليوم", ["memo"], "<b>احفظ</b> المعنى والنطق. الحفظ الفعلي يتم في «البطاقات» بالتكرار المتباعد. هنا تعرّف عليها واسمع كل كلمة مرة.", "words")}
+      <div class="row" style="margin-bottom:10px"><button class="btn" data-act="playlist" data-src="words">${IC.play}تشغيل الكل</button><button class="btn pri" data-act="view" data-v="cards">احفظها بالبطاقات</button></div>
+      <div class="words">${W.map(w => `<div class="word">${spk(w.en)}<div class="grow"><div class="en">${esc(w.en)}</div><div class="ar">${esc(w.ar)}</div></div><a class="lk" href="${RES.youglish(w.en)}" target="_blank" rel="noopener" title="اسمعها في فيديوهات حقيقية">YouGlish</a></div>`).join("")}</div>
+    </section>
+
+    <section class="card">${secHead("جمل اليوم الجاهزة", ["memo", "rep"], "<b>احفظها كما هي</b> (قطعة واحدة) و<b>كررها بصوتك</b> 3 مرات بعد الصوت. هذه الجمل ستستخدمها حرفياً في الحياة.", "phrases")}
+      <div class="row" style="margin-bottom:8px"><button class="btn" data-act="playlist" data-src="phrases">${IC.play}تشغيل مع مهلة للتكرار</button></div>
+      ${P.map(p => `<div class="ex">${spk(p.en)}<div><div class="en">${esc(p.en)}</div><div class="ar">${esc(p.ar)}</div></div></div>`).join("")}
+    </section>
+
+    <section class="card" id="dialogue-card">${secHead("حوار اليوم", ["focus", "rep"], "١) <b>استمع بتركيز</b> والترجمة مخفية. ٢) اقرأ مع الصوت. ٣) <b>كرر</b> دور B بصوتك.", "dialogue")}
+      <div class="row" style="margin-bottom:10px"><button class="btn pri" data-act="playlist" data-src="dialogue">${IC.play}تشغيل الحوار</button><button class="btn" data-act="toggleAr">إظهار/إخفاء الترجمة</button></div>
+      <div class="dlg ${UI.showAr ? "" : "hideAr"}">${D.dlg.map(l => `<div class="bub ${l[0]}"><div class="row" style="gap:8px;flex-wrap:nowrap">${spk(l[1])}<div><div class="en">${esc(l[0])}: ${esc(l[1])}</div><div class="ar">${esc(l[2])}</div></div></div></div>`).join("")}</div>
+    </section>
+
+    ${pr ? `<section class="card">${secHead("نطق اليوم: " + pr.t, ["rep"], esc(pr.d), "pron")}
+      <div class="words">${pr.w.map(w => `<div class="word">${spk(w)}<div class="en">${esc(w)}</div></div>`).join("")}</div></section>` : ""}
+
+    <section class="card">${secHead("تحدي النطق", ["rep", "test"], dictHelp(), "speak")}
+      ${speakDrill(d, P)}
+    </section>
+
+    <section class="card">${secHead("كتابة اليوم", ["write"], "اكتب بنفسك بلا مترجم. الأخطاء مطلوبة، فهي ما يتعلم منه عقلك.", "write")}
+      <p style="margin:0 0 8px"><b>${esc(D.w)}</b></p>
+      ${writeBox(d, D.w, wr)}
+    </section>
+
+    <section class="card">${secHead("محادثة اليوم", ["rep"], "شريك ذكي (Gemini) يتكلم معك بإنجليزية A1 ويصحح أخطاءك بالعربي. تكلم بالميكروفون أو اكتب.", "chatsec")}
+      <button class="btn pri" data-act="chat">ابدأ المحادثة</button>
+    </section>
+
+    <section class="card">${secHead("مصادر اليوم الخارجية", [], "", "res")}
+      <div>
+        <div class="res"><div><div class="t-title en" style="text-align:right">Let's Learn English — Lesson ${d}: ${esc(VOA_TITLES[d])}</div><div class="t-meta">${tagHTML("focus")}${tagHTML("bg")}<span class="tiny">VOA · فيديو مع نص</span></div></div><a class="btn ext" href="${VOA[d]}" target="_blank" rel="noopener">افتح</a></div>
+        ${(D.bc || []).map(b => `<div class="res"><div><div class="t-title en" style="text-align:right">${esc(b[1])}</div><div class="t-meta">${tagHTML(KIND_TAG[b[0]])}<span class="tiny">British Council · ${KIND_AR[b[0]]} A1</span></div></div><a class="btn ext" href="${bcLink(b[2])}" target="_blank" rel="noopener">افتح</a></div>`).join("")}
+      </div>
+    </section>
+  </div>`;
+}
+function vLessonReview(d, D) {
+  const days = D.kind === "review" ? weekDays(D.week) : learnDays();
+  const title = D.kind === "review" ? "قواعد الأسبوع " + D.week + " في صفحة واحدة" : "كل قواعد المسار في صفحة واحدة";
+  const wr = (S.journal || []).filter(j => j.day === d).slice(-1)[0];
+  const task = D.kind === "review" ? "اكتب فقرة من 6 إلى 8 جمل تجمع موضوعات الأسبوع " + D.week + "." : "عرّف بنفسك في 8 جمل: حاضر، ماضٍ، ومستقبل.";
+  return `<div class="stack">
+    <section class="card lift"><div class="eyebrow">اليوم ${d}</div><h1 style="font-size:24px;margin-top:2px">${esc(D.topic)}</h1><div style="margin-top:10px">${daySwitcher()}</div></section>
+    <section class="card">${secHead(title, ["memo"], "هذه هي السطور التي يجب أن تحفظها. إن لم تفهم قاعدة، افتح يومها.")}
+      ${days.map(x => `<div class="ex" style="grid-template-columns:auto 1fr auto"><span class="tag min num">${x}</span><div><div class="small"><b>${esc(DAYS[x].g.t)}</b></div><div class="en small" style="background:var(--hi);color:var(--hi-ink);border-radius:6px;padding:2px 8px;display:inline-block;margin-top:4px">${esc(DAYS[x].g.rule)}</div></div><button class="btn ghost small" data-act="day" data-d="${x}">افتح</button></div>`).join("")}
+    </section>
+    ${D.kind !== "final" ? `<section class="card">${secHead("كتابة المراجعة", ["write"], "", "write")}<p style="margin:0 0 8px"><b>${esc(task)}</b></p>${writeBox(d, task, wr)}</section>` : ""}
+    <section class="card">${secHead("محادثة المراجعة", ["rep"], "")}<button class="btn pri" data-act="chat">ابدأ المحادثة</button></section>
+  </div>`;
+}
+function dictHelp() {
+  return `اضغط الزر الأصفر <b>«اضغط وتكلم»</b> وقل الجملة بالإنجليزية. التطبيق يسمعك ويعلّم بالأحمر على كل كلمة لم تكن واضحة. وتقدر كمان تسجّل صوتك وتسمعه جنب النطق الصحيح، أو تطلب من الذكاء الاصطناعي يحلل نطقك. أول مرة المتصفح هيطلب إذن الميكروفون: اضغط «سماح». يعمل على Chrome وEdge وSafari.`;
+}
+function speakDrill(d, P) {
+  const cur = UI.drill && UI.drill.d === d ? UI.drill : { d, i: 0, wins: 0 };
+  const i = cur.i, p = P[i % P.length], r = cur.r;
+  return `<div class="stack" style="gap:10px">
+    <div class="row between"><span class="tiny num">الجملة ${i % P.length + 1} من ${P.length}</span><span class="tiny num">${isDone(d, "speak") ? "أنجزت التحدي" : "انجح في 3 جمل لإتمام المهمة (" + (cur.wins || 0) + "/3)"}</span></div>
+    <div class="row" style="flex-wrap:nowrap">${spk(p.en)}<div><div class="en" style="font-size:18px;font-weight:600">${esc(p.en)}</div><div class="small muted">${esc(p.ar)}</div></div></div>
+    <div class="row">${micBtn("drill")}</div>
+    ${SR ? "" : `<textarea id="drill-in" class="en" rows="2" dir="ltr" placeholder="ميكروفون الكيبورد: اضغط هنا ثم زر الميكروفون وقل الجملة…" autocomplete="off" autocorrect="off" spellcheck="false"></textarea><div class="row"><button class="btn pri" data-act="drillCheck" data-d="${d}">تحقق</button></div>`}
+    ${r ? `<div class="fb ${r.score >= 80 ? "ok" : r.score >= 60 ? "warn" : "bad"}"><b class="num">وضوح النطق: ${r.score}%</b> ${r.score >= 80 ? "ممتاز، مفهوم." : r.score >= 60 ? "قريب. استمع مرة وأعد." : "غير واضح. استمع ببطء وقلّد."}${diffHTML(r)}${r.said ? `<div class="tiny">سمعتك تقول: <span class="en">${esc(r.said)}</span></div>` : ""}</div>` : ""}
+    <div class="row">
+      <button class="btn ${RECD.on && UI.recCtx === "drill" ? "rec" : ""}" data-act="recDrill" data-d="${d}">${RECD.on && UI.recCtx === "drill" ? "إيقاف التسجيل" : "سجّل صوتك وقارن"}</button>
+      <button class="btn ghost" data-act="drillNext" data-d="${d}">الجملة التالية</button>
+    </div>
+    ${UI.drillRec && UI.drillRec.d === d && UI.drillRec.i === i ? `<div class="stack" style="gap:8px;background:var(--sunk);border-radius:12px;padding:10px">
+      <div class="row" style="gap:8px"><span class="small"><b>صوتك:</b></span><audio controls src="${UI.drillRec.url}" style="height:36px;max-width:100%"></audio></div>
+      <div class="row" style="gap:8px"><span class="small"><b>النطق الصحيح:</b></span>${spk(p.en)}<button class="btn ghost small" data-act="sayslow" data-t="${esc(p.en)}">أبطأ</button></div>
+      ${store.ai ? `<button class="btn pri" data-act="pronAI" data-d="${d}" ${UI.drillRec.busy ? "disabled" : ""}>${UI.drillRec.busy ? "يحلل صوتك…" : "حلّل نطقي بالذكاء الاصطناعي"}</button>` : `<span class="tiny">لتحليل صوتك بالذكاء الاصطناعي فعّل Gemini من الإعدادات.</span>`}
+      ${UI.drillRec.err ? `<div class="fb warn small">${esc(UI.drillRec.err)}</div>` : ""}
+      ${pronResultHTML(UI.drillRec.res)}
+    </div>` : ""}
+  </div>`;
+}
+function writeBox(d, task, wr) {
+  const st = UI.write && UI.write.d === d ? UI.write : null;
+  const ai = !!(store.ai && AUTH);
+  return `<div class="stack" style="gap:10px">
+    <textarea id="write-in" class="en" rows="5" dir="ltr" placeholder="Write here…">${esc(st ? st.text : "")}</textarea>
+    <div class="row">
+      ${ai ? `<button class="btn pri" data-act="aiWrite" data-d="${d}" data-task="${esc(task)}" ${st && st.busy ? "disabled" : ""}>${st && st.busy ? "يصحّح…" : "صحّح لي"}</button>` : ""}
+      <button class="btn ${ai ? "ghost" : "pri"}" data-act="selfWrite" data-d="${d}" data-task="${esc(task)}">${ai ? "تصحيح ذاتي" : "احفظ وصحّح ذاتياً"}</button>
+    </div>
+    ${st && st.err ? `<div class="fb warn small">${esc(st.err)}</div>` : ""}
+    ${st && st.self ? `<div class="fb info stack" style="gap:6px"><b>راجع نصك بنفسك:</b>${SELF_CHECK.map((c, i) => `<label class="ck"><input type="checkbox" id="sc-${d}-${i}"> ${c}</label>`).join("")}<div class="tiny">للتصحيح الآلي فعّل Gemini من «تقدّمي ← الإعدادات».</div></div>` : ""}
+    ${st && st.res ? writeResultHTML(st.res) : wr && wr.res ? `<details><summary class="small">آخر تصحيح محفوظ (${new Date(wr.at).toLocaleDateString("ar")})</summary><div class="en small" style="margin:6px 0">${esc(wr.text)}</div>${writeResultHTML(wr.res)}</details>` : ""}
+  </div>`;
+}
+
+function vCards() {
+  ensureCards();
+  const due = dueList();
+  if (!UI.card || UI.card.done) {
+    const total = Object.keys(S.srs).length;
+    return `<div class="stack">
+      <section class="card lift stack">
+        <div class="row between"><h2>البطاقات</h2>${tagHTML("memo")}</div>
+        <div class="how"><b>احفظ</b> هنا بطريقة التكرار المتباعد: الكلمة التي تعرفها تختفي أياماً، والتي تنساها تعود فوراً. <b>قل كل كلمة بصوتك قبل أن تقلب.</b> 10 دقائق يومياً تكفي.</div>
+        <div class="stats">
+          <div class="stat"><b class="num">${due.length}</b><span>مستحقة الآن</span></div>
+          <div class="stat"><b class="num">${learnedCount()}</b><span>محفوظة</span></div>
+          <div class="stat"><b class="num">${total}</b><span>كلمة مفتوحة</span></div>
+        </div>
+        <div class="row"><span class="small muted">الاتجاه:</span>
+          <div class="pill-row"><button data-act="cardDir" data-v="en" aria-pressed="${S.cardDir === "en"}">إنجليزي ← عربي</button><button data-act="cardDir" data-v="ar" aria-pressed="${S.cardDir === "ar"}">عربي ← إنجليزي</button></div></div>
+        ${UI.card && UI.card.done ? `<div class="fb ok">أنهيت الجلسة: <span class="num">${UI.card.ok}</span> صحيحة من <span class="num">${UI.card.seen}</span>.</div>` : ""}
+        <button class="btn pri lg block" data-act="cardStart" ${due.length ? "" : "disabled"}>${due.length ? "ابدأ جلسة (" + Math.min(due.length, 25) + " بطاقة)" : "لا توجد بطاقات مستحقة، عد لاحقاً"}</button>
+      </section>
+    </div>`;
+  }
+  const C = UI.card, k = C.q[0], w = WORDS[k];
+  const front = S.cardDir === "en" ? w.en : w.ar, back = S.cardDir === "en" ? w.ar : w.en;
+  return `<div class="stack">
+    <div class="row between"><button class="btn ghost" data-act="cardEnd">إنهاء</button><span class="tiny num">متبقٍ ${C.q.length} · صحيح ${C.ok}</span></div>
+    <section class="card lift flash" data-act="flip" role="button" aria-label="اقلب البطاقة" tabindex="0">
+      <div class="front ${S.cardDir === "ar" ? "arf" : ""}">${esc(front)}</div>
+      ${UI.flipped ? `<div class="back ${S.cardDir === "ar" ? "en" : ""}" style="${S.cardDir === "ar" ? "text-align:center;font-size:26px;color:var(--ink);font-weight:600" : ""}">${esc(back)}</div>` : `<div class="tiny">قلها بصوتك، ثم اضغط لتقلب</div>`}
+      <div class="row" style="justify-content:center">${spk(w.en)}<span class="tiny">اليوم ${w.d}</span></div>
+    </section>
+    ${UI.flipped ? `<div class="row" style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><button class="btn lg block" data-act="cardGrade" data-ok="0">لم أعرفها</button><button class="btn ok lg block" data-act="cardGrade" data-ok="1">عرفتها</button></div>
+    <div class="row" style="justify-content:center"><a class="btn ghost ext small" href="${RES.youglish(w.en)}" target="_blank" rel="noopener">اسمعها من ناس حقيقيين</a><a class="btn ghost ext small" href="${RES.cambridgeDict(w.en)}" target="_blank" rel="noopener">قاموس كامبريدج</a></div>` : `<button class="btn pri lg block" data-act="flip">اقلب</button>`}
+  </div>`;
+}
+
+const PL = { on: false, items: [], i: 0, tok: 0, lock: null };
+function listenItems(src, d = UI.day) {
+  const D = DAYS[d];
+  const dayList = D.kind === "learn" ? [d] : D.kind === "review" ? weekDays(D.week) : unlockedLearn();
+  if (src === "words") return (D.kind === "learn" ? [d] : dayList).flatMap(x => wordsOf(x).map(w => ({ en: w.en, ar: w.ar })));
+  if (src === "phrases") return (D.kind === "learn" ? [d] : dayList).flatMap(x => phrasesOf(x));
+  if (src === "dialogue") return (D.kind === "learn" ? [d] : dayList).flatMap(x => DAYS[x].dlg.map(l => ({ en: l[1], ar: l[2] })));
+  if (src === "day") return listenItems("words", d).concat(listenItems("phrases", d), listenItems("dialogue", d));
+  if (src === "week") { const w = D.week > 4 ? 4 : D.week; return weekDays(w).filter(x => x <= S.unlocked).flatMap(x => phrasesOf(x).concat(DAYS[x].dlg.map(l => ({ en: l[1], ar: l[2] })))); }
+  if (src === "all") return shuffle(unlockedLearn().flatMap(x => phrasesOf(x).concat(DAYS[x].dlg.map(l => ({ en: l[1], ar: l[2] })))));
+  return [];
+}
+function vListen() {
+  const cur = PL.items[PL.i];
+  const srcs = [["day", "كل محتوى اليوم"], ["words", "كلمات اليوم"], ["phrases", "جمل اليوم"], ["dialogue", "الحوار"], ["week", "الأسبوع"], ["all", "كل ما تعلمته"]];
+  const lib = [
+    ["Let's Learn English — Lesson " + UI.day, "حلقة اليوم. شاهدها بتركيز مرة، ثم شغّلها صوتاً في الخلفية.", ["focus", "bg"], VOA[UI.day]],
+    ["Let's Learn English — كل الحلقات", "قائمة الحلقات 1-30 مع روابطها.", ["focus"], RES.voaIndex],
+    ["Let's Learn English — قائمة يوتيوب", "الحلقات على يوتيوب، مناسبة للتشغيل في الخلفية.", ["bg"], RES.voaPlaylist],
+    ["Easy Stories in English (L1 Beginner)", "بودكاست قصص بطيئة للمبتدئين. للخلفية أثناء القيادة والمشي.", ["bg"], RES.easyStories],
+    ["News in Levels — Level 1", "خبر يومي بأهم 1000 كلمة، مع صوت ونص.", ["focus", "read"], RES.newsLevels],
+    ["Breaking News English — Level 0", "أخبار قصيرة جداً بصوت بطيء وتمارين.", ["focus", "read"], RES.bne0],
+    ["British Council — A1 Listening", "12 درس استماع A1 مع تمارين تفاعلية.", ["focus"], RES.bcListenIndex],
+    ["British Council — A1 Reading", "12 نص قراءة A1 من الحياة اليومية.", ["read"], RES.bcReadIndex]
+  ];
+  return `<div class="stack">
+    <section class="card lift stack">
+      <div class="row between"><h2>مشغّل الاستماع</h2><div class="row" style="gap:4px">${tagHTML("bg")}${tagHTML("rep")}</div></div>
+      <div class="how">شغّله وأنت تطبخ أو تمشي أو تقود. يقرأ الجملة، ثم يترك <b>مهلة لتكررها خلفه</b>، ثم يقول المعنى بالعربي إن فعّلته. <b>اترك الشاشة مفتوحة</b>، فالمتصفح يوقف الصوت عند قفل الجوال.</div>
+      <div class="pill-row">${srcs.map(([k, l]) => `<button data-act="lsrc" data-v="${k}" aria-pressed="${UI.listenSrc === k}">${l}</button>`).join("")}</div>
+      <div class="player-now" aria-live="polite">${cur ? `<div class="en">${esc(cur.en)}</div>${UI.plShowAr !== false ? `<div class="ar">${esc(cur.ar || "")}</div>` : ""}<div class="tiny num" style="margin-top:8px">${PL.i + 1} / ${PL.items.length}</div>` : `<div class="muted">اختر المصدر واضغط تشغيل</div>`}</div>
+      <div class="row" style="justify-content:center;gap:14px">
+        <button class="btn" data-act="plPrev" aria-label="السابق">→</button>
+        <button class="spk lg" data-act="plToggle" aria-label="${PL.on ? "إيقاف" : "تشغيل"}">${PL.on ? IC.pause : IC.play}</button>
+        <button class="btn" data-act="plNext" aria-label="التالي">←</button>
+      </div>
+      <div class="opt-grid">
+        <label class="ck"><input type="checkbox" id="pl-ar" data-act="plOpt" ${UI.plAr ? "checked" : ""}> قل المعنى بالعربي${TTS.ar ? "" : " (غير متوفر في جهازك)"}</label>
+        <label class="ck"><input type="checkbox" id="pl-shadow" data-act="plOpt" ${UI.plShadow !== false ? "checked" : ""}> مهلة للتكرار خلفه</label>
+        <label class="ck"><input type="checkbox" id="pl-loop" data-act="plOpt" ${UI.plLoop !== false ? "checked" : ""}> إعادة عند الانتهاء</label>
+        <label class="ck">السرعة <select id="rate" data-act="rate">${[0.6, 0.75, 0.85, 1].map(r => `<option value="${r}" ${S.rate == r ? "selected" : ""}>${r === 1 ? "طبيعية" : r === 0.85 ? "مريحة" : r === 0.75 ? "بطيئة" : "بطيئة جداً"}</option>`).join("")}</select></label>
+      </div>
+    </section>
+    <section class="card">
+      <div class="sec-h"><h2>مكتبة الاستماع الخارجية</h2></div>
+      <div class="how">«استمع بتركيز» = سماعات وانتباه كامل. «في الخلفية» = أثناء نشاط آخر. العادة الناجحة: <b>مرة بتركيز ثم مرات في الخلفية</b> لنفس المادة.</div>
+      ${lib.map(l => `<div class="res"><div><div class="t-title en" style="text-align:right">${esc(l[0])}</div><div class="small muted">${esc(l[1])}</div><div class="t-meta">${l[2].map(tagHTML).join("")}</div></div><a class="btn ext" href="${esc(l[3])}" target="_blank" rel="noopener">افتح</a></div>`).join("")}
+    </section>
+  </div>`;
+}
+async function plRun() {
+  const tok = ++PL.tok;
+  try { if (navigator.wakeLock && !PL.lock) navigator.wakeLock.request("screen").then(l => { PL.lock = l; }).catch(() => {}); } catch (e) {}
+  while (PL.on && tok === PL.tok) {
+    if (PL.i >= PL.items.length) { if (UI.plLoop !== false) PL.i = 0; else { PL.on = false; break; } }
+    const it = PL.items[PL.i];
+    if (UI.view === "listen") render();
+    await say(it.en); if (tok !== PL.tok) return;
+    if (UI.plShadow !== false) { await wait(900 + it.en.length * 55); if (tok !== PL.tok) return; }
+    if (UI.plAr && it.ar && TTS.ar) { await say(it.ar, { lang: "ar" }); if (tok !== PL.tok) return; await wait(400); }
+    await wait(500); if (tok !== PL.tok) return;
+    PL.i++;
+  }
+  try { PL.lock && PL.lock.release(); } catch (e) {} PL.lock = null;
+  if (UI.view === "listen") render();
+}
+function plStart(items, from = 0) { hush(); PL.items = items; PL.i = from; PL.on = true; logActivity(); save(false); plRun(); }
+function plStop() { PL.on = false; PL.tok++; hush(); }
+
+function vProgress() {
+  const tests = Object.keys(DAYS).map(Number).filter(d => d <= S.unlocked).map(d => [d, testKey(d)]).filter((x, i, a) => a.findIndex(y => y[1] === x[1]) === i);
+  const agg = {}; Object.values(S.tests).forEach(t => Object.entries(t.skills || {}).forEach(([k, v]) => { agg[k] = agg[k] || []; agg[k].push(v); }));
+  const skillAvg = Object.keys(SKILL_AR).map(k => [k, agg[k] ? Math.round(agg[k].reduce((a, b) => a + b, 0) / agg[k].length) : null]);
+  const passedN = Object.keys(DAYS).filter(d => passedDay(+d)).length;
+  return `<div class="stack">
+    <section class="card lift stack">
+      <h2>تقدّمك نحو A1</h2>
+      <div class="row" style="gap:8px"><div class="bar grow ok"><b style="width:${Math.round(100 * passedN / 30)}%"></b></div><span class="tiny num">${passedN}/30 يوماً</span></div>
+      <div class="cal">${Object.keys(DAYS).map(Number).map(d => { const cls = passedDay(d) ? "pass" : d === S.unlocked ? "open" : d > S.unlocked ? "lock" : ""; return `<button class="${cls} ${DAYS[d].kind !== "learn" ? "rev" : ""}" data-act="day" data-d="${d}" ${d > S.unlocked ? "disabled" : ""} aria-label="اليوم ${d}">${d}</button>`; }).join("")}</div>
+      <div class="tiny">الأخضر = نجحت في اختباره · الإطار الأزرق = يومك الحالي · المنقّط = مراجعة/اختبار</div>
+    </section>
+    <section class="card stack">
+      <h2>مهاراتك (متوسط كل الاختبارات)</h2>
+      ${skillAvg.map(([k, v]) => `<div class="skill"><span>${SKILL_AR[k]}</span><div class="bar ${v >= 80 ? "ok" : ""}"><b style="width:${v || 0}%"></b></div><span class="num tiny">${v == null ? "—" : v + "%"}</span></div>`).join("")}
+    </section>
+    <section class="card stack">
+      <h2>الاختبارات</h2>
+      ${tests.map(([d, k]) => { const r = S.tests[k]; return `<div class="res"><div><div class="t-title">${k[0] === "d" ? "اختبار اليوم " + d : k[0] === "w" ? "اختبار الأسبوع " + k.slice(1) : k === "mock" ? "الاختبار التجريبي" : "الاختبار النهائي"}</div><div class="tiny num">${r ? `أفضل ${r.best}% · آخر ${r.last}% · ${r.n} محاولة${r.passed ? " · ناجح" : ""}` : "لم يُختبر بعد"}</div></div><button class="btn ${r && r.passed ? "" : "pri"}" data-act="quiz" data-k="${k}">${r ? "أعد" : "ابدأ"}</button></div>`; }).join("")}
+    </section>
+    <section class="card stack" id="voice">
+      <div class="sec-h"><h2>بصمة صوتك</h2>${tagHTML("rep")}</div>
+      <div class="how">مرة كل أسبوع: سجّل دقيقة تعرّف فيها بنفسك بكل ما تعلمته. التسجيل يُحفظ في Google Drive على إيميلك. في اليوم 30 قارن أول تسجيل بآخره.</div>
+      <div class="row">
+        <button class="btn ${RECD.on && UI.recCtx === "voice" ? "rec" : "pri"}" data-act="recVoice">${IC_MIC}${RECD.on && UI.recCtx === "voice" ? "إيقاف وحفظ" : "سجّل الآن (حتى 90 ثانية)"}</button>
+        <label class="btn">ارفع ملفاً صوتياً<input type="file" id="voice-in" accept="audio/*,video/mp4,video/webm,.m4a" hidden></label>
+      </div>
+      ${UI.voiceMsg ? `<div class="fb ${UI.voiceMsg[0]} small">${esc(UI.voiceMsg[1])}</div>` : ""}
+      ${(S.voice || []).slice().reverse().map(v => `<div class="row" style="gap:8px"><span class="tiny num" style="min-width:110px">اليوم ${v.day} · ${new Date(v.at).toLocaleDateString("ar")}</span>${UI.voiceUrls && UI.voiceUrls[v.id] ? `<audio controls src="${UI.voiceUrls[v.id]}" style="height:36px;max-width:100%"></audio>` : `<button class="btn small" data-act="voicePlay" data-id="${esc(v.id)}">${UI.voiceLoading === v.id ? "يحمّل…" : "استمع"}</button>`}</div>`).join("")}
+    </section>
+    <section class="card stack">
+      <h2>كتاباتك</h2>
+      ${(S.journal || []).length ? S.journal.slice().reverse().map(j => `<details><summary class="small">اليوم ${j.day}${j.res ? " · " + (j.res.score ?? "") + "/10" : ""} · ${new Date(j.at).toLocaleDateString("ar")}</summary><div class="en small" style="margin:6px 0">${esc(j.text)}</div>${j.res ? writeResultHTML(j.res) : ""}</details>`).join("") : `<div class="muted small">لم تكتب بعد. الكتابة في صفحة «الدرس».</div>`}
+    </section>
+    <section class="card stack" id="settings">
+      <h2>الإعدادات</h2>
+      <div class="stack" style="gap:8px">
+        <h3>التذكير والتقارير على الإيميل</h3>
+        ${AUTH ? `<div class="small muted">تصل إلى <span class="en">${esc(AUTH.email)}</span></div>
+        <label class="ck"><input type="checkbox" id="st-remind" data-act="setOpt" ${S.settings.remind !== false ? "checked" : ""}> تذكير يومي إذا لم تُنهِ يومك</label>
+        <label class="ck"><input type="checkbox" id="st-report" data-act="setOpt" ${S.settings.report !== false ? "checked" : ""}> تقرير أسبوعي كل جمعة</label>
+        <label class="ck">الساعة <select id="st-hour" data-act="setOpt">${Array.from({ length: 24 }, (_, h) => `<option value="${h}" ${+S.settings.remindHour === h ? "selected" : ""}>${(h % 12 || 12) + (h < 12 ? " صباحاً" : " مساءً")}</option>`).join("")}</select> <span class="tiny">بتوقيت السعودية</span></label>
+        <div class="row"><button class="btn" data-act="testMail" data-k="testEmail">أرسل تذكيراً تجريبياً</button><button class="btn ghost" data-act="testMail" data-k="testReport">أرسل تقريراً تجريبياً</button></div>` : `<div class="small muted">سجّل الدخول لتفعيل الإيميلات.</div>`}
+      </div>
+      <div class="stack" style="gap:8px">
+        <h3>الذكاء الاصطناعي (Gemini المجاني)</h3>
+        <div class="small">${store.ai ? `<span class="tag read">مفعّل</span> المحادثة وتصحيح الكتابة وتحليل النطق تعمل.` : `<span class="tag min">غير مفعّل</span> خطوة واحدة: افتح <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener" class="en">aistudio.google.com/apikey</a> بنفس الإيميل، اضغط <b>Create API key</b>، انسخ المفتاح والصقه هنا.`}</div>
+        ${AUTH ? `<div class="row"><input type="password" id="gkey" class="en grow" dir="ltr" placeholder="${store.ai ? "مفتاح جديد (اختياري)" : "الصق مفتاح Gemini هنا"}" autocomplete="off" style="max-width:360px"><button class="btn pri" data-act="saveKey">${UI.keyBusy ? "يتحقق…" : "حفظ"}</button></div>${UI.keyMsg ? `<div class="fb ${UI.keyMsg[0]} small">${esc(UI.keyMsg[1])}</div>` : ""}<div class="tiny">المفتاح يُحفظ في حسابك على جوجل فقط ولا يظهر في الموقع.</div>` : ""}
+      </div>
+      <div class="row"><span>سرعة النطق</span><select id="rate2" data-act="rate">${[0.6, 0.75, 0.85, 1].map(r => `<option value="${r}" ${S.rate == r ? "selected" : ""}>${r}</option>`).join("")}</select><button class="btn" data-act="say" data-t="Hello! This is my voice. Can you hear me?">جرّب الصوت</button></div>
+      <div class="tiny">صوت النطق: ${TTS.en ? esc(TTS.en.name) : "الافتراضي"}. لصوت أوضح استخدم Chrome أو Edge أو Safari.</div>
+      <div class="row">${AUTH ? `<button class="btn ghost" data-act="logout">تسجيل الخروج من هذا الجهاز</button>` : `<button class="btn pri" data-act="view" data-v="login">سجّل الدخول لحفظ تقدمك على إيميلك</button>`}</div>
+      ${UI.confirmReset ? `<div class="fb bad stack" style="gap:8px"><b>سيُحذف كل تقدمك نهائياً من كل أجهزتك.</b><div class="row"><button class="btn" data-act="reset" data-y="1" style="border-color:var(--bad);color:var(--bad)">نعم، ابدأ من جديد</button><button class="btn ghost" data-act="reset" data-y="0">إلغاء</button></div></div>` : `<button class="btn ghost" data-act="reset" style="align-self:flex-start;color:var(--bad)">ابدأ المسار من جديد</button>`}
+    </section>
+  </div>`;
+}
+
+function vGuide() {
+  return `<div class="stack">
+    <section class="card lift stack">
+      <h1 style="font-size:24px">كيف يوصلك هذا النظام إلى A1؟</h1>
+      <p class="muted" style="margin:0">المستوى A1 حسب الإطار الأوروبي (CEFR) يعني أنك تفهم وتستخدم عبارات يومية بسيطة، تعرّف بنفسك وتسأل وتجيب عن معلومات شخصية، وتتفاهم مع شخص يتكلم ببطء. المسار يغطي هذا بالكامل في 30 يوماً: 24 يوم تعلم (حوالي 480 كلمة و150 جملة جاهزة و24 قاعدة)، و4 أيام مراجعة واختبار أسبوعي، ويوم اختبار تجريبي، ويوم اختبار نهائي.</p>
+      <div class="fb info small"><b>بصراحة عن «الضمان»:</b> تقدّر كامبريدج أن A1 يحتاج حوالي 90 إلى 100 ساعة تعلم موجّه. في 30 يوماً هذا يعني بمعدل ساعتين يومياً تقريباً، بين تركيز واستماع في الخلفية. لذلك الضمان مبني على قاعدتين: <b>لا تنتقل ليوم جديد إلا بعد نجاحك في اختبار اليوم</b>، و<b>النجاح في الاختبار النهائي يشترط 70% في كل مهارة على حدة</b>. إن كانت أيامك كلها «مشغول» فستصل أيضاً، لكن في مدة أطول من شهر. اجعل 4 أيام في الأسبوع على الأقل «عادي» أو «متفرغ».</div>
+    </section>
+    <section class="card stack">
+      <h2>ماذا تفعل بكل شيء؟ (الوسوم)</h2>
+      <div class="legend">${Object.entries(TAGS).map(([k, t]) => `<div class="item"><span>${tagHTML(k)}</span><span class="small">${esc(t.d)}</span></div>`).join("")}</div>
+    </section>
+    <section class="card stack">
+      <h2>الأوضاع الثلاثة</h2>
+      ${Object.entries(MODES).map(([k, m]) => `<div class="res"><div><b>${m.ar}</b> <span class="tiny num">~${m.min} دقيقة</span><div class="small muted">${esc(m.d)}</div></div></div>`).join("")}
+      <div class="small">وفي كل الأوضاع: مهام «في الخلفية» تشغّلها أثناء القيادة أو الطبخ أو المشي، فلا تأخذ من وقتك شيئاً.</div>
+    </section>
+    <section class="card stack">
+      <h2>يوم نموذجي لشخص مشغول</h2>
+      <div class="ex" style="grid-template-columns:90px 1fr"><b class="small">الصباح</b><span class="small">في الطريق للعمل: حلقة VOA أو البودكاست في الخلفية (15 د).</span></div>
+      <div class="ex" style="grid-template-columns:90px 1fr"><b class="small">الاستراحة</b><span class="small">البطاقات (10 د) من الجوال.</span></div>
+      <div class="ex" style="grid-template-columns:90px 1fr"><b class="small">المساء</b><span class="small">القاعدة + الجمل + الحوار + الاختبار بتركيز (30-40 د).</span></div>
+      <div class="ex" style="grid-template-columns:90px 1fr"><b class="small">قبل النوم</b><span class="small">مشغّل الاستماع بكلمات اليوم (10 د) مع التكرار الخافت.</span></div>
+    </section>
+    <section class="card stack">
+      <h2>الصوت والنطق</h2>
+      <div class="small">${dictHelp()}</div>
+      <div class="small"><b>ثلاث طرق لقياس نطقك:</b> (1) «اضغط وتكلم»: يحوّل كلامك لنص ويقارنه بالجملة الصحيحة فوراً. (2) «سجّل صوتك وقارن»: تسمع صوتك وبجانبه النطق الصحيح. (3) «حلّل نطقي بالذكاء الاصطناعي»: Gemini يسمع التسجيل ويقول لك أي كلمة نطقتها خطأ وكيف تصلحها بالعربي.</div>
+      <div class="small"><b>إن رفض المتصفح الميكروفون:</b> اضغط أيقونة القفل بجانب رابط الموقع، واختر «السماح» للميكروفون، ثم أعد تحميل الصفحة.</div>
+    </section>
+    <section class="card stack">
+      <h2>تحقق مستقل في النهاية</h2>
+      <div class="res"><div><b class="en">EF SET Quick Check</b><div class="small muted">20 سؤالاً مجاناً بمعايير CEFR</div></div><a class="btn ext" href="${RES.efQuick}" target="_blank" rel="noopener">افتح</a></div>
+      <div class="res"><div><b class="en">EF SET 50</b><div class="small muted">قراءة واستماع مع شهادة مجانية</div></div><a class="btn ext" href="${RES.ef50}" target="_blank" rel="noopener">افتح</a></div>
+      <div class="res"><div><b class="en">Cambridge — Test your English</b><div class="small muted">اختبار سريع مجاني</div></div><a class="btn ext" href="${RES.cambridgeTest}" target="_blank" rel="noopener">افتح</a></div>
+      <div class="res"><div><b class="en">Oxford 3000 word list</b><div class="small muted">قائمة أكسفورد، صفّها على مستوى A1 لترى الكلمات الأساسية</div></div><a class="btn ext" href="${RES.oxford3000}" target="_blank" rel="noopener">افتح</a></div>
+    </section>
+    <section class="card small muted">تقدّمك وتسجيلاتك تُحفظ في Google Drive على إيميلك (مجلد «مسار A1 — بياناتي»). افتح نفس الرابط من أي جهاز وادخل بإيميلك ورمزك لتكمل من حيث وقفت. التذكير اليومي والتقرير الأسبوعي يصلانك على نفس الإيميل.</section>
+  </div>`;
+}
+
+function vQuiz() {
+  const Z = UI.quiz, q = Z.qs[Z.i], a = Z.answers[Z.i], n = Z.qs.length;
+  let body = "";
+  if (q.passage && Z.showPassage !== Z.i) body += `<details open class="passage en"><summary style="font-family:var(--f-ar);direction:rtl;text-align:right">${esc(q.passage.title)} — النص</summary><div style="margin-top:6px">${esc(q.passage.text)}</div><div class="row" style="margin-top:6px">${spk(q.passage.text)}<span class="tiny" style="font-family:var(--f-ar)">اقرأ أولاً، الصوت اختياري</span></div></details>`;
+  body += `<div class="qprompt">${esc(q.prompt)} <span class="tag min">${SKILL_AR[q.skill]}</span></div>`;
+  if (q.type === "mc") {
+    if (q.hidden) body += `<div class="row" style="justify-content:center;margin:10px 0 16px">${spk(q.audio, "lg")}<button class="btn ghost small" data-act="sayslow" data-t="${esc(q.audio)}">أبطأ</button></div>`;
+    else if (q.main) body += `<div class="qmain">${q.audio ? spk(q.audio) : ""}<span>${esc(q.main)}</span></div>`;
+    body += `<div class="opts">${q.opts.map((o, i) => { let c = ""; if (a) { if (i === q.ans) c = "right"; else if (i === a.choice) c = "wrong"; } return `<button class="opt ${q.en ? "en" : ""} ${c}" data-act="qpick" data-i="${i}" ${a ? "disabled" : ""}>${esc(o)}</button>`; }).join("")}</div>`;
+    if (a) body += `<div class="fb ${a.pts ? "ok" : "bad"}" style="margin-top:12px"><b>${a.pts ? "صحيح" : "خطأ"}</b>${q.reveal ? ` <span class="en">— ${esc(q.reveal)}</span>` : ""}${q.hidden || q.skill === "grammar" ? ` ${spk(q.reveal)}` : ""}</div>`;
+  } else if (q.type === "type") {
+    body += `<div class="row" style="justify-content:center;margin:10px 0 16px">${spk(q.audio, "lg")}<button class="btn ghost small" data-act="sayslow" data-t="${esc(q.audio)}">أبطأ</button></div>
+      <input type="text" id="q-in" class="en" dir="ltr" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="Type what you hear…" ${a ? "disabled" : ""} value="${esc(a ? a.said : "")}">`;
+    if (a) body += `<div class="fb ${a.pts ? "ok" : "bad"}" style="margin-top:12px"><b class="num">${a.score}%</b> ${a.pts ? "صحيح" : "راجع الكلمات الحمراء"}${diffHTML(compare(q.target, a.said))}<div class="small">${esc(q.ar)}</div></div>`;
+  } else if (q.type === "speak") {
+    body += `<div class="qmain" style="font-size:20px">${spk(q.target)}<span>${esc(q.target)}</span></div><div class="small muted" style="margin:-8px 0 12px">${esc(q.ar)}</div>
+      ${a ? "" : `<div class="row">${micBtn("quiz", "اضغط وقل الجملة")}</div>`}
+      ${SR ? "" : `<textarea id="q-in" class="en" rows="2" dir="ltr" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="اضغط هنا ثم ميكروفون الكيبورد…" ${a ? "disabled" : ""}>${esc(a ? a.said || "" : "")}</textarea>
+      <div class="tiny" style="margin-top:6px">لغة الكيبورد يجب أن تكون English. لا تكتب بيدك، فالهدف قياس النطق.</div>`}`;
+    if (a) body += a.skip ? `<div class="fb warn" style="margin-top:12px">تم التخطي. لن يُحسب هذا السؤال${Z.perSkill ? "، لكن الاختبار النهائي يتطلب التحدث" : ""}.</div>` : `<div class="fb ${a.pts ? "ok" : "bad"}" style="margin-top:12px"><b class="num">وضوح: ${a.score}%</b>${diffHTML(compare(q.target, a.said))}<div class="tiny">سمعتك تقول: <span class="en">${esc(a.said)}</span></div></div>`;
+  } else if (q.type === "write") {
+    const ws = Z.ws || {};
+    body += `<p style="margin:0 0 10px"><b>${esc(q.prompt)}</b></p><textarea id="q-in" class="en" rows="7" dir="ltr" placeholder="Write here…" ${a ? "disabled" : ""}>${esc(ws.text || "")}</textarea>`;
+    if (!a && ws.self) body += `<div class="fb info stack" style="gap:6px;margin-top:10px"><b>قيّم نفسك بصدق:</b>${SELF_CHECK.map((c, i) => `<label class="ck"><input type="checkbox" id="qsc-${i}"> ${c}</label>`).join("")}<button class="btn pri" data-act="qselfdone" style="align-self:flex-start">اعتمد التقييم</button></div>`;
+    if (ws.err) body += `<div class="fb warn small" style="margin-top:10px">${esc(ws.err)}</div>`;
+    if (a && ws.res) body += `<div style="margin-top:10px">${writeResultHTML(ws.res)}</div>`;
+    if (a && !ws.res) body += `<div class="fb info" style="margin-top:10px">تقييم ذاتي: <span class="num">${a.pts}/${a.max}</span></div>`;
+  }
+  let foot = "";
+  if (!a) {
+    if (q.type === "type") foot = `<button class="btn pri lg" data-act="qcheck">تحقق</button>`;
+    if (q.type === "speak") foot = `${SR ? "" : `<button class="btn pri lg" data-act="qcheck">تحقق</button>`}<button class="btn ghost" data-act="qskip">لا أستطيع التحدث الآن</button>`;
+    if (q.type === "write") foot = store.ai ? `<button class="btn pri lg" data-act="qwrite" ${(Z.ws || {}).busy ? "disabled" : ""}>${(Z.ws || {}).busy ? "يصحّح…" : "سلّم للتصحيح"}</button><button class="btn ghost" data-act="qselfw">تقييم ذاتي</button>` : `<button class="btn pri lg" data-act="qselfw">تقييم ذاتي</button>`;
+  } else foot = `<button class="btn pri lg" data-act="qnext">${Z.i + 1 < n ? "التالي" : "النتيجة"}</button>`;
+  return `<div class="qwrap stack">
+    <div class="qhead"><button class="btn ghost" data-act="qexit">خروج</button><div class="grow"><div class="bar"><b style="width:${Math.round(100 * Z.i / n)}%"></b></div></div><span class="tiny num">${Z.i + 1}/${n}</span></div>
+    <h2>${esc(Z.title)}</h2>
+    <section class="card lift qbody">${body}</section>
+    <div class="row">${foot}</div>
+  </div>`;
+}
+function vQuizResult() {
+  const Z = UI.quiz, R = Z.result;
+  const wrong = Z.qs.map((q, i) => [q, Z.answers[i]]).filter(([q, a]) => a && !a.skip && a.pts < a.max && q.type !== "write");
+  const dayOf = Object.keys(DAYS).map(Number).find(d => testKey(d) === Z.key);
+  return `<div class="qwrap stack">
+    <section class="card lift stack" style="align-items:center;text-align:center">
+      <div class="eyebrow">${esc(Z.title)}</div>
+      <div class="big-score" style="color:${R.passed ? "var(--ok)" : "var(--ink)"}">${R.pct}%</div>
+      <div class="fb ${R.passed ? "ok" : "warn"}" style="width:100%">${R.passed ? (Z.key === "final" ? "<b>مبروك! وصلت إلى مستوى A1.</b> ثبّت النتيجة باختبار EF SET الخارجي." : "<b>نجحت!</b> " + (dayOf && dayOf < 30 ? "اليوم " + (dayOf + 1) + " مفتوح الآن." : "")) : `<b>لم تصل بعد إلى ${Z.pass}%${Z.perSkill ? " في كل مهارة" : ""}.</b> راجع الأخطاء أدناه ثم أعد، فالأسئلة تتغير كل مرة.${R.skippedSpeak && Z.perSkill ? " (تخطيت أسئلة التحدث، وهي مطلوبة هنا)" : ""}`}</div>
+    </section>
+    <section class="card stack">${Object.entries(R.skills).map(([k, v]) => `<div class="skill"><span>${SKILL_AR[k]}</span><div class="bar ${v >= Z.pass ? "ok" : ""}"><b style="width:${v}%"></b></div><span class="num tiny">${v}%</span></div>`).join("")}</section>
+    ${wrong.length ? `<section class="card stack"><h3>راجع هذه (أُعيدت الكلمات الخاطئة إلى بطاقاتك)</h3>${wrong.map(([q]) => { const t = q.reveal || q.target || ""; return `<div class="ex">${spk(t)}<div><div class="en">${esc(t)}</div>${q.ar ? `<div class="ar">${esc(q.ar)}</div>` : ""}</div></div>`; }).join("")}</section>` : ""}
+    <div class="row"><button class="btn pri lg" data-act="quiz" data-k="${Z.key}">أعد الاختبار</button><button class="btn lg" data-act="qdone">${R.passed && dayOf && dayOf < 30 ? "إلى اليوم " + (dayOf + 1) : "رجوع"}</button></div>
+  </div>`;
+}
+function vChat() {
+  const C = UI.chat;
+  return `<div class="stack">
+    <div class="row between"><button class="btn ghost" data-act="chatExit">رجوع</button><span class="tiny">اليوم ${C.day} · ${esc(DAYS[C.day].topic)}</span></div>
+    <div class="how small">${tagHTML("rep")} تكلم بالزر الأصفر أو اكتب ردك بالإنجليزية. الشريك يرد بصوت، والتصحيح يظهر تحت رده باللون البرتقالي.</div>
+    <div class="chat" id="chatlog">
+      ${C.msgs.map(m => { if (m.role === "user") return `<div class="msg me en">${esc(m.content)}</div>`; const [reply, corr] = m.content.split(/\n?\s*Correction:\s*/); return `<div class="msg ai en"><div class="row" style="gap:8px;flex-wrap:nowrap;align-items:flex-start">${spk(reply)}<div>${esc(reply)}</div></div>${corr ? `<div class="corr"><b>تصحيح:</b> <span class="en" style="display:inline">${esc(corr)}</span></div>` : ""}</div>`; }).join("")}
+      ${C.busy ? `<div class="msg ai small muted">${C.stream ? esc(C.stream) : "يفكر…"}</div>` : ""}
+      ${C.err ? `<div class="fb warn small">${esc(C.err)}</div>` : ""}
+    </div>
+    ${store.ai ? `${C.msgs.length && !C.busy ? `<div class="row">${micBtn("chat", "اضغط وتكلم")}</div>` : ""}<textarea id="chat-in" class="en" rows="2" dir="ltr" placeholder="Type or dictate your answer…" ${C.busy ? "disabled" : ""}></textarea>
+    <div class="row"><button class="btn pri" data-act="chatSend" ${C.busy ? "disabled" : ""}>${C.msgs.length ? "أرسل" : "ابدأ"}</button><span class="tiny num">ردودك: ${C.msgs.filter(m => m.role === "user").length}</span></div>`
+    : `<div class="fb warn">المحادثة تحتاج تفعيل Gemini المجاني (خطوة واحدة). <button class="btn small" data-act="go" data-go="progress#settings">افتح الإعدادات</button></div>`}
+  </div>`;
+}
+
+function vLogin() {
+  return `<div class="stack" style="max-width:440px;margin:0 auto">
+    <section class="card lift stack">
+      <div class="daynum" dir="ltr" style="font-size:44px;align-self:flex-start">A1</div>
+      <h1 style="font-size:22px">ادخل إلى مسارك</h1>
+      <p class="muted small" style="margin:0">تقدمك وتسجيلاتك تُحفظ على إيميلك، وتكمل من أي جهاز.</p>
+      <label class="small" for="lg-email">الإيميل</label>
+      <input type="text" id="lg-email" class="en" dir="ltr" inputmode="email" autocomplete="email" placeholder="${OWNER_HINT}">
+      <label class="small" for="lg-pin">رمز الدخول (4 إلى 8 أرقام)</label>
+      <input type="password" id="lg-pin" class="en" dir="ltr" inputmode="numeric" autocomplete="current-password" placeholder="••••">
+      <div class="tiny">أول مرة: الرمز الذي تكتبه يصبح رمزك الدائم. احفظه.</div>
+      ${UI.loginErr ? `<div class="fb bad small">${esc(UI.loginErr)}</div>` : ""}
+      <button class="btn pri lg block" data-act="login">${UI.loginBusy ? "يتحقق…" : "دخول"}</button>
+      <button class="btn ghost small" data-act="guest">استخدمه بدون تسجيل (يحفظ على هذا الجهاز فقط)</button>
+    </section>
+  </div>`;
+}
+function render() {
+  const views = { login: vLogin, today: vToday, lesson: vLesson, cards: vCards, listen: vListen, progress: vProgress, guide: vGuide, quiz: vQuiz, quizResult: vQuizResult, chat: vChat };
+  const keep = document.activeElement && document.activeElement.id;
+  const drill = $("#drill-in") && $("#drill-in").value, wr = $("#write-in") && $("#write-in").value, qi = $("#q-in") && $("#q-in").value, ci = $("#chat-in") && $("#chat-in").value;
+  document.getElementById("app").innerHTML = header() + `<main><div class="wrap">${views[UI.view]()}</div></main>` + (["quiz", "quizResult", "chat", "login"].includes(UI.view) ? "" : nav()) + (UI.toast ? `<div class="toast" role="status">${esc(UI.toast)}</div>` : "");
+  setSync(store.kind);
+  if (drill && $("#drill-in") && !UI.clearDrill) $("#drill-in").value = drill; UI.clearDrill = false;
+  if (wr && $("#write-in") && !(UI.write && UI.write.text)) $("#write-in").value = wr;
+  if (qi && $("#q-in") && !$("#q-in").disabled && !$("#q-in").value) $("#q-in").value = qi;
+  if (ci && $("#chat-in") && !UI.clearChat) $("#chat-in").value = ci; UI.clearChat = false;
+  if (keep && document.getElementById(keep)) { try { document.getElementById(keep).focus({ preventScroll: true }); } catch (e) {} }
+  if (UI.view === "chat") { const l = $("#chatlog"); if (l) l.lastElementChild && l.lastElementChild.scrollIntoView({ block: "nearest" }); }
+}
+function toast(t) { UI.toast = t; render(); clearTimeout(toast.t); toast.t = setTimeout(() => { UI.toast = null; render(); }, 2200); }
+function go(target) {
+  const [v, anchor] = target.split("#");
+  UI.view = v; render();
+  if (anchor) setTimeout(() => { const el = document.getElementById(anchor); if (el) el.scrollIntoView({ behavior: "smooth", block: "start" }); }, 30);
+  else window.scrollTo(0, 0);
+}
+
+// ---------- actions ----------
+const A = {
+  view: b => { UI.card = UI.card && !UI.card.done ? UI.card : null; go(b.dataset.v); },
+  go: b => go(b.dataset.go),
+  day: b => { const d = +b.dataset.d; if (d < 1 || d > S.unlocked) return; UI.day = d; UI.drill = null; UI.write = null; if (UI.view === "progress" || UI.view === "guide") UI.view = "today"; render(); window.scrollTo(0, 0); },
+  mode: b => { S.mode = b.dataset.m; save(); },
+  toggle: b => { const d = +b.dataset.d, id = b.dataset.id; markDone(d, id, !isDone(d, id)); if (isDone(d, id)) logActivity(); save(); },
+  linkdone: b => { const d = +b.dataset.d, id = b.dataset.id; if (!isDone(d, id)) { markDone(d, id); logActivity(); setTimeout(() => save(), 200); } return "follow"; },
+  say: b => { hush(); say(b.dataset.t); },
+  sayslow: b => { hush(); say(b.dataset.t, { rate: 0.6 }); },
+  quiz: b => startQuiz(b.dataset.k),
+  toggleAr: () => { UI.showAr = !UI.showAr; render(); },
+  playlist: b => { UI.listenSrc = b.dataset.src; plStart(listenItems(b.dataset.src)); go("listen"); },
+  lsrc: b => { UI.listenSrc = b.dataset.v; const was = PL.on; plStop(); PL.items = listenItems(UI.listenSrc); PL.i = 0; if (was) plStart(PL.items); else render(); },
+  plToggle: () => { if (PL.on) { plStop(); render(); } else { if (!PL.items.length) PL.items = listenItems(UI.listenSrc); plStart(PL.items, PL.i < PL.items.length ? PL.i : 0); markDone(UI.day, DAYS[UI.day].kind === "learn" ? "bgself" : DAYS[UI.day].kind === "review" ? "bgweek" : "bgall"); save(false); render(); } },
+  plNext: () => { if (!PL.items.length) return; PL.i = Math.min(PL.i + 1, PL.items.length - 1); if (PL.on) { hush(); plRun(); } else render(); },
+  plPrev: () => { if (!PL.items.length) return; PL.i = Math.max(PL.i - 1, 0); if (PL.on) { hush(); plRun(); } else render(); },
+  cardDir: b => { S.cardDir = b.dataset.v; save(); },
+  cardStart: () => { const q = dueList().slice(0, 25); UI.card = { q, ok: 0, seen: 0, again: {}, done: false }; UI.flipped = false; render(); if (S.cardDir === "en" && q.length) say(WORDS[q[0]].en); },
+  flip: () => { if (!UI.card || UI.card.done) return; UI.flipped = !UI.flipped; render(); if (UI.flipped && S.cardDir === "ar") say(WORDS[UI.card.q[0]].en); },
+  cardGrade: b => {
+    const C = UI.card, k = C.q.shift(), ok = b.dataset.ok === "1";
+    C.seen++; if (ok) C.ok++;
+    grade(k, ok);
+    if (!ok && !C.again[k]) { C.again[k] = 1; C.q.push(k); }
+    UI.flipped = false; logActivity();
+    if (!C.q.length) { C.done = true; const d = UI.day; if (DAYS[d].kind !== "learn" || wordsOf(d).every(w => (S.srs[w.key] || [0])[0] >= 1)) markDone(d, "words"); }
+    save(); if (!C.done && S.cardDir === "en") say(WORDS[C.q[0]].en);
+  },
+  cardEnd: () => { UI.card.done = true; save(); },
+  drillCheck: (b, alts) => {
+    const d = +(b ? b.dataset.d : UI.day), P = phrasesOf(d), cur = UI.drill && UI.drill.d === d ? UI.drill : { d, i: 0, wins: 0 };
+    const target = P[cur.i % P.length].en;
+    const list = alts || [($("#drill-in") || {}).value || ""];
+    if (!list.join("").trim()) { toast("لم أسمع شيئاً. اضغط الزر وتكلم بوضوح."); return; }
+    const r = bestOf(target, list);
+    UI.drill = { d, i: cur.i, r, wins: (cur.wins || 0) + (r.score >= 80 ? 1 : 0) };
+    if (UI.drill.wins >= 3) markDone(d, "speak");
+    logActivity(); save();
+  },
+  drillNext: b => { const d = +b.dataset.d; UI.drill = { d, i: (UI.drill && UI.drill.d === d ? UI.drill.i : 0) + 1, r: null, wins: UI.drill && UI.drill.d === d ? UI.drill.wins : 0 }; UI.drillRec = null; UI.clearDrill = true; render(); },
+  mic: b => {
+    const ctx = b.dataset.ctx;
+    if (ctx === "drill") micListen("drill", alts => { if (alts.length) A.drillCheck(null, alts); });
+    else if (ctx === "quiz") micListen("quiz", alts => { if (!alts.length) return; const Z = UI.quiz, q = Z.qs[Z.i]; if (Z.answers[Z.i]) return; const r = bestOf(q.target, alts); recordAnswer(r.score >= 80 ? 1 : 0, 1, { said: r.said, score: r.score }); });
+    else if (ctx === "chat") micListen("chat", alts => { if (!alts.length) return; const el = $("#chat-in"); if (el) el.value = alts[0]; A.chatSend(); });
+  },
+  recDrill: b => {
+    const d = +b.dataset.d;
+    if (RECD.on) { recStop(); return; }
+    const i = UI.drill && UI.drill.d === d ? UI.drill.i : 0;
+    UI.recCtx = "drill";
+    recStart(10000, blob => { try { UI.drillRec && URL.revokeObjectURL(UI.drillRec.url); } catch (e) {} UI.drillRec = { d, i, blob, url: URL.createObjectURL(blob) }; logActivity(); save(false); });
+  },
+  pronAI: async b => {
+    const d = +b.dataset.d, R = UI.drillRec; if (!R) return;
+    const P = phrasesOf(d), target = P[R.i % P.length].en;
+    R.busy = true; R.err = null; render();
+    try { R.res = await aiPron(target, R.blob); if ((+R.res.score || 0) >= 80) { UI.drill = UI.drill || { d, i: R.i, wins: 0 }; } }
+    catch (e) { R.err = aiErr(e); }
+    R.busy = false; render();
+  },
+
+  aiWrite: async b => {
+    const d = +b.dataset.d, task = b.dataset.task, text = ($("#write-in") || {}).value || "";
+    if (text.trim().split(/\s+/).length < 4) { toast("اكتب جملتين على الأقل"); return; }
+    UI.write = { d, text, busy: true }; render();
+    try {
+      const res = await aiCorrect(task, text);
+      UI.write = { d, text, res };
+      S.journal = (S.journal || []).concat([{ day: d, text, res, at: Date.now() }]).slice(-40);
+      markDone(d, "write"); logActivity(); save();
+    } catch (e) { UI.write = { d, text, err: aiErr(e) }; render(); }
+  },
+  selfWrite: b => {
+    const d = +b.dataset.d, text = ($("#write-in") || {}).value || "";
+    if (!text.trim()) { toast("اكتب أولاً"); return; }
+    UI.write = { d, text, self: true };
+    S.journal = (S.journal || []).concat([{ day: d, text, res: null, at: Date.now() }]).slice(-40);
+    markDone(d, "write"); logActivity(); save();
+  },
+  // quiz
+  qpick: b => { const Z = UI.quiz, q = Z.qs[Z.i], i = +b.dataset.i; recordAnswer(i === q.ans ? 1 : 0, 1, { choice: i }); render(); if (q.hidden) say(q.audio); },
+  qcheck: () => {
+    const Z = UI.quiz, q = Z.qs[Z.i], v = ($("#q-in") || {}).value || "";
+    if (!v.trim()) { toast(q.type === "speak" ? "قل الجملة بميكروفون الكيبورد أولاً" : "اكتب ما سمعته أولاً"); return; }
+    const r = compare(q.target, v); recordAnswer(r.score >= 80 ? 1 : 0, 1, { said: v, score: r.score }); render();
+  },
+  qskip: () => { recordAnswer(0, 0, { skip: true, said: "" }); render(); },
+  qwrite: async () => {
+    const Z = UI.quiz, q = Z.qs[Z.i], text = ($("#q-in") || {}).value || "";
+    if (text.trim().split(/\s+/).length < 8) { toast("اكتب أكثر (5 جمل على الأقل)"); return; }
+    Z.ws = { text, busy: true }; render();
+    try {
+      const res = await aiCorrect(q.prompt, text);
+      Z.ws = { text, res }; const sc = Math.max(0, Math.min(10, +res.score || 0));
+      recordAnswer(Math.round(sc / 10 * q.weight * 10) / 10, q.weight);
+      S.journal = (S.journal || []).concat([{ day: UI.day, text, res, at: Date.now() }]).slice(-40); save(false);
+      render();
+    } catch (e) { Z.ws = { text, err: aiErr(e) }; render(); }
+  },
+  qselfw: () => { const Z = UI.quiz, text = ($("#q-in") || {}).value || ""; if (!text.trim()) { toast("اكتب أولاً"); return; } Z.ws = { text, self: true }; render(); },
+  qselfdone: () => { const Z = UI.quiz, q = Z.qs[Z.i]; const n = SELF_CHECK.filter((_, i) => ($("#qsc-" + i) || {}).checked).length; recordAnswer(Math.round(n / SELF_CHECK.length * q.weight * 10) / 10, q.weight); render(); },
+  qnext: () => { const Z = UI.quiz; hush(); Z.ws = null; if (Z.i + 1 < Z.qs.length) { Z.i++; render(); window.scrollTo(0, 0); const q = Z.qs[Z.i]; if (q.hidden || q.type === "type") say(q.audio); } else finishQuiz(); },
+  qexit: () => { hush(); UI.quiz = null; UI.view = "today"; render(); },
+  qdone: () => { const Z = UI.quiz; const dayOf = Object.keys(DAYS).map(Number).find(d => testKey(d) === Z.key); if (Z.result.passed && dayOf && dayOf < 30) UI.day = dayOf + 1; UI.quiz = null; UI.view = "today"; render(); window.scrollTo(0, 0); },
+  // chat
+  chat: () => { hush(); UI.chat = { day: UI.day, msgs: [], busy: false }; UI.view = "chat"; render(); window.scrollTo(0, 0); },
+  chatExit: () => { if (UI.chat && UI.chat.ctl) UI.chat.ctl.abort(); UI.chat = null; UI.view = "lesson"; render(); },
+  chatSend: async () => {
+    const C = UI.chat; if (C.busy || !store.ai) return;
+    const v = (($("#chat-in") || {}).value || "").trim();
+    if (C.msgs.length && !v) { toast("تكلم أو اكتب ردك أولاً"); return; }
+    if (v) C.msgs.push({ role: "user", content: v });
+    C.busy = true; C.err = null; C.stream = ""; UI.clearChat = true; render();
+    let hist = C.msgs.slice(-16); while (hist.length && hist[0].role === "user" && C.msgs.length > 16) hist.shift();
+    const turns = [{ role: "user", text: chatRules(C.day) + "\n\nStart the conversation now with a greeting and a first question." }].concat(hist.map(m => ({ role: m.role === "assistant" ? "model" : "user", text: m.content })));
+    if (turns[turns.length - 1].role !== "user") turns.push({ role: "user", text: "(continue)" });
+    try {
+      const text = await aiText(turns, false);
+      C.msgs.push({ role: "assistant", content: text.trim() });
+      C.busy = false;
+      if (C.msgs.filter(m => m.role === "user").length >= 4) markDone(C.day, "chat");
+      logActivity(); save(false); render();
+      hush(); say(text.split(/\n?\s*Correction:/)[0]);
+    } catch (e) { C.busy = false; C.err = aiErr(e); render(); }
+  },
+  login: async () => {
+    const email = (($("#lg-email") || {}).value || "").trim().toLowerCase(), pin = (($("#lg-pin") || {}).value || "").trim();
+    if (!email || !/^\d{4,8}$/.test(pin)) { UI.loginErr = "اكتب الإيميل ورمزاً من 4 إلى 8 أرقام."; render(); return; }
+    AUTH = { email, pin }; UI.loginBusy = true; UI.loginErr = null; render();
+    try {
+      const j = await api("login");
+      UI.loginBusy = false;
+      if (!j.ok) { AUTH = null; UI.loginErr = j.error === "auth" ? "الإيميل أو الرمز غير صحيح." : "تعذّر الاتصال بالخادم."; render(); return; }
+      try { localStorage.setItem(AUTH_K, JSON.stringify(AUTH)); } catch (e) {}
+      store.ai = !!j.ai; UI.view = "today"; render(); toast(j.firstTime ? "تم إنشاء حسابك. احفظ رمزك." : "أهلاً بعودتك"); connect();
+    } catch (e) { AUTH = null; UI.loginBusy = false; UI.loginErr = "تعذّر الاتصال بالخادم. تأكد من الإنترنت."; render(); }
+  },
+  guest: () => { UI.view = "today"; render(); },
+  logout: () => logout(false),
+  testMail: async b => { if (!AUTH) return; await flush(); try { const j = await api(b.dataset.k); toast(j.ok ? "أُرسل. راجع بريدك (وقد يصل إلى الرسائل غير المرغوبة)." : "تعذّر الإرسال"); } catch (e) { toast("تعذّر الاتصال"); } },
+  saveKey: async () => {
+    const key = (($("#gkey") || {}).value || "").trim(); if (!key) { UI.keyMsg = ["warn", "الصق المفتاح أولاً."]; render(); return; }
+    UI.keyBusy = true; UI.keyMsg = null; render();
+    try { const j = await api("setKey", { key }); store.ai = !!j.ai; UI.keyMsg = j.ok ? ["ok", "تم تفعيل Gemini. المحادثة والتصحيح وتحليل النطق جاهزة."] : ["bad", "المفتاح لم يعمل. تأكد أنك نسخته كاملاً."]; }
+    catch (e) { UI.keyMsg = ["bad", "تعذّر الاتصال."]; }
+    UI.keyBusy = false; render();
+  },
+  recVoice: () => {
+    if (RECD.on) { recStop(); return; }
+    UI.recCtx = "voice"; UI.voiceMsg = ["info", "يسجّل… تكلم عن نفسك بالإنجليزية ثم اضغط «إيقاف وحفظ»."];
+    recStart(90000, blob => uploadVoice(blob, blob.type));
+  },
+  voicePlay: async b => {
+    const id = b.dataset.id; UI.voiceLoading = id; render();
+    try { const j = await api("voiceGet", { id }); if (!j.ok) throw j; const bin = atob(j.data), u = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i); UI.voiceUrls = UI.voiceUrls || {}; UI.voiceUrls[id] = URL.createObjectURL(new Blob([u], { type: j.mime })); }
+    catch (e) { toast("تعذّر تحميل التسجيل"); }
+    UI.voiceLoading = null; render();
+  },
+  rate: b => { S.rate = +b.value; save(false); },
+  reset: b => {
+    if (!UI.confirmReset) { UI.confirmReset = true; render(); return; }
+    if (b.dataset.y === "1") { const keepVoice = S.voice; S = blank(); S.voice = keepVoice; UI.day = 1; UI.confirmReset = false; save(false); UI.view = "today"; render(); toast("بدأت من جديد"); }
+    else { UI.confirmReset = false; render(); }
+  }
+};
+
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-act]"); if (!b) return;
+  const act = b.dataset.act; if (!A[act] || b.tagName === "SELECT" || b.type === "checkbox") return;
+  if (b.tagName === "A") { A[act](b); return; }
+  e.preventDefault(); A[act](b);
+});
+document.addEventListener("keydown", e => { if (e.key === "Enter" && e.target.id === "q-in" && e.target.tagName === "INPUT") { e.preventDefault(); A.qcheck(); return; } if ((e.key === "Enter" || e.key === " ") && e.target.classList && e.target.classList.contains("flash")) { e.preventDefault(); A.flip(); } });
+async function uploadVoice(blob, mime) {
+  if (!AUTH) { UI.voiceMsg = ["warn", "سجّل الدخول لحفظ التسجيلات على إيميلك."]; render(); return; }
+  if (blob.size > 12 * 1024 * 1024) { UI.voiceMsg = ["warn", "الملف كبير جداً. سجّل دقيقة أو دقيقتين فقط."]; render(); return; }
+  UI.voiceMsg = ["info", "يحفظ التسجيل في Drive…"]; render();
+  try {
+    const j = await api("voiceUpload", { data: await toB64(blob), mime: mime || blob.type || "audio/webm", day: UI.day });
+    if (!j.ok) throw j;
+    S.voice = (S.voice || []).concat([{ id: j.id, day: UI.day, at: Date.now() }]);
+    UI.voiceUrls = UI.voiceUrls || {}; UI.voiceUrls[j.id] = URL.createObjectURL(blob);
+    UI.voiceMsg = ["ok", "حُفظ التسجيل على إيميلك."]; markDone(UI.day, "voice"); logActivity(); save();
+  } catch (e) { UI.voiceMsg = ["warn", "تعذّر الحفظ الآن. حاول مرة أخرى."]; render(); }
+}
+document.addEventListener("change", async e => {
+  const t = e.target;
+  if (t.dataset && t.dataset.act === "rate") { A.rate(t); return; }
+  if (t.dataset && t.dataset.act === "plOpt") { if (t.id === "pl-ar") UI.plAr = t.checked; if (t.id === "pl-shadow") UI.plShadow = t.checked; if (t.id === "pl-loop") UI.plLoop = t.checked; return; }
+  if (t.dataset && t.dataset.act === "setOpt") {
+    S.settings = Object.assign({ remind: true, remindHour: 20, report: true }, S.settings);
+    if (t.id === "st-remind") S.settings.remind = t.checked;
+    if (t.id === "st-report") S.settings.report = t.checked;
+    if (t.id === "st-hour") S.settings.remindHour = +t.value;
+    save(false); toast("تم الحفظ"); return;
+  }
+  if (t.id === "voice-in" && t.files && t.files[0]) { const f = t.files[0]; UI.recCtx = null; uploadVoice(f, f.type || (/\.m4a$/i.test(f.name) ? "audio/mp4" : "audio/mpeg")); }
+});
+document.addEventListener("keydown", e => { if (e.key === "Enter" && (e.target.id === "lg-pin" || e.target.id === "lg-email")) { e.preventDefault(); A.login(); } });
+
+ensureCards();
+render();
+connect();
+
+</script>
+</body>
+</html>

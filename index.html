@@ -608,7 +608,6 @@ const API = "https://script.google.com/macros/s/AKfycbx49HqI6MC3c7iYTNYQqm-4qK0H
 const AUTH_K = "a1path.auth";
 let AUTH = null; try { AUTH = JSON.parse(localStorage.getItem(AUTH_K) || "null"); } catch (e) {}
 if (!AUTH) UI.view = "login";
-const OWNER_HINT = "ahmed0944asd1@gmail.com";
 const store = { kind: "local", saving: false, again: false, timer: null, ai: false };
 async function api(action, data = {}) {
   const r = await fetch(API, { method: "POST", credentials: "omit", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(Object.assign({ action, email: AUTH && AUTH.email, pin: AUTH && AUTH.pin }, data)) });
@@ -1549,7 +1548,7 @@ function vLogin() {
       <h1 style="font-size:22px">ادخل إلى مسارك</h1>
       <p class="muted small" style="margin:0">تقدمك وتسجيلاتك تُحفظ على إيميلك، وتكمل من أي جهاز.</p>
       <label class="small" for="lg-email">الإيميل</label>
-      <input type="text" id="lg-email" class="en" dir="ltr" inputmode="email" autocomplete="email" placeholder="${OWNER_HINT}">
+      <input type="text" id="lg-email" class="en" dir="ltr" inputmode="email" autocomplete="email" placeholder="name@gmail.com">
       <label class="small" for="lg-pin">رمز الدخول (4 إلى 8 أرقام)</label>
       <input type="password" id="lg-pin" class="en" dir="ltr" inputmode="numeric" autocomplete="current-password" placeholder="••••">
       <div class="tiny">أول مرة: الرمز الذي تكتبه يصبح رمزك الدائم. احفظه.</div>

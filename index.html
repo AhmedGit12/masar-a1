@@ -1132,6 +1132,7 @@ function header() {
   return `<header class="top"><div class="wrap">
     <div class="brand"><span class="mark">A1</span>مسار</div>
     <div id="sync" class="sync ${store.kind}"><i></i><span></span></div>
+    ${AUTH ? `<a class="icon-btn" href="map.html" style="text-decoration:none" aria-label="خريطة المنهج">الخريطة</a>` : ""}
     <button class="icon-btn" data-act="view" data-v="guide" aria-label="كيف يعمل النظام">كيف يعمل؟</button>
   </div></header>`;
 }

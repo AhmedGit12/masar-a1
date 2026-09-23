@@ -230,6 +230,13 @@ textarea:focus,input:focus{border-color:var(--accent);outline:none}
 .opt-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
 select{border:1.5px solid var(--line);background:var(--card);border-radius:10px;padding:7px 10px}
 label.ck{display:flex;gap:8px;align-items:center;font-size:14px}
+.guide{border:2px solid var(--accent)}
+.gdots{display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end}
+.gdots i{width:8px;height:8px;border-radius:50%;background:var(--line);display:inline-block}
+.gdots i.d{background:var(--ok)} .gdots i.c{background:var(--accent);transform:scale(1.3)}
+.gbar{position:sticky;top:calc(55px + env(safe-area-inset-top,0px));z-index:19;background:var(--accent-soft);border-bottom:1px solid var(--line)}
+.gbar .wrap{padding-block:8px}
+.gbar .btn{white-space:nowrap;flex:none}
 .toast{position:fixed;bottom:calc(86px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:9px 16px;border-radius:12px;font-size:14px;z-index:50;box-shadow:var(--shadow);max-width:calc(100% - 32px)}
 details summary{cursor:pointer;font-weight:600}
 .pill-row{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
@@ -1067,6 +1074,50 @@ function taskHTML(d, t) {
 }
 function weakestDay(w) { let best = null, low = 101; weekDays(w).forEach(d => { const r = S.tests["d" + d]; const v = r ? r.best : 0; if (v < low) { low = v; best = d; } }); return best; }
 
+function guideSteps(d) {
+  const T = tasksFor(d).filter(t => MODE_SET[S.mode].includes(t.mode));
+  return T.filter(t => !t.quiz).concat(T.filter(t => t.quiz));
+}
+function currentStep(d = UI.day) {
+  const L = guideSteps(d), i = L.findIndex(t => !isDone(d, t.id));
+  return { L, i, t: i >= 0 ? L[i] : null };
+}
+function stepAction(d, t, cls) {
+  if (t.quiz) return `<button class="btn ${cls} lg" data-act="quiz" data-k="${t.quiz}">ابدأ الاختبار</button>`;
+  if (t.chat) return `<button class="btn ${cls} lg" data-act="chat">ابدأ المحادثة</button>`;
+  if (t.go) return `<button class="btn ${cls} lg" data-act="go" data-go="${t.go}">ابدأ هذه الخطوة</button>`;
+  if (t.link) return `<a class="btn ${cls} lg ext" href="${esc(t.link)}" target="_blank" rel="noopener">افتح الرابط</a>`;
+  if (t.weak) { const w = weakestDay(t.weak); return w ? `<button class="btn ${cls} lg" data-act="quiz" data-k="d${w}">اختبار اليوم ${w}</button>` : ""; }
+  return "";
+}
+function guideCard(d) {
+  const D = DAYS[d], { L, i, t } = currentStep(d);
+  const setup = AUTH && !store.ai ? `<div class="fb warn small row between"><span><b>خطوة إعداد واحدة:</b> فعّل Gemini لتعمل المحادثة وتصحيح الكتابة وتحليل النطق.</span><button class="btn small" data-act="go" data-go="progress#settings">فعّله الآن</button></div>` : "";
+  if (!t) {
+    const next = d + 1;
+    return setup + `<section class="card lift guide stack" style="gap:10px">
+      <div class="eyebrow">المرشد</div>
+      <h2>أنهيت خطوات اليوم ${d}. ممتاز!</h2>
+      <div class="small muted">${passedDay(d) ? "نجحت في الاختبار. " : ""}باقي فقط الاستماع في الخلفية وقت انشغالك (أسفل الصفحة).</div>
+      <div class="row">${next <= 30 && next <= S.unlocked ? `<button class="btn pri lg" data-act="day" data-d="${next}">ابدأ اليوم ${next}</button>` : ""}<button class="btn lg" data-act="view" data-v="cards">راجع البطاقات</button></div>
+      <div class="tiny">نصيحة: لا تبدأ اليوم التالي في نفس الجلسة إلا إذا كان عندك وقت. التوزيع على الأيام يثبت الحفظ.</div>
+    </section>`;
+  }
+  const dots = L.map((x, k) => `<i class="${isDone(d, x.id) ? "d" : k === i ? "c" : ""}"></i>`).join("");
+  return setup + `<section class="card lift guide stack" style="gap:10px">
+    <div class="row between"><span class="eyebrow">المرشد · الخطوة ${i + 1} من ${L.length}</span><span class="gdots">${dots}</span></div>
+    <h2>${esc(t.t)}</h2>
+    <div class="t-meta">${tagHTML(t.tag)}<span class="tag min num">${t.min} د</span></div>
+    <div class="how" style="margin:0"><b>ماذا تفعل:</b> ${esc(t.how)}</div>
+    <div class="row">${stepAction(d, t, "pri")}${t.quiz ? "" : `<button class="btn lg" data-act="gdone" data-d="${d}" data-id="${t.id}">خلصتها، التالي ←</button>`}</div>
+    ${t.quiz ? `<div class="tiny">هذه الخطوة تكتمل تلقائياً عندما تنجح في الاختبار بنسبة ${PASS[D.kind]}% أو أكثر.</div>` : `<div class="tiny">بعد ما تخلص اضغط «خلصتها» وأنا أوديك للخطوة اللي بعدها.</div>`}
+  </section>`;
+}
+function guideBar() {
+  if (!AUTH || ["today", "login", "quiz", "quizResult", "chat", "guide"].includes(UI.view)) return "";
+  const { i, L, t } = currentStep(); if (!t) return "";
+  return `<div class="gbar"><div class="wrap row between" style="flex-wrap:nowrap"><span class="small grow" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap"><b>الخطوة ${i + 1}/${L.length}:</b> ${esc(t.t)}</span>${t.quiz ? `<button class="btn small pri" data-act="view" data-v="today">للمرشد</button>` : `<button class="btn small pri" data-act="gdone" data-d="${UI.day}" data-id="${t.id}" data-back="1">خلصتها ←</button>`}</div></div>`;
+}
 function vToday() {
   const d = UI.day, D = DAYS[d], T = tasksFor(d), p = dayProgress(d);
   ensureCards();
@@ -1092,12 +1143,14 @@ function vToday() {
       </div>
       ${daySwitcher()}
     </section>
+    ${guideCard(d)}
     <section class="stack" style="gap:8px">
       <div class="row between"><h2>كم عندك وقت اليوم؟</h2><span class="tiny num">≈ ${mins} دقيقة + الخلفية</span></div>
       <div class="seg" role="group" aria-label="وضع اليوم">${Object.entries(MODES).map(([k, m]) => `<button data-act="mode" data-m="${k}" aria-pressed="${S.mode === k}">${m.ar}<small class="num">~${m.min} د</small></button>`).join("")}</div>
       <div class="tiny">${esc(MODES[S.mode].d)}</div>
     </section>
     ${gate}
+    <div class="group-h"><h3>كل مهام اليوم</h3><span class="tiny">المرشد فوق يعرض لك الخطوة التالية منها بالترتيب</span></div>
     ${groups.map(([m, label]) => `<div class="group-h"><h3>${label}</h3></div><div class="tasks">${T.filter(t => t.mode === m).map(t => taskHTML(d, t)).join("")}</div>`).join("")}
     <div class="group-h"><h3>أثناء انشغالك (في الخلفية)</h3><span class="tiny">لا تُحسب في النسبة، لكنها سر سرعة الأذن</span></div>
     <div class="tasks">${T.filter(t => t.mode === "bg").map(t => taskHTML(d, t)).join("")}</div>
@@ -1502,15 +1555,16 @@ function vLogin() {
       <div class="tiny">أول مرة: الرمز الذي تكتبه يصبح رمزك الدائم. احفظه.</div>
       ${UI.loginErr ? `<div class="fb bad small">${esc(UI.loginErr)}</div>` : ""}
       <button class="btn pri lg block" data-act="login">${UI.loginBusy ? "يتحقق…" : "دخول"}</button>
-      <button class="btn ghost small" data-act="guest">استخدمه بدون تسجيل (يحفظ على هذا الجهاز فقط)</button>
+      <div class="tiny">الموقع خاص بك وحدك: لا يعمل إلا بإيميلك ورمزك. يُفضّل رمز من 6 أرقام أو أكثر.</div>
     </section>
   </div>`;
 }
 function render() {
+  if (!AUTH && UI.view !== "login") UI.view = "login";
   const views = { login: vLogin, today: vToday, lesson: vLesson, cards: vCards, listen: vListen, progress: vProgress, guide: vGuide, quiz: vQuiz, quizResult: vQuizResult, chat: vChat };
   const keep = document.activeElement && document.activeElement.id;
   const drill = $("#drill-in") && $("#drill-in").value, wr = $("#write-in") && $("#write-in").value, qi = $("#q-in") && $("#q-in").value, ci = $("#chat-in") && $("#chat-in").value;
-  document.getElementById("app").innerHTML = header() + `<main><div class="wrap">${views[UI.view]()}</div></main>` + (["quiz", "quizResult", "chat", "login"].includes(UI.view) ? "" : nav()) + (UI.toast ? `<div class="toast" role="status">${esc(UI.toast)}</div>` : "");
+  document.getElementById("app").innerHTML = header() + guideBar() + `<main><div class="wrap">${views[UI.view]()}</div></main>` + (["quiz", "quizResult", "chat", "login"].includes(UI.view) ? "" : nav()) + (UI.toast ? `<div class="toast" role="status">${esc(UI.toast)}</div>` : "");
   setSync(store.kind);
   if (drill && $("#drill-in") && !UI.clearDrill) $("#drill-in").value = drill; UI.clearDrill = false;
   if (wr && $("#write-in") && !(UI.write && UI.write.text)) $("#write-in").value = wr;
@@ -1533,6 +1587,13 @@ const A = {
   go: b => go(b.dataset.go),
   day: b => { const d = +b.dataset.d; if (d < 1 || d > S.unlocked) return; UI.day = d; UI.drill = null; UI.write = null; if (UI.view === "progress" || UI.view === "guide") UI.view = "today"; render(); window.scrollTo(0, 0); },
   mode: b => { S.mode = b.dataset.m; save(); },
+  gdone: b => {
+    const d = +b.dataset.d; markDone(d, b.dataset.id); logActivity();
+    const n = currentStep(d).t;
+    if (b.dataset.back) UI.view = "today";
+    save(); if (UI.view === "today") window.scrollTo(0, 0);
+    toast(n ? "ممتاز! الخطوة التالية: " + n.t : "أنهيت خطوات اليوم!");
+  },
   toggle: b => { const d = +b.dataset.d, id = b.dataset.id; markDone(d, id, !isDone(d, id)); if (isDone(d, id)) logActivity(); save(); },
   linkdone: b => { const d = +b.dataset.d, id = b.dataset.id; if (!isDone(d, id)) { markDone(d, id); logActivity(); setTimeout(() => save(), 200); } return "follow"; },
   say: b => { hush(); say(b.dataset.t); },
@@ -1635,7 +1696,7 @@ const A = {
   qdone: () => { const Z = UI.quiz; const dayOf = Object.keys(DAYS).map(Number).find(d => testKey(d) === Z.key); if (Z.result.passed && dayOf && dayOf < 30) UI.day = dayOf + 1; UI.quiz = null; UI.view = "today"; render(); window.scrollTo(0, 0); },
   // chat
   chat: () => { hush(); UI.chat = { day: UI.day, msgs: [], busy: false }; UI.view = "chat"; render(); window.scrollTo(0, 0); },
-  chatExit: () => { if (UI.chat && UI.chat.ctl) UI.chat.ctl.abort(); UI.chat = null; UI.view = "lesson"; render(); },
+  chatExit: () => { if (UI.chat && UI.chat.ctl) UI.chat.ctl.abort(); UI.chat = null; UI.view = "today"; render(); window.scrollTo(0, 0); },
   chatSend: async () => {
     const C = UI.chat; if (C.busy || !store.ai) return;
     const v = (($("#chat-in") || {}).value || "").trim();
@@ -1661,7 +1722,7 @@ const A = {
     try {
       const j = await api("login");
       UI.loginBusy = false;
-      if (!j.ok) { AUTH = null; UI.loginErr = j.error === "auth" ? "الإيميل أو الرمز غير صحيح." : "تعذّر الاتصال بالخادم."; render(); return; }
+      if (!j.ok) { AUTH = null; UI.loginErr = j.error === "auth" ? "الإيميل أو الرمز غير صحيح." : j.error === "locked" ? "محاولات خاطئة كثيرة. الدخول مقفول " + (j.minutes || 30) + " دقيقة للحماية." : "تعذّر الاتصال بالخادم."; render(); return; }
       try { localStorage.setItem(AUTH_K, JSON.stringify(AUTH)); } catch (e) {}
       store.ai = !!j.ai; UI.view = "today"; render(); toast(j.firstTime ? "تم إنشاء حسابك. احفظ رمزك." : "أهلاً بعودتك"); connect();
     } catch (e) { AUTH = null; UI.loginBusy = false; UI.loginErr = "تعذّر الاتصال بالخادم. تأكد من الإنترنت."; render(); }

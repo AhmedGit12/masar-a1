@@ -567,10 +567,93 @@ const TAGS = {
  test:{ar:"اختبر",d:"قِس نفسك. لا تنتقل إلا بعد النجاح."}
 };
 const MODES = {
- busy:{ar:"مشغول",min:25,d:"الحد الأدنى الذي يحافظ على تقدمك: كلمات + قاعدة مختصرة + جمل + اختبار."},
- normal:{ar:"يوم عادي",min:65,d:"الوضع الموصى به: يضيف حلقة الفيديو والحوار والنطق."},
+ busy:{ar:"مشغول",min:30,d:"الحد الأدنى الذي يحافظ على تقدمك: كلمات + قاعدة مختصرة + جمل + اختبار."},
+ normal:{ar:"يوم عادي",min:75,d:"الوضع الموصى به: يضيف حلقة الفيديو والحوار والنطق."},
  free:{ar:"متفرغ",min:120,d:"الأسرع: يضيف الكتابة المصححة والمحادثة ومصادر إضافية."}
 };
+
+// ================= EXTRA CONTENT (v2): +10 words/day and a daily reading =================
+// Words are appended to the END of each day's list so existing card keys ("day:index") stay valid.
+const EXTRA_WORDS = {
+1:["Mr|السيد","Mrs|السيدة","Miss|الآنسة","fine|بخير","welcome|أهلاً بك","excuse me|لو سمحت","see you|أراك لاحقاً","man|رجل","woman|امرأة","people|ناس"],
+2:["zero|صفر","fourteen|أربعة عشر","sixteen|ستة عشر","seventeen|سبعة عشر","eighteen|ثمانية عشر","nineteen|تسعة عشر","forty|أربعون","letter|حرف / رسالة","address|عنوان","email|بريد إلكتروني"],
+3:["India|الهند","Indian|هندي","France|فرنسا","French|فرنسي","Turkey|تركيا","Turkish|تركي","Pakistan|باكستان","Pakistani|باكستاني","north|شمال","south|جنوب"],
+4:["grandparents|الأجداد","grandson|حفيد","granddaughter|حفيدة","nephew|ابن الأخ / ابن الأخت","niece|بنت الأخ / بنت الأخت","boy|ولد","girl|بنت","twins|توأم","young|صغير السن / شاب","family name|اسم العائلة"],
+5:["computer|كمبيوتر","laptop|لابتوب","notebook|دفتر","pencil|قلم رصاص","wallet|محفظة","umbrella|مظلة","picture|صورة","clock|ساعة حائط","those|أولئك / تلك (للجمع)","desk|مكتب (طاولة)"],
+6:["brown|بني","grey|رمادي","pink|وردي","purple|بنفسجي","orange|برتقالي","long|طويل (شيء)","short|قصير","tall|طويل (شخص)","strong|قوي","dark|غامق / مظلم"],
+8:["wash|يغسل","brush|يفرّش (أسنانه)","get dressed|يرتدي ملابسه","leave|يغادر","come back|يرجع","go to bed|يذهب للنوم","pray|يصلّي","have breakfast|يفطر","noon|الظهر","midnight|منتصف الليل"],
+9:["minute|دقيقة","second|ثانية","day|يوم","month|شهر","year|سنة","date|تاريخ","birthday|عيد ميلاد","quarter to|إلا ربع","every|كل","free|فاضي / مجاني"],
+10:["chocolate|شوكولاتة","pizza|بيتزا","cat|قطة","dog|كلب","animal|حيوان","song|أغنية","news|أخبار","really|حقاً","a lot|كثيراً","video games|ألعاب الفيديو"],
+11:["camera|كاميرا","guitar|جيتار","paint|يرسم بالألوان","fishing|صيد السمك","tennis|تنس","basketball|كرة السلة","club|نادٍ","join|ينضم إلى","once a week|مرة في الأسبوع","twice|مرتين"],
+12:["cheese|جبن","soup|شوربة","salad|سلطة","potato|بطاطس","tomato|طماطم","banana|موز","cake|كعكة","plate|طبق","spoon|ملعقة","glass|كوب زجاج"],
+13:["sell|يبيع","cost|يكلّف","change|الباقي (الفكّة)","receipt|إيصال","medium|وسط (مقاس)","large|كبير (مقاس)","jacket|جاكيت","T-shirt|تي شيرت","jeans|بنطلون جينز","try on|يجرّب (ملابس)"],
+15:["roof|سطح","carpet|سجادة","shelf|رف","towel|منشفة","oven|فرن","toilet|حمّام (مرحاض)","neighbour|جار","upstairs|في الطابق العلوي","downstairs|في الطابق السفلي","rent|إيجار"],
+16:["museum|متحف","library|مكتبة عامة","post office|مكتب البريد","cinema|سينما","bridge|جسر","corner|ناصية / زاوية","traffic lights|إشارة المرور","map|خريطة","taxi|تاكسي","train|قطار"],
+17:["use|يستخدم","try|يحاول","remember|يتذكر","forget|ينسى","hear|يسمع","see|يرى","jump|يقفز","count|يعدّ","piano|بيانو","of course|طبعاً"],
+18:["right now|الآن حالاً","cry|يبكي","laugh|يضحك","smile|يبتسم","text|يرسل رسالة نصية","come|يأتي","hold|يمسك / يحمل","chat|يدردش","online|على الإنترنت","lie down|يستلقي"],
+19:["May|مايو","August|أغسطس","October|أكتوبر","November|نوفمبر","snow|ثلج / تثلج","sun|شمس","degrees|درجات","temperature|درجة الحرارة","storm|عاصفة","dry|جاف"],
+20:["chef|طاهٍ (شيف)","waiter|نادل","shop assistant|بائع في محل","businessman|رجل أعمال","factory|مصنع","part-time|دوام جزئي","retired|متقاعد","what|ماذا / ما","which|أيّ","how|كيف"],
+22:["last month|الشهر الماضي","the day before yesterday|أول أمس","angry|غاضب","famous|مشهور","concert|حفلة موسيقية","match|مباراة","full|ممتلئ","empty|فارغ","funny|مضحك","excited|متحمس"],
+23:["asked|سأل","answered|أجاب","tried|حاول","moved|انتقل","needed|احتاج","lived|عاش / سكن","waited|انتظر","used|استخدم","stopped|توقف","washed|غسل"],
+24:["did|فعل","brought|أحضر","thought|فكّر / ظنّ","spoke|تكلم","drove|قاد (سيارة)","flew|سافر بالطائرة / طار","lost|فقد / خسر","sent|أرسل","paid|دفع","heard|سمع"],
+25:["this evening|هذا المساء","the day after tomorrow|بعد غد","next weekend|عطلة نهاية الأسبوع القادمة","university|جامعة","course|دورة (كورس)","exam|امتحان","pass|ينجح في","save|يدّخر","passport|جواز سفر","fly|يسافر بالطائرة"],
+26:["body|جسم","face|وجه","hair|شعر","finger|إصبع","ill|مريض","healthy|بصحة جيدة / صحي","pain|ألم","cough|سعال / يسعل","rest|يرتاح","appointment|موعد"],
+27:["her|ها (مفعول)","someone|شخص ما","everyone|الجميع","nobody|لا أحد","kind|طيّب","friendly|ودود","clever|ذكي","lazy|كسول","shy|خجول","polite|مؤدب"]
+};
+
+// Daily reading: short text built from the day's words + grammar. Q format: [question, [options], correctIndex]
+const DAILY_READ = {
+1:{t:"Sara at school",text:"Hello! My name is Sara. I am a student. Omar is my friend. He is a student too. Mr Adam is our teacher. He is very nice. Every morning I say, \"Good morning, Mr Adam!\" and he says, \"Good morning, Sara. How are you?\" I say, \"I'm fine, thank you.\"",ar:"مرحباً! اسمي سارة. أنا طالبة. عمر صديقي. هو طالب أيضاً. السيد آدم معلّمنا. هو لطيف جداً. كل صباح أقول: «صباح الخير يا سيد آدم!» فيقول: «صباح الخير يا سارة. كيف حالك؟» فأقول: «أنا بخير، شكراً.»",
+ q:[["What is Sara?",["a teacher","a student","a doctor"],1],["Who is Omar?",["her teacher","her brother","her friend"],2],["What does Sara say every morning?",["Good night","Good morning","Goodbye"],1]]},
+2:{t:"Karim's number",text:"This is Karim. He is a student. He is twenty years old. Mona is his sister. She is twelve. Karim's phone number is 0 1 5 7 3 8 9 4. His name is easy to spell: K-A-R-I-M.",ar:"هذا كريم. هو طالب. عمره عشرون سنة. منى أخته. عمرها اثنتا عشرة سنة. رقم هاتف كريم هو 0 1 5 7 3 8 9 4. اسمه سهل في التهجئة: K-A-R-I-M.",
+ q:[["How old is Karim?",["twelve","twenty","thirty"],1],["How old is Mona?",["ten","eleven","twelve"],2],["How do you spell Karim's name?",["K-A-R-I-M","K-E-R-I-M","C-A-R-I-M"],0]]},
+3:{t:"Yusuf and John",text:"I am Yusuf. I am from Egypt, but I live in Saudi Arabia. My city is Riyadh. I speak Arabic and a little English. My friend John is not Egyptian. He is British. He is from London, the capital of Britain. His language is English. Are you from Egypt too?",ar:"أنا يوسف. أنا من مصر، لكني أعيش في السعودية. مدينتي الرياض. أتكلم العربية وقليلاً من الإنجليزية. صديقي جون ليس مصرياً. هو بريطاني، من لندن عاصمة بريطانيا. لغته الإنجليزية. هل أنت من مصر أيضاً؟",
+ q:[["Where is Yusuf from?",["Saudi Arabia","Egypt","Britain"],1],["Where does Yusuf live?",["in Egypt","in London","in Saudi Arabia"],2],["What nationality is John?",["Egyptian","British","American"],1]]},
+4:{t:"Huda's family",text:"My name is Huda. I am married. My husband's name is Tarek. We have two children, a son and a daughter. Our son is eight and our daughter is five. My parents live near us. My father is a teacher and my mother is a doctor. My brother, Sami, is single. His car is red.",ar:"اسمي هدى. أنا متزوجة. اسم زوجي طارق. لدينا طفلان، ولد وبنت. ابننا عمره ثماني سنوات وابنتنا خمس سنوات. والداي يعيشان قريباً منا. أبي معلّم وأمي طبيبة. أخي سامي أعزب. سيارته حمراء.",
+ q:[["Is Huda married?",["Yes, she is.","No, she isn't.","We don't know."],0],["How many children do Huda and Tarek have?",["one","two","three"],1],["Who is single?",["Tarek","Sami","Huda's father"],1]]},
+5:{t:"What's in my bag?",text:"This is my bag. It is big and black. In my bag there is a book, two pens and a pencil. These are my keys, and this is my phone. That is my wallet on the table. Those are not my glasses. They are my brother's glasses. My laptop is not in my bag. It is at home.",ar:"هذه حقيبتي. إنها كبيرة وسوداء. في حقيبتي كتاب وقلمان وقلم رصاص. هذه مفاتيحي، وهذا هاتفي. تلك محفظتي على الطاولة. تلك ليست نظارتي، إنها نظارة أخي. اللابتوب ليس في حقيبتي، إنه في البيت.",
+ q:[["What colour is the bag?",["red","black","white"],1],["How many pens are in the bag?",["one","two","three"],1],["Where is the laptop?",["in the bag","on the table","at home"],2]]},
+6:{t:"My favourite things",text:"My favourite colour is green. My new car is dark green and very beautiful. My house is small, but it is nice. My cat is grey and white. She is very small and very happy. My brother is tall and strong. His favourite colour is blue. Today is very hot, so I am tired.",ar:"لوني المفضل هو الأخضر. سيارتي الجديدة خضراء غامقة وجميلة جداً. بيتي صغير لكنه لطيف. قطتي رمادية وبيضاء. هي صغيرة جداً وسعيدة جداً. أخي طويل وقوي. لونه المفضل الأزرق. اليوم حار جداً، لذلك أنا متعب.",
+ q:[["What is the writer's favourite colour?",["blue","green","grey"],1],["What colour is the cat?",["black and white","grey and white","brown"],1],["Why is the writer tired?",["It is very hot.","The car is new.","The house is small."],0]]},
+8:{t:"My day",text:"I get up at six o'clock every day. I wash my face and pray. Then I have breakfast with my family. We eat bread, eggs and cheese. I go to work at seven thirty. I work in an office. I come back home at four. In the evening, I study English for one hour. I go to bed at eleven.",ar:"أستيقظ الساعة السادسة كل يوم. أغسل وجهي وأصلّي. ثم أتناول الفطور مع عائلتي. نأكل خبزاً وبيضاً وجبناً. أذهب إلى العمل الساعة السابعة والنصف. أعمل في مكتب. أرجع إلى البيت الساعة الرابعة. في المساء أدرس الإنجليزية لمدة ساعة. أنام الساعة الحادية عشرة.",
+ q:[["When does the writer get up?",["at five","at six","at seven"],1],["Where does the writer work?",["in a school","in an office","at home"],1],["What does the writer do in the evening?",["works","studies English","goes to the gym"],1]]},
+9:{t:"Nadia's week",text:"Nadia is a nurse. She works in a big hospital. She starts work at seven in the morning and finishes at three in the afternoon. Friday and Saturday are her weekend. On Friday she visits her mother. In the evening she watches TV or reads a book. Her birthday is in May.",ar:"نادية ممرضة. تعمل في مستشفى كبير. تبدأ العمل الساعة السابعة صباحاً وتنتهي الساعة الثالثة عصراً. الجمعة والسبت عطلة نهاية الأسبوع لها. يوم الجمعة تزور أمها. في المساء تشاهد التلفاز أو تقرأ كتاباً. عيد ميلادها في شهر مايو.",
+ q:[["What is Nadia's job?",["a teacher","a nurse","a doctor"],1],["What time does she finish work?",["at seven","at three","at five"],1],["What does she do on Friday?",["She works.","She visits her mother.","She goes to the gym."],1]]},
+10:{t:"Two different brothers",text:"Ali and Hassan are brothers, but they are very different. Ali likes football. He watches every match on TV. Hassan doesn't like football. He loves music and reading. Ali drinks coffee every morning, but Hassan doesn't drink coffee. He prefers tea. Do they like the same food? Yes, they do! They love chicken and rice.",ar:"علي وحسن أخوان، لكنهما مختلفان جداً. علي يحب كرة القدم. يشاهد كل مباراة على التلفاز. حسن لا يحب كرة القدم. يحب الموسيقى والقراءة. علي يشرب القهوة كل صباح، لكن حسن لا يشرب القهوة. يفضّل الشاي. هل يحبان نفس الطعام؟ نعم! يحبان الدجاج والأرز.",
+ q:[["Who likes football?",["Ali","Hassan","both brothers"],0],["What does Hassan drink?",["coffee","tea","juice"],1],["What food do both brothers love?",["pizza","fish","chicken and rice"],2]]},
+11:{t:"Mariam's free time",text:"Mariam is very busy in the week, but at the weekend she has free time. She always visits her grandmother on Friday. She usually goes to the gym on Saturday morning. She often walks in the park with her friends. She sometimes takes photos with her camera. She never watches TV because she thinks it is boring.",ar:"مريم مشغولة جداً خلال الأسبوع، لكن في عطلة نهاية الأسبوع عندها وقت فراغ. دائماً تزور جدتها يوم الجمعة. عادةً تذهب إلى النادي الرياضي صباح السبت. غالباً تمشي في الحديقة مع صديقاتها. أحياناً تلتقط صوراً بكاميرتها. لا تشاهد التلفاز أبداً لأنها تراه مملاً.",
+ q:[["When does Mariam visit her grandmother?",["on Saturday","on Friday","every day"],1],["How often does she walk in the park?",["often","never","always"],0],["What does she never do?",["go to the gym","take photos","watch TV"],2]]},
+12:{t:"At the restaurant",text:"Waiter: Good evening. Are you ready to order? — Ahmed: Yes. I'd like some chicken soup and a salad, please. — Waiter: Would you like any rice? — Ahmed: No, thank you. I'm not very hungry. — Waiter: And to drink? — Ahmed: Some orange juice, please. — Later: Can I have the bill, please? The food was delicious!",ar:"النادل: مساء الخير. هل أنت مستعد للطلب؟ — أحمد: نعم. أريد شوربة دجاج وسلطة من فضلك. — النادل: هل تريد أرزاً؟ — أحمد: لا، شكراً. لست جائعاً جداً. — النادل: وماذا تشرب؟ — أحمد: عصير برتقال من فضلك. — بعد ذلك: ممكن الحساب من فضلك؟ الطعام كان لذيذاً!",
+ q:[["What soup does Ahmed order?",["fish soup","chicken soup","tomato soup"],1],["Does Ahmed want rice?",["Yes, he does.","No, he doesn't.","The text doesn't say."],1],["What does he drink?",["water","tea","orange juice"],2]]},
+13:{t:"Buying a jacket",text:"Salma is at the market. She wants a new jacket for winter. She tries on a black jacket, but it is too small. She asks for a large size. The large jacket is perfect. \"How much is it?\" she asks. \"It's fifty riyals,\" says the shop assistant. It is not cheap, but it is not expensive. Salma pays by card and takes her receipt.",ar:"سلمى في السوق. تريد جاكيت جديداً للشتاء. تجرّب جاكيت أسود، لكنه صغير جداً عليها. تطلب مقاساً كبيراً. الجاكيت الكبير ممتاز. تسأل: «بكم هذا؟» فيقول البائع: «بخمسين ريالاً.» ليس رخيصاً وليس غالياً. تدفع سلمى بالبطاقة وتأخذ الإيصال.",
+ q:[["What does Salma want?",["a dress","a jacket","shoes"],1],["What is the problem with the first jacket?",["It is too big.","It is too small.","It is too expensive."],1],["How does Salma pay?",["cash","by card","She doesn't pay."],1]]},
+15:{t:"My new apartment",text:"My new apartment is small but clean. There are three rooms: a living room, a bedroom and a kitchen. There is one bathroom. In the living room there is a big sofa and a lamp, but there isn't a TV. There are two windows in my bedroom. The rent is not expensive, and my neighbours are quiet and friendly.",ar:"شقتي الجديدة صغيرة لكنها نظيفة. فيها ثلاث غرف: غرفة معيشة وغرفة نوم ومطبخ. فيها حمّام واحد. في غرفة المعيشة كنبة كبيرة ومصباح، لكن لا يوجد تلفاز. في غرفة نومي نافذتان. الإيجار ليس غالياً، وجيراني هادئون وودودون.",
+ q:[["How many rooms are there?",["two","three","four"],1],["Is there a TV in the living room?",["Yes, there is.","No, there isn't.","There are two."],1],["What are the neighbours like?",["noisy","quiet and friendly","lazy"],1]]},
+16:{t:"The way to the museum",text:"Excuse me, where is the museum? — Go straight on this street. Turn left at the traffic lights. The museum is next to the library, opposite the big mosque. It is not far. It's about five minutes from here. — Thank you! — You're welcome.",ar:"لو سمحت، أين المتحف؟ — امشِ مستقيماً في هذا الشارع. انعطف يساراً عند إشارة المرور. المتحف بجانب المكتبة، مقابل المسجد الكبير. ليس بعيداً. حوالي خمس دقائق من هنا. — شكراً! — عفواً.",
+ q:[["Where do you turn left?",["at the bank","at the traffic lights","at the corner"],1],["What is next to the museum?",["the library","the hospital","the station"],0],["Is the museum far?",["Yes, it is.","No, it isn't.","It's thirty minutes."],1]]},
+17:{t:"What can you do?",text:"My name is Faisal. I am ten years old. I can swim and I can ride a bike, but I can't drive a car. My sister Laila can draw very well. She can't sing, but she can dance! My grandfather can't read small letters, so I help him. I read the news to him. Can you play the piano? I can't, but I want to learn.",ar:"اسمي فيصل. عمري عشر سنوات. أستطيع السباحة وركوب الدراجة، لكن لا أستطيع قيادة السيارة. أختي ليلى تستطيع الرسم جيداً جداً. لا تستطيع الغناء، لكنها تستطيع الرقص! جدي لا يستطيع قراءة الحروف الصغيرة، لذلك أساعده وأقرأ له الأخبار. هل تستطيع العزف على البيانو؟ أنا لا أستطيع، لكني أريد أن أتعلم.",
+ q:[["What can't Faisal do?",["swim","ride a bike","drive a car"],2],["What can Laila do very well?",["sing","draw","swim"],1],["How does Faisal help his grandfather?",["He drives him.","He reads the news to him.","He cooks for him."],1]]},
+18:{t:"A message from the airport",text:"Hi Khaled! I'm at the airport right now. I'm going to Cairo today. It's raining outside, and a lot of people are sitting and waiting. A small boy is crying, and his mother is holding him. His father is talking on the phone. I'm drinking coffee and reading a book. See you tomorrow! Omar",ar:"مرحباً خالد! أنا في المطار الآن. أنا مسافر إلى القاهرة اليوم. إنها تمطر بالخارج، وكثير من الناس جالسون ينتظرون. ولد صغير يبكي، وأمه تحمله. أبوه يتكلم في الهاتف. أنا أشرب قهوة وأقرأ كتاباً. أراك غداً! عمر",
+ q:[["Where is Omar now?",["at home","at the airport","at the station"],1],["What is the weather like?",["It's sunny.","It's raining.","It's windy."],1],["What is Omar doing?",["He's crying.","He's drinking coffee and reading.","He's talking on the phone."],1]]},
+19:{t:"Weather in two cities",text:"In Riyadh, the summer is very hot and dry. It usually doesn't rain in June or July. Today it is 45 degrees! In London, the weather is different. It often rains in summer. Right now my friend Tom is in London. He is wearing a jacket because it is cool and cloudy. He is sending me photos of the rain!",ar:"في الرياض، الصيف حار جداً وجاف. عادةً لا تمطر في يونيو أو يوليو. اليوم درجة الحرارة 45! في لندن الطقس مختلف. غالباً تمطر في الصيف. الآن صديقي توم في لندن. يرتدي جاكيت لأن الجو بارد قليلاً وغائم. يرسل لي صوراً للمطر!",
+ q:[["What is summer like in Riyadh?",["cool and rainy","hot and dry","cold and windy"],1],["What is the temperature in Riyadh today?",["25 degrees","35 degrees","45 degrees"],2],["Why is Tom wearing a jacket?",["It is cool and cloudy.","It is snowing.","It is hot."],0]]},
+20:{t:"Meet Dr Rania",text:"Who is Rania? She is a doctor. Where does she work? She works at a hospital in Jeddah. When does she start work? She starts at eight. Why does she love her job? Because she helps people every day. How does she go to work? She drives. Her husband, Majid, is an engineer. He works for a big company.",ar:"من هي رانيا؟ هي طبيبة. أين تعمل؟ تعمل في مستشفى في جدة. متى تبدأ العمل؟ تبدأ الساعة الثامنة. لماذا تحب عملها؟ لأنها تساعد الناس كل يوم. كيف تذهب إلى العمل؟ تقود سيارتها. زوجها ماجد مهندس. يعمل في شركة كبيرة.",
+ q:[["Where does Rania work?",["at a school","at a hospital","at a company"],1],["Why does she love her job?",["The salary is good.","She helps people.","It is easy."],1],["What is Majid's job?",["doctor","engineer","driver"],1]]},
+22:{t:"A wedding last Friday",text:"Last Friday was my cousin's wedding. It was in a big hotel. The party was great, and the food was delicious. My parents were very happy. My little brother was tired at night. The next day I was sick, so I was at home. I wasn't at work on Saturday.",ar:"الجمعة الماضية كان حفل زفاف ابن عمي. كان في فندق كبير. الحفلة كانت رائعة، والطعام كان لذيذاً. والداي كانا سعيدين جداً. أخي الصغير كان متعباً في الليل. في اليوم التالي كنت مريضاً، لذلك كنت في البيت. لم أكن في العمل يوم السبت.",
+ q:[["Where was the wedding?",["at home","in a big hotel","in a park"],1],["How was the party?",["boring","great","bad"],1],["Where was the writer on Saturday?",["at work","at the hotel","at home"],2]]},
+23:{t:"Yesterday at home",text:"Yesterday I stayed at home. In the morning I cleaned the kitchen and washed the car. At noon I cooked rice and chicken for my family. In the afternoon my friend Sami called me. We talked for an hour. Then I watched a football match on TV. I studied English in the evening and finished my lesson at ten.",ar:"أمس بقيت في البيت. في الصباح نظّفت المطبخ وغسلت السيارة. عند الظهر طبخت أرزاً ودجاجاً لعائلتي. في العصر اتصل بي صديقي سامي وتكلمنا لمدة ساعة. ثم شاهدت مباراة كرة قدم على التلفاز. درست الإنجليزية في المساء وأنهيت درسي الساعة العاشرة.",
+ q:[["Where did the writer stay yesterday?",["at work","at home","at a friend's house"],1],["What did the writer cook?",["fish","rice and chicken","soup"],1],["Who called the writer?",["his brother","his friend Sami","his teacher"],1]]},
+24:{t:"A trip to Dubai",text:"Last month I went to Dubai with my wife. We flew from Cairo, and the trip took three hours. We stayed in a small hotel near the beach. We ate fish every day and drank a lot of juice. We saw many very tall buildings. I bought a watch for my father. On the last day I lost my wallet, but a man found it and gave it back to me!",ar:"الشهر الماضي ذهبت إلى دبي مع زوجتي. سافرنا بالطائرة من القاهرة، واستغرقت الرحلة ثلاث ساعات. أقمنا في فندق صغير قرب الشاطئ. أكلنا السمك كل يوم وشربنا الكثير من العصير. رأينا مباني عالية جداً. اشتريت ساعة لأبي. في اليوم الأخير فقدت محفظتي، لكن رجلاً وجدها وأعادها إليّ!",
+ q:[["How did they travel to Dubai?",["by car","by plane","by bus"],1],["What did the writer buy for his father?",["a watch","a wallet","a shirt"],0],["What happened to the wallet?",["He never found it.","A man found it and gave it back.","His wife took it."],1]]},
+25:{t:"Adel's plans",text:"Next year is going to be a big year for Adel. He is going to finish university in June. Then he is going to look for a job in a bank. He is also going to save money because he wants to get married. In the summer he is going to travel abroad with his brother. He hopes to visit Turkey.",ar:"العام القادم سيكون عاماً مهماً لعادل. سينهي الجامعة في يونيو. ثم سيبحث عن عمل في بنك. وسيدّخر المال أيضاً لأنه يريد أن يتزوج. في الصيف سيسافر إلى الخارج مع أخيه. يتمنى أن يزور تركيا.",
+ q:[["When is Adel going to finish university?",["in January","in June","next month"],1],["Where does he want to work?",["in a hospital","in a bank","in a school"],1],["Why is he going to save money?",["to buy a car","to get married","to study abroad"],1]]},
+26:{t:"At the doctor's",text:"Doctor: Hello, Mr Nasser. What's the problem? — Nasser: I don't feel well. I have a headache and a bad cough, and my back hurts. — Doctor: Do you have a fever? — Nasser: Yes, a little. — Doctor: You have a cold. Take this medicine three times a day and rest at home for two days. Drink a lot of water. — Nasser: Thank you, doctor.",ar:"الطبيب: مرحباً يا سيد ناصر. ما المشكلة؟ — ناصر: لا أشعر أنني بخير. عندي صداع وسعال شديد، وظهري يؤلمني. — الطبيب: هل عندك حمّى؟ — ناصر: نعم، قليلاً. — الطبيب: عندك زكام. خذ هذا الدواء ثلاث مرات في اليوم واسترح في البيت يومين. اشرب الكثير من الماء. — ناصر: شكراً يا دكتور.",
+ q:[["What is wrong with Nasser?",["He has a headache and a cough.","His leg hurts.","He has a toothache."],0],["What does the doctor say he has?",["a broken arm","a cold","nothing"],1],["How often must he take the medicine?",["once a day","twice a day","three times a day"],2]]},
+27:{t:"Two friends",text:"Laila and Dina are friends, but they are different. Laila is friendly, and she enjoys meeting new people. She likes going to parties. Dina is shy. She prefers staying at home and reading. But they both love cooking, so they often cook together. Dina wants to learn English, and Laila helps her. Laila also likes Dina's family very much.",ar:"ليلى ودينا صديقتان، لكنهما مختلفتان. ليلى ودودة وتستمتع بالتعرف على أشخاص جدد. تحب الذهاب إلى الحفلات. دينا خجولة. تفضّل البقاء في البيت والقراءة. لكن الاثنتين تحبان الطبخ، لذلك غالباً تطبخان معاً. دينا تريد أن تتعلم الإنجليزية، وليلى تساعدها. وليلى تحب عائلة دينا كثيراً.",
+ q:[["What does Laila enjoy?",["staying at home","meeting new people","reading"],1],["What is Dina like?",["shy","lazy","angry"],0],["What do they often do together?",["go to parties","cook","travel"],1]]}
+};
+Object.keys(EXTRA_WORDS).forEach(d => { DAYS[d].words = DAYS[d].words.concat(EXTRA_WORDS[d]); });
+Object.keys(DAILY_READ).forEach(d => { DAYS[d].rd = DAILY_READ[d]; });
 
 // ================= APP =================
 const DAY = 86400000;
@@ -789,12 +872,13 @@ function tasksFor(d) {
     ? { id: "bgpod", mode: "bg", tag: "bg", min: 10, t: "بودكاست Easy Stories in English — مستوى L1 Beginner", how: "قصص بطيئة للمبتدئين. اسمع أي حلقة من L1 في الخلفية. لا تقلق إن فهمت 30% فقط.", link: RES.easyStories, link2: RES.easyStoriesApple, l2: "Apple Podcasts" }
     : { id: "bgpod", mode: "bg", tag: "bg", min: 5, t: "خبر اليوم: News in Levels — Level 1", how: "خبر قصير بكلمات أساسية مع صوت. اسمعه أولاً في الخلفية، وإن تفرغت اقرأه وأنت تسمع.", link: RES.newsLevels };
   if (D.kind === "learn") {
-    T.push({ id: "words", mode: "busy", tag: "memo", min: 10, t: "كلمات اليوم (" + D.words.length + " كلمة)", how: "في البطاقات: اسمع الكلمة، قلها بصوتك مرتين، ثم اقلب البطاقة. احفظ المعنى والنطق معاً.", go: "cards" });
+    T.push({ id: "words", mode: "busy", tag: "memo", min: 14, t: "كلمات اليوم (" + D.words.length + " كلمة)", how: "في البطاقات: اسمع الكلمة، قلها بصوتك مرتين، ثم اقلب البطاقة. احفظ المعنى والنطق معاً.", go: "cards" });
     T.push({ id: "grammar", mode: "busy", tag: "und", min: 6, t: "قاعدة اليوم: " + D.g.t, how: "افهم الشرح ولا تحفظه. احفظ فقط السطر الأصفر (القاعدة).", go: "lesson#grammar" });
     T.push({ id: "phrases", mode: "busy", tag: "rep", min: 5, t: "جمل اليوم الجاهزة (" + D.phrases.length + ")", how: "احفظ كل جملة كقطعة واحدة. شغّلها وكرر خلفها 3 مرات بنفس السرعة.", go: "lesson#phrases" });
     T.push({ id: "quiz", mode: "busy", tag: "test", min: 6, t: "اختبار اليوم", how: "80% أو أكثر يفتح اليوم التالي. يمكنك الإعادة بلا حدود.", quiz: testKey(d) });
     T.push(voa);
     T.push({ id: "dialogue", mode: "normal", tag: "focus", min: 8, t: "حوار اليوم", how: "استمع أولاً بدون قراءة وخمّن المعنى، ثم اقرأ مع الصوت، ثم أخفِ الترجمة وكرر دور B.", go: "lesson#dialogue" });
+    if (D.rd) T.push({ id: "read", mode: "normal", tag: "read", min: 6, t: "قراءة اليوم: " + D.rd.t, how: "اقرأ النص مرة للفكرة العامة بدون ترجمة، ثم مرة للتفاصيل، ثم أجب عن الأسئلة الثلاثة. الترجمة للتأكد فقط بعد ما تجاوب. سؤال منه سيأتي في اختبار اليوم.", go: "lesson#read" });
     if (PRON[d]) T.push({ id: "pron", mode: "normal", tag: "rep", min: 5, t: "نطق اليوم: " + PRON[d].t, how: "مخصص لأخطاء العرب في النطق. اسمع كل كلمة وقلدها بصوت عالٍ.", go: "lesson#pron" });
     T.push({ id: "speak", mode: "normal", tag: "rep", min: 5, t: "تحدي النطق بالميكروفون", how: "اضغط «اضغط وتكلم» وقل جمل اليوم. التطبيق يسمعك ويقيس وضوح نطقك، وتقدر تسجّل صوتك وتقارنه بالنطق الصحيح.", go: "lesson#speak" });
     T.push({ id: "write", mode: "free", tag: "write", min: 12, t: "كتابة: " + D.w, how: "اكتب بنفسك بلا مترجم، ثم اضغط «صحّح لي».", go: "lesson#write" });
@@ -890,6 +974,7 @@ function buildQuiz(key) {
     ws.slice(4).forEach(w => Q.push(mcVocab(w, poolW, "ar")));
     DAYS[d].gq.forEach(g => Q.push(mcGrammar(g)));
     const ps = pick(P, 4);
+    if (DAYS[d].rd) { const R = DAYS[d].rd; Q.push(qRead({ title: R.t, text: R.text }, R.q[Math.floor(Math.random() * R.q.length)])); }
     Q.push(mcListen(ps[0], poolP), mcListen(ps[1], poolP), qType(ps[2]), qSpeak(ps[3]));
     if (d > 2) { const old = learnDays(1, d - 1); const od = old[Math.floor(Math.random() * old.length)]; Q.splice(6, 0, mcVocab(pick(wordsOf(od), 1)[0], poolW, "en")); }
     return { key, title: "اختبار اليوم " + d, pass: PASS.learn, qs: Q };
@@ -1190,6 +1275,8 @@ function vLesson() {
       <div class="dlg ${UI.showAr ? "" : "hideAr"}">${D.dlg.map(l => `<div class="bub ${l[0]}"><div class="row" style="gap:8px;flex-wrap:nowrap">${spk(l[1])}<div><div class="en">${esc(l[0])}: ${esc(l[1])}</div><div class="ar">${esc(l[2])}</div></div></div></div>`).join("")}</div>
     </section>
 
+    ${D.rd ? readCard(d, D.rd) : ""}
+
     ${pr ? `<section class="card">${secHead("نطق اليوم: " + pr.t, ["rep"], esc(pr.d), "pron")}
       <div class="words">${pr.w.map(w => `<div class="word">${spk(w)}<div class="en">${esc(w)}</div></div>`).join("")}</div></section>` : ""}
 
@@ -1213,6 +1300,18 @@ function vLesson() {
       </div>
     </section>
   </div>`;
+}
+function readCard(d, R) {
+  const st = UI.rd && UI.rd.d === d ? UI.rd : { d, a: {}, ar: false };
+  const qs = R.q.map((q, qi) => { const a = st.a[qi]; return `<div class="stack" style="gap:6px;margin-top:10px"><div class="en" style="text-align:left"><b>${qi + 1}. ${esc(q[0])}</b></div><div class="opts">${q[1].map((o, i) => { let c = ""; if (a != null) { if (i === q[2]) c = "right"; else if (i === a) c = "wrong"; } return `<button class="opt en ${c}" data-act="rdpick" data-q="${qi}" data-i="${i}" ${a != null ? "disabled" : ""}>${esc(o)}</button>`; }).join("")}</div></div>`; }).join("");
+  const done = Object.keys(st.a).length === R.q.length, right = R.q.filter((q, qi) => st.a[qi] === q[2]).length;
+  return `<section class="card">${secHead("قراءة اليوم: " + esc(R.t), ["read", "und"], "١) اقرأ مرة للفكرة العامة بدون ترجمة. ٢) اقرأ مرة للتفاصيل. ٣) أجب عن الأسئلة. ٤) افتح الترجمة للتأكد فقط.", "read")}
+      <div class="passage en" style="max-height:none;text-align:left" dir="ltr">${esc(R.text)}</div>
+      <div class="row">${spk(R.text)}<span class="tiny">اسمع النص بعد ما تقرأه</span><button class="btn ghost small" data-act="rdAr">${st.ar ? "إخفاء الترجمة" : "إظهار الترجمة"}</button></div>
+      ${st.ar ? `<div class="small muted" style="margin-top:8px">${esc(R.ar)}</div>` : ""}
+      ${qs}
+      ${done ? `<div class="fb ${right === R.q.length ? "ok" : "info"}" style="margin-top:10px">${right} من ${R.q.length} صحيحة. ${right === R.q.length ? "ممتاز!" : "ارجع للنص وابحث عن الإجابة الصحيحة."}</div>` : ""}
+    </section>`;
 }
 function vLessonReview(d, D) {
   const days = D.kind === "review" ? weekDays(D.week) : learnDays();
@@ -1310,7 +1409,7 @@ function listenItems(src, d = UI.day) {
   if (src === "words") return (D.kind === "learn" ? [d] : dayList).flatMap(x => wordsOf(x).map(w => ({ en: w.en, ar: w.ar })));
   if (src === "phrases") return (D.kind === "learn" ? [d] : dayList).flatMap(x => phrasesOf(x));
   if (src === "dialogue") return (D.kind === "learn" ? [d] : dayList).flatMap(x => DAYS[x].dlg.map(l => ({ en: l[1], ar: l[2] })));
-  if (src === "day") return listenItems("words", d).concat(listenItems("phrases", d), listenItems("dialogue", d));
+  if (src === "day") return listenItems("words", d).concat(listenItems("phrases", d), listenItems("dialogue", d), D.rd ? [{ en: D.rd.text, ar: D.rd.ar }] : []);
   if (src === "week") { const w = D.week > 4 ? 4 : D.week; return weekDays(w).filter(x => x <= S.unlocked).flatMap(x => phrasesOf(x).concat(DAYS[x].dlg.map(l => ({ en: l[1], ar: l[2] })))); }
   if (src === "all") return shuffle(unlockedLearn().flatMap(x => phrasesOf(x).concat(DAYS[x].dlg.map(l => ({ en: l[1], ar: l[2] })))));
   return [];
@@ -1599,6 +1698,8 @@ const A = {
   sayslow: b => { hush(); say(b.dataset.t, { rate: 0.6 }); },
   quiz: b => startQuiz(b.dataset.k),
   toggleAr: () => { UI.showAr = !UI.showAr; render(); },
+  rdpick: b => { const d = UI.day; if (!UI.rd || UI.rd.d !== d) UI.rd = { d, a: {}, ar: false }; UI.rd.a[+b.dataset.q] = +b.dataset.i; render(); },
+  rdAr: () => { const d = UI.day; if (!UI.rd || UI.rd.d !== d) UI.rd = { d, a: {}, ar: false }; UI.rd.ar = !UI.rd.ar; render(); },
   playlist: b => { UI.listenSrc = b.dataset.src; plStart(listenItems(b.dataset.src)); go("listen"); },
   lsrc: b => { UI.listenSrc = b.dataset.v; const was = PL.on; plStop(); PL.items = listenItems(UI.listenSrc); PL.i = 0; if (was) plStart(PL.items); else render(); },
   plToggle: () => { if (PL.on) { plStop(); render(); } else { if (!PL.items.length) PL.items = listenItems(UI.listenSrc); plStart(PL.items, PL.i < PL.items.length ? PL.i : 0); markDone(UI.day, DAYS[UI.day].kind === "learn" ? "bgself" : DAYS[UI.day].kind === "review" ? "bgweek" : "bgall"); save(false); render(); } },

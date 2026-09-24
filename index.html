@@ -70,7 +70,9 @@ a{color:var(--accent)}
 .brand .mark{display:inline-grid;place-items:center;height:28px;padding-inline:7px;border-radius:8px;background:var(--hi);color:var(--hi-ink);font-size:14px;font-weight:700;direction:ltr}
 .sync{margin-inline-start:auto;font-size:12px;color:var(--ink3);display:flex;align-items:center;gap:6px;white-space:nowrap}
 .sync i{width:8px;height:8px;border-radius:50%;background:var(--ink3);display:inline-block}
-.sync.cloud i{background:var(--ok)} .sync.local i{background:var(--warn)} .sync.err i{background:var(--bad)}
+.hlw{background:var(--hi);border-radius:4px;padding:0 2px;font-weight:700}
+.sync.cloud i{background:var(--ok)} .sync.local i{background:var(--warn)} .sync.err i{background:var(--bad)} .sync.saving i{background:var(--accent);animation:syncp 1s ease-in-out infinite}
+@keyframes syncp{50%{opacity:.3}}
 .icon-btn{border:1px solid var(--line);background:var(--card);border-radius:10px;height:34px;min-width:34px;padding-inline:9px;display:inline-grid;place-items:center;font-size:13px;color:var(--ink2)}
 
 /* bottom nav */
@@ -309,7 +311,7 @@ const RES = {
   ef50: "https://www.efset.org/ef-set-50/",
   cambridgeTest: "https://www.cambridgeenglish.org/test-your-english/general-english/",
   oxford3000: "https://www.oxfordlearnersdictionaries.com/wordlists/oxford3000-5000",
-  youglish: w => "https://youglish.com/pronounce/" + encodeURIComponent(w) + "/english",
+  youglish: w => "https://youglish.com/pronounce/" + encodeURIComponent(w) + "/english/us",
   cambridgeDict: w => "https://dictionary.cambridge.org/dictionary/english-arabic/" + encodeURIComponent(w.toLowerCase().replace(/ /g,"-"))
 };
 
@@ -681,7 +683,7 @@ const IC = {
 
 // ---------- state ----------
 function blank() {
-  return { v: 1, updatedAt: 0, started: Date.now(), unlocked: 1, mode: "normal", done: {}, tests: {}, srs: {}, log: {}, journal: [], voice: [], rate: 0.85, cardDir: "en", finished: false, settings: { remind: true, remindHour: 20, report: true } };
+  return { v: 1, updatedAt: 0, started: Date.now(), unlocked: 1, mode: "normal", done: {}, tests: {}, srs: {}, log: {}, journal: [], errs: [], voice: [], rate: 0.85, cardDir: "en", finished: false, settings: { remind: true, remindHour: 20, report: true } };
 }
 let S = blank();
 try { const raw = localStorage.getItem(LK); if (raw) S = Object.assign(blank(), JSON.parse(raw)); } catch (e) {}
@@ -691,9 +693,21 @@ const API = "https://script.google.com/macros/s/AKfycbx49HqI6MC3c7iYTNYQqm-4qK0H
 const AUTH_K = "a1path.auth";
 let AUTH = null; try { AUTH = JSON.parse(localStorage.getItem(AUTH_K) || "null"); } catch (e) {}
 if (!AUTH) UI.view = "login";
-const store = { kind: "local", saving: false, again: false, timer: null, ai: false };
-async function api(action, data = {}) {
-  const r = await fetch(API, { method: "POST", credentials: "omit", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(Object.assign({ action, email: AUTH && AUTH.email, pin: AUTH && AUTH.pin }, data)) });
+const store = { kind: "local", saving: false, again: false, timer: null, ai: false, providers: [], primary: "" };
+// مزودو الذكاء الاصطناعي المجانيون (المفاتيح تُحفظ في الخادم فقط). الترتيب = الأسرع أولاً
+const AI_PROV = [
+  { id: "groq", name: "Groq", url: "https://console.groq.com/keys", note: "الأسرع: يرد غالباً في أقل من ثانية. نماذج قوية (GPT-OSS 120B و Llama 3.3 70B و Kimi K2)، وفيه Whisper لتحليل النطق. سجّل بإيميل جوجل ثم Create API Key." },
+  { id: "cerebras", name: "Cerebras", url: "https://cloud.cerebras.ai/platform", note: "سريع جداً أيضاً (GPT-OSS 120B و Qwen 3 235B). احتياطي ممتاز لـ Groq. سجّل ثم API Keys." },
+  { id: "gemini", name: "Gemini", url: "https://aistudio.google.com/apikey", note: "يسمع الصوت مباشرة، فهو الأدق في تحليل النطق. أبطأ من Groq في المحادثة." },
+  { id: "mistral", name: "Mistral", url: "https://console.mistral.ai/api-keys", note: "خطة Experiment مجانية (تحتاج تأكيد رقم الهاتف). جيد جداً في التصحيح." },
+  { id: "openrouter", name: "OpenRouter", url: "https://openrouter.ai/settings/keys", note: "نماذج مجانية كثيرة (DeepSeek و Llama و Qwen) بحد يومي محدود. احتياطي أخير." }
+];
+const provName = id => (AI_PROV.find(p => p.id === id) || { name: id || "" }).name;
+function setAI(j) { store.ai = !!j.ai; store.providers = j.providers || (j.ai ? ["gemini"] : []); store.primary = j.primary || ""; }
+async function api(action, data = {}, keepalive = false) {
+  const body = JSON.stringify(Object.assign({ action, email: AUTH && AUTH.email, pin: AUTH && AUTH.pin }, data));
+  // keepalive يكمل الطلب حتى لو المستخدم قفل الصفحة أو بدّل التطبيق (حده 64KB)
+  const r = await fetch(API, { method: "POST", credentials: "omit", keepalive: keepalive && new Blob([body]).size < 63000, headers: { "Content-Type": "text/plain;charset=utf-8" }, body });
   const txt = await r.text(); let j;
   try { j = JSON.parse(txt); } catch (e) { throw { error: "bad_response", detail: r.status + " " + txt.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").slice(0, 160) }; }
   if (!j.ok && j.error === "auth" && action !== "login") logout(true);
@@ -702,23 +716,35 @@ async function api(action, data = {}) {
 function save(render_ = true) {
   S.updatedAt = Date.now();
   try { localStorage.setItem(LK, JSON.stringify(S)); } catch (e) {}
-  if (AUTH) { clearTimeout(store.timer); store.timer = setTimeout(flush, 1200); }
+  if (AUTH) { store.dirty = true; setSync("saving"); clearTimeout(store.timer); store.timer = setTimeout(flush, 800); }
   if (render_) render();
 }
-async function flush() {
+async function flush(keepalive = false) {
   if (!AUTH) return;
+  clearTimeout(store.timer); clearTimeout(store.retry);
   if (store.saving) { store.again = true; return; }
-  store.saving = true;
-  try { S.summary = summary(); const j = await api("save", { state: S, appUrl: location.href.split("#")[0].split("?")[0] }); setSync(j.ok ? "cloud" : "err"); }
-  catch (e) { setSync("err"); }
+  store.saving = true; store.dirty = false;
+  let ok = false;
+  try { S.summary = summary(); const j = await api("save", { state: S, appUrl: location.href.split("#")[0].split("?")[0] }, keepalive); ok = !!j.ok; }
+  catch (e) {}
   store.saving = false;
-  if (store.again) { store.again = false; flush(); }
+  if (!ok) store.dirty = true;
+  if (store.again) { store.again = false; flush(); return; }
+  if (ok) { store.fails = 0; setSync(store.dirty ? "saving" : "cloud"); return; }
+  // فشل (نت ضعيف/الخادم مشغول): نعيد المحاولة تلقائياً بعد 3 ثم 6 ثم 12… ثانية (حد أقصى دقيقة)
+  store.fails = (store.fails || 0) + 1;
+  setSync("err");
+  store.retry = setTimeout(() => { if (store.dirty) flush(); }, Math.min(60000, 3000 * 2 ** (store.fails - 1)));
 }
+// لو قفل الصفحة أو بدّل التطبيق قبل ما الحفظ يخلص: نحفظ فوراً
+function flushNow() { if (AUTH && store.dirty && !store.saving) flush(true); }
+window.addEventListener("pagehide", flushNow);
+window.addEventListener("online", () => { if (store.dirty) flush(); });
 function setSync(k) {
   store.kind = k;
   const el = $("#sync"); if (!el) return;
   el.className = "sync " + k;
-  el.querySelector("span").textContent = k === "cloud" ? "محفوظ على إيميلك" : k === "err" ? "غير متصل، سيُحفظ لاحقاً" : k === "wait" ? "يتصل…" : "على هذا الجهاز فقط";
+  el.querySelector("span").textContent = k === "cloud" ? "محفوظ على إيميلك" : k === "saving" ? "يحفظ…" : k === "err" ? "لم يُحفظ بعد، يعيد المحاولة…" : k === "wait" ? "يتصل…" : "على هذا الجهاز فقط";
 }
 function logActivity() { const k = todayKey(); S.log[k] = (S.log[k] || 0) + 1; }
 function markDone(day, id, on = true) {
@@ -740,18 +766,18 @@ async function connect() {
   try {
     const j = await api("load");
     if (!j.ok) { setSync("err"); render(); return; }
-    store.ai = !!j.ai;
+    setAI(j);
     const remote = j.state || {};
     if ((remote.updatedAt || 0) > (S.updatedAt || 0)) {
       S = Object.assign(blank(), remote);
       try { localStorage.setItem(LK, JSON.stringify(S)); } catch (e) {}
       UI.day = Math.min(S.unlocked, 30);
-    } else if (S.updatedAt) await flush();
-    setSync("cloud");
+    } else if (S.updatedAt && (remote.updatedAt || 0) < S.updatedAt) await flush();
+    setSync(store.dirty ? "saving" : "cloud");
   } catch (e) { setSync("err"); }
   if (!["quiz", "chat", "quizResult"].includes(UI.view)) render();
 }
-document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible" && AUTH && !["quiz", "chat", "quizResult"].includes(UI.view)) connect(); });
+document.addEventListener("visibilitychange", () => { if (document.visibilityState === "hidden") { flushNow(); return; } if (document.visibilityState === "visible" && AUTH && !["quiz", "chat", "quizResult"].includes(UI.view)) connect(); });
 function logout(expired) {
   AUTH = null; try { localStorage.removeItem(AUTH_K); } catch (e) {}
   UI.view = "login"; UI.loginErr = expired ? "انتهت الجلسة أو تغيّر رمز الدخول. سجّل الدخول مرة أخرى." : null; render();
@@ -1045,10 +1071,11 @@ function finishQuiz() {
 function aiErr(e) {
   const c = e && (e.error || e.code);
   const d = e && e.detail ? " (تفاصيل: " + String(e.detail).slice(0, 220) + ")" : "";
-  if (c === "no_key") return "الذكاء الاصطناعي غير مفعّل بعد. أضف مفتاح Gemini من «تقدّمي ← الإعدادات».";
-  if (c === "key_invalid") return "مفتاح Gemini غير صالح أو غير مسموح له. أنشئ مفتاحاً جديداً وضعه في الإعدادات." + d;
-  if (c === "rate_limited") return "وصلت للحد المجاني المؤقت لـ Gemini. انتظر دقيقة ثم أعد المحاولة." + d;
-  if (c === "ai_failed") return "خدمة Gemini لم ترد الآن. جرّب بعد دقيقة، أو اضغط «اختبر Gemini» في الإعدادات." + d;
+  const more = store.providers.length < 2 ? " أضف مزوداً ثانياً (مثل Groq) من الإعدادات ليعمل كاحتياطي تلقائي." : "";
+  if (c === "no_key") return "الذكاء الاصطناعي غير مفعّل بعد. أضف مفتاحاً مجانياً (Groq هو الأسرع) من «تقدّمي ← الإعدادات».";
+  if (c === "key_invalid") return "المفتاح غير صالح أو غير مسموح له. أنشئ مفتاحاً جديداً وضعه في الإعدادات." + d;
+  if (c === "rate_limited") return "كل المزودين المفعّلين وصلوا للحد المجاني المؤقت. انتظر دقيقة ثم أعد المحاولة." + more + d;
+  if (c === "ai_failed") return "الذكاء الاصطناعي لم يرد الآن. جرّب بعد دقيقة، أو اضغط «اختبر كل المزودين» في الإعدادات." + more + d;
   if (c === "bad_json") return "الرد وصل بشكل غير مفهوم. اضغط مرة أخرى.";
   if (!navigator.onLine) return "لا يوجد اتصال بالإنترنت.";
   if (c === "bad_response" || c === "server") return "الخادم رد بخطأ." + d;
@@ -1059,6 +1086,7 @@ async function aiText(turns, json) {
   turns.forEach(t => { const last = merged[merged.length - 1]; if (last && last.role === t.role && !t.audio && !last.audio) last.text += "\n\n" + t.text; else merged.push(Object.assign({}, t)); });
   const j = await api("ai", { turns: merged, json: !!json });
   if (!j.ok) throw j;
+  store.lastAI = { provider: j.provider, model: j.model, ms: j.ms };
   return j.text;
 }
 async function aiJSON(prompt, extra) {
@@ -1109,6 +1137,139 @@ function writeResultHTML(r) {
   </div>`;
 }
 const SELF_CHECK = ["كل جملة فيها فاعل وفعل (I am / She works...)", "بدأت الجمل بحرف كبير وانتهت بنقطة", "استخدمت he/she/it مع is أو فعل+s", "استخدمت كلمات من دروس هذا الأسبوع", "كتبت العدد المطلوب من الجمل"];
+// ---------- مثال لكل كلمة من المنهج نفسه (الكلمة في جملة تُحفظ أسرع من الكلمة وحدها) ----------
+let EXS = null;
+function exampleFor(w) {
+  if (!EXS) {
+    EXS = {};
+    learnDays().forEach(d => { const D = DAYS[d]; EXS[d] = [].concat(phrasesOf(d).map(p => [p.en, p.ar]), (D.dlg || []).map(l => [l[1], l[2]]), ((D.g || {}).ex || []).map(e => [e[0], e[1]]), D.rd ? (D.rd.text.match(/[^.!?]+[.!?]+/g) || []).map(x => [x.trim(), ""]) : []); });
+  }
+  const term = termOf(w.en); if (!term) return null;
+  const re = new RegExp("(^|[^a-z'])" + term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "($|[^a-z'])", "i");
+  const earlier = learnDays(1, w.d - 1).reverse(), later = learnDays(w.d + 1, 28);
+  for (const d of [w.d].concat(earlier, later)) {
+    const hit = (EXS[d] || []).filter(x => re.test(x[0]) && x[0].length < 90).sort((a, b) => (!!b[1] - !!a[1]) || a[0].length - b[0].length)[0];
+    if (hit) return hit;
+  }
+  return null;
+}
+// أمثلة الذكاء الاصطناعي للكلمات اللي مالهاش مثال في المنهج (محفوظة على الجهاز فقط)
+const EXAI_K = "a1path.ex";
+let EXAI = {}; try { EXAI = JSON.parse(localStorage.getItem(EXAI_K) || "{}"); } catch (e) {}
+async function aiExample(w) {
+  const r = await aiJSON(`Write ONE very short, natural example sentence (max 9 words, CEFR A1, American English) that uses the word "${termOf(w.en)}" (meaning in Arabic: ${w.ar}). Reply with ONLY JSON: {"en": "<sentence>", "ar": "<Arabic translation>"}`);
+  if (!r.en) throw { error: "bad_json" };
+  EXAI[w.key] = [String(r.en), String(r.ar || "")];
+  try { localStorage.setItem(EXAI_K, JSON.stringify(EXAI)); } catch (e) {}
+}
+const termOf = en => String(en).replace(/\(.*?\)/g, "").split("/")[0].trim();
+function hlWords(text, words) {
+  let h = esc(text);
+  // علامات مؤقتة بدل الوسوم حتى لا تطابق كلمة مثل class داخل الوسم نفسه
+  words.map(termOf).filter(Boolean).sort((a, b) => b.length - a.length).forEach(t => { h = h.replace(new RegExp("(^|[^a-zA-Z\u0001])(" + esc(t).replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + ")(?=$|[^a-zA-Z\u0002])", "gi"), "$1\u0001$2\u0002"); });
+  return h.replace(/\u0001/g, '<b class="hlw">').replace(/\u0002/g, "</b>");
+}
+
+// ---------- دفتر أخطائي: كل خطأ من التصحيح أو المحادثة أو الاختبار يرجع لك بالتكرار المتباعد ----------
+function addErr(wrong, right, why, src) {
+  wrong = String(wrong || "").trim(); right = String(right || "").trim();
+  const n = x => x.toLowerCase().replace(/[^a-z0-9' ]/g, "").replace(/\s+/g, " ").trim();
+  if (!wrong || !right || n(wrong) === n(right) || wrong.length > 220) return;
+  S.errs = (S.errs || []).filter(e => n(e.r) !== n(right));
+  S.errs.push({ id: Date.now().toString(36) + Math.random().toString(36).slice(2, 5), w: wrong, r: right.slice(0, 220), y: String(why || "").slice(0, 200), s: src, d: UI.day, b: 0, due: Date.now() });
+  if (S.errs.length > 60) { const i = S.errs.findIndex(e => e.b >= 4); S.errs.splice(i >= 0 ? i : 0, 1); }
+}
+const errsOpen = () => (S.errs || []).filter(e => e.b < 4);
+const errsDue = () => errsOpen().filter(e => e.due <= Date.now());
+function gradeErr(id, ok) {
+  const e = (S.errs || []).find(x => x.id === id); if (!e) return;
+  if (ok) { e.b = Math.min(e.b + 1, 4); e.due = Date.now() + INT[e.b] * DAY - 3600000; } else { e.b = 0; e.due = Date.now(); }
+}
+const ERR_SRC = { write: "من الكتابة", chat: "من المحادثة", quiz: "من الاختبار" };
+
+// ---------- قصة من كلماتك (الذكاء الاصطناعي يكتب قصة قصيرة بالكلمات اللي بتنساها) ----------
+function storyWords() {
+  const now = Date.now(), keys = Object.keys(S.srs).filter(k => WORDS[k]);
+  const rank = k => (S.srs[k][1] <= now ? 0 : 10) + S.srs[k][0];
+  return pick(keys.sort((a, b) => rank(a) - rank(b)).slice(0, 16), 8).map(k => WORDS[k]);
+}
+async function aiStory(words) {
+  const days = unlockedLearn();
+  const prompt = `Write a short, interesting story for an Arabic-speaking adult learning English at CEFR A1 (day ${Math.min(S.unlocked, 30)} of 30).
+The learner has studied these topics: ${days.map(d => DAYS[d].en).join(", ")}.
+Grammar they know: ${days.map(d => DAYS[d].g.t.replace(/[^\x00-\x7F]+/g, " ").trim()).filter(Boolean).join("; ")}. Do not use grammar beyond this.
+You MUST use ALL of these target words: ${words.map(w => termOf(w.en)).join(", ")}.
+6 to 9 short sentences (max 12 words each), American English, everyday life, friendly names, a small surprise or funny ending.
+Reply with ONLY a JSON object:
+{"title": "<3-5 words>", "text": "<the story>", "ar": "<natural Arabic translation>", "q": [["<simple English question>", ["<option>", "<option>", "<option>"], <index of the correct option 0-2>], <2 more questions like this>]}`;
+  const r = await aiJSON(prompt);
+  const q = (Array.isArray(r.q) ? r.q : []).filter(x => Array.isArray(x) && Array.isArray(x[1]) && x[1].length >= 2 && Number.isInteger(+x[2]) && +x[2] >= 0 && +x[2] < x[1].length).map(x => [String(x[0]), x[1].map(String), +x[2]]).slice(0, 4);
+  if (!r.text) throw { error: "bad_json" };
+  return { t: String(r.title || "Story"), text: String(r.text), ar: String(r.ar || ""), q };
+}
+function storyCard() {
+  const T = UI.story;
+  if (!store.ai || Object.keys(S.srs).length < 8) return "";
+  if (!T || (!T.R && !T.busy)) return `<section class="card stack">
+      <div class="row between"><h2>قصة من كلماتك</h2>${tagHTML("read")}</div>
+      <div class="how">الذكاء الاصطناعي يكتب لك قصة قصيرة فيها <b>الكلمات اللي بتنساها</b>، بقواعد درستها بس. لما تقرا الكلمة في قصة، بتثبت في دماغك أسرع بكتير من البطاقة لوحدها.</div>
+      ${T && T.err ? `<div class="fb bad small">${esc(T.err)}</div>` : ""}
+      <button class="btn pri" data-act="story">اكتب لي قصة</button>
+    </section>`;
+  if (T.busy) return `<section class="card"><div class="fb info">يكتب قصة بكلماتك: <span class="en">${esc(T.words.map(w => termOf(w.en)).join(", "))}</span>…</div></section>`;
+  const R = T.R, done = Object.keys(T.a).length === R.q.length, right = R.q.filter((q, qi) => T.a[qi] === q[2]).length;
+  return `<section class="card stack">
+      <div class="row between"><h2 class="en" style="text-align:left">${esc(R.t)}</h2>${tagHTML("read")}</div>
+      <div class="passage en" style="max-height:none;text-align:left" dir="ltr">${hlWords(R.text, T.words.map(w => w.en))}</div>
+      <div class="row">${spk(R.text)}<span class="tiny">اسمعها بعد ما تقراها</span><button class="btn ghost small" data-act="stAr">${T.ar ? "إخفاء الترجمة" : "إظهار الترجمة"}</button></div>
+      ${T.ar ? `<div class="small muted">${esc(R.ar)}</div>` : ""}
+      <div class="tiny">الكلمات المهمة: ${T.words.map(w => `<span class="en" style="display:inline">${esc(termOf(w.en))}</span> = ${esc(w.ar)}`).join(" · ")}</div>
+      ${R.q.map((q, qi) => { const a = T.a[qi]; return `<div class="stack" style="gap:6px"><div class="en" style="text-align:left"><b>${qi + 1}. ${esc(q[0])}</b></div><div class="opts">${q[1].map((o, i) => `<button class="opt en ${a != null ? (i === q[2] ? "right" : i === a ? "wrong" : "") : ""}" data-act="stpick" data-q="${qi}" data-i="${i}" ${a != null ? "disabled" : ""}>${esc(o)}</button>`).join("")}</div></div>`; }).join("")}
+      ${done ? `<div class="fb ${right === R.q.length ? "ok" : "info"}">${right} من ${R.q.length} صحيحة. ${right === R.q.length ? "ممتاز!" : "ارجع للقصة ودوّر على الإجابة."}</div>` : ""}
+      <div class="row"><button class="btn" data-act="story">قصة جديدة</button></div>
+    </section>`;
+}
+
+function errCard() {
+  const all = S.errs || [], open = errsOpen(), due = errsDue();
+  if (!all.length) return `<section class="card stack">
+      <div class="row between"><h2>دفتر أخطائي</h2>${tagHTML("rep")}</div>
+      <div class="how">أي غلطة يصححها لك الذكاء الاصطناعي في الكتابة أو المحادثة، أو سؤال قواعد تغلط فيه في الاختبار، بتتسجل هنا تلقائياً. وبترجعلك للمراجعة لحد ما تتقنها.</div>
+      <div class="tiny">لسه مفيش أخطاء متسجلة.</div>
+    </section>`;
+  return `<section class="card stack">
+      <div class="row between"><h2>دفتر أخطائي</h2>${tagHTML("rep")}</div>
+      <div class="how">أخطاؤك الحقيقية هي أهم حاجة تذاكرها. كل غلطة بترجعلك بعد يوم، ثم يومين، ثم 4، ثم 8، لحد ما تتقنها.</div>
+      <div class="stats">
+        <div class="stat"><b class="num">${due.length}</b><span>مستحقة الآن</span></div>
+        <div class="stat"><b class="num">${open.length}</b><span>تحت المراجعة</span></div>
+        <div class="stat"><b class="num">${all.length - open.length}</b><span>أتقنتها</span></div>
+      </div>
+      <button class="btn pri lg block" data-act="errStart" ${due.length ? "" : "disabled"}>${due.length ? "راجع أخطائي (" + Math.min(due.length, 15) + ")" : "لا توجد أخطاء مستحقة الآن"}</button>
+      <details><summary class="small">كل أخطائي (${all.length})</summary><div class="stack" style="gap:8px;margin-top:8px">${all.slice().reverse().map(e => `<div class="small"><span class="en" style="text-decoration:line-through;color:var(--bad);display:inline">${esc(e.w)}</span> ← <span class="en" style="color:var(--ok);font-weight:600;display:inline">${esc(e.r)}</span>${e.y ? `<div class="tiny">${esc(e.y)}</div>` : ""}<div class="tiny">${ERR_SRC[e.s] || ""} · اليوم ${e.d}${e.b >= 4 ? " · أتقنتها ✓" : ""}</div></div>`).join("")}</div></details>
+    </section>`;
+}
+function vErrReview() {
+  const R = UI.errRev, e = (S.errs || []).find(x => x.id === R.q[0]);
+  if (!e) { R.done = true; return vCards(); }
+  const chk = R.said != null ? compare(e.r, R.said) : null;
+  return `<div class="stack">
+    <div class="row between"><button class="btn ghost" data-act="errEnd">إنهاء</button><span class="tiny num">متبقٍ ${R.q.length} · صحيح ${R.ok}</span></div>
+    <section class="card lift stack">
+      <div class="tiny">الجملة دي فيها غلطة عملتها قبل كده (${ERR_SRC[e.s] || ""}). صححها بنفسك: اكتبها صح أو قولها.</div>
+      <div class="en" style="font-size:20px;text-align:left;color:var(--bad)">${esc(e.w)}</div>
+      ${R.show ? `<div class="fb ${chk ? (chk.score >= 85 ? "ok" : "warn") : "info"} stack" style="gap:6px">
+          ${chk ? `<div class="small">كتبت: <span class="en" style="display:inline">${esc(R.said)}</span> ${chk.score >= 85 ? "✓" : ""}</div>` : ""}
+          <div class="row" style="gap:8px;flex-wrap:nowrap">${spk(e.r)}<b class="en" style="font-size:18px">${esc(e.r)}</b></div>
+          ${e.y ? `<div class="small">${esc(e.y)}</div>` : ""}
+        </div>
+        <div class="row" style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><button class="btn lg block" data-act="errGrade" data-ok="0">لسه بغلط فيها</button><button class="btn ok lg block" data-act="errGrade" data-ok="1">عرفتها</button></div>`
+      : `<textarea id="err-in" class="en" rows="2" dir="ltr" placeholder="Write the correct sentence…"></textarea>
+        <div class="row">${micBtn("err", "قولها صح")}<button class="btn pri" data-act="errCheck">تحقق</button><button class="btn ghost" data-act="errCheck" data-skip="1">اكشف الإجابة</button></div>`}
+    </section>
+  </div>`;
+}
+
 function chatRules(d) {
   const D = DAYS[d];
   const topic = D.kind === "learn" ? D.chat + " Today's grammar: " + D.g.t.replace(/[^\x00-\x7F]+/g, " ") + "." : D.kind === "review" ? "Review everything from week " + D.week + ": " + weekDays(D.week).map(x => DAYS[x].en).join(", ") + "." : "A friendly A1 speaking interview: name, origin, family, routine, likes, last weekend, next plans.";
@@ -1119,7 +1280,8 @@ Rules:
 - If the learner's last message has a grammar or word mistake, add a final separate line starting exactly with "Correction:" then the corrected sentence, then " — " and a very short explanation in Arabic.
 - If there is no mistake, do not add a Correction line.
 - If the learner writes in Arabic, reply in simple English and gently ask them to try in English.
-- Never write long paragraphs.`;
+- Never write long paragraphs.${errsOpen().length ? `
+- The learner recently made these mistakes (wrong → right): ${errsOpen().slice(-4).map(e => `"${e.w}" → "${e.r}"`).join("; ")}. Naturally ask questions that give them a chance to use the correct forms.` : ""}`;
 }
 
 // ---------- rendering ----------
@@ -1182,7 +1344,7 @@ function stepAction(d, t, cls) {
 }
 function guideCard(d) {
   const D = DAYS[d], { L, i, t } = currentStep(d);
-  const setup = AUTH && !store.ai ? `<div class="fb warn small row between"><span><b>خطوة إعداد واحدة:</b> فعّل Gemini لتعمل المحادثة وتصحيح الكتابة وتحليل النطق.</span><button class="btn small" data-act="go" data-go="progress#settings">فعّله الآن</button></div>` : "";
+  const setup = AUTH && !store.ai ? `<div class="fb warn small row between"><span><b>خطوة إعداد واحدة:</b> فعّل الذكاء الاصطناعي المجاني (Groq الأسرع) لتعمل المحادثة وتصحيح الكتابة وتحليل النطق.</span><button class="btn small" data-act="go" data-go="progress#settings">فعّله الآن</button></div>` : "";
   if (!t) {
     const next = d + 1;
     return setup + `<section class="card lift guide stack" style="gap:10px">
@@ -1295,7 +1457,7 @@ function vLesson() {
       ${writeBox(d, D.w, wr)}
     </section>
 
-    <section class="card">${secHead("محادثة اليوم", ["rep"], "شريك ذكي (Gemini) يتكلم معك بإنجليزية A1 ويصحح أخطاءك بالعربي. تكلم بالميكروفون أو اكتب.", "chatsec")}
+    <section class="card">${secHead("محادثة اليوم", ["rep"], "شريك ذكي يتكلم معك بإنجليزية A1 ويصحح أخطاءك بالعربي. تكلم بالميكروفون أو اكتب.", "chatsec")}
       <button class="btn pri" data-act="chat">ابدأ المحادثة</button>
     </section>
 
@@ -1352,7 +1514,7 @@ function speakDrill(d, P) {
     ${UI.drillRec && UI.drillRec.d === d && UI.drillRec.i === i ? `<div class="stack" style="gap:8px;background:var(--sunk);border-radius:12px;padding:10px">
       <div class="row" style="gap:8px"><span class="small"><b>صوتك:</b></span><audio controls src="${UI.drillRec.url}" style="height:36px;max-width:100%"></audio></div>
       <div class="row" style="gap:8px"><span class="small"><b>النطق الصحيح:</b></span>${spk(p.en)}<button class="btn ghost small" data-act="sayslow" data-t="${esc(p.en)}">أبطأ</button></div>
-      ${store.ai ? `<button class="btn pri" data-act="pronAI" data-d="${d}" ${UI.drillRec.busy ? "disabled" : ""}>${UI.drillRec.busy ? "يحلل صوتك…" : "حلّل نطقي بالذكاء الاصطناعي"}</button>` : `<span class="tiny">لتحليل صوتك بالذكاء الاصطناعي فعّل Gemini من الإعدادات.</span>`}
+      ${store.providers.some(p => p === "gemini" || p === "groq") ? `<button class="btn pri" data-act="pronAI" data-d="${d}" ${UI.drillRec.busy ? "disabled" : ""}>${UI.drillRec.busy ? "يحلل صوتك…" : "حلّل نطقي بالذكاء الاصطناعي"}</button>` : `<span class="tiny">لتحليل صوتك بالذكاء الاصطناعي فعّل Gemini أو Groq من الإعدادات.</span>`}
       ${UI.drillRec.err ? `<div class="fb warn small">${esc(UI.drillRec.err)}</div>` : ""}
       ${pronResultHTML(UI.drillRec.res)}
     </div>` : ""}
@@ -1368,12 +1530,13 @@ function writeBox(d, task, wr) {
       <button class="btn ${ai ? "ghost" : "pri"}" data-act="selfWrite" data-d="${d}" data-task="${esc(task)}">${ai ? "تصحيح ذاتي" : "احفظ وصحّح ذاتياً"}</button>
     </div>
     ${st && st.err ? `<div class="fb warn small">${esc(st.err)}</div>` : ""}
-    ${st && st.self ? `<div class="fb info stack" style="gap:6px"><b>راجع نصك بنفسك:</b>${SELF_CHECK.map((c, i) => `<label class="ck"><input type="checkbox" id="sc-${d}-${i}"> ${c}</label>`).join("")}<div class="tiny">للتصحيح الآلي فعّل Gemini من «تقدّمي ← الإعدادات».</div></div>` : ""}
+    ${st && st.self ? `<div class="fb info stack" style="gap:6px"><b>راجع نصك بنفسك:</b>${SELF_CHECK.map((c, i) => `<label class="ck"><input type="checkbox" id="sc-${d}-${i}"> ${c}</label>`).join("")}<div class="tiny">للتصحيح الآلي فعّل الذكاء الاصطناعي من «تقدّمي ← الإعدادات».</div></div>` : ""}
     ${st && st.res ? writeResultHTML(st.res) : wr && wr.res ? `<details><summary class="small">آخر تصحيح محفوظ (${new Date(wr.at).toLocaleDateString("ar")})</summary><div class="en small" style="margin:6px 0">${esc(wr.text)}</div>${writeResultHTML(wr.res)}</details>` : ""}
   </div>`;
 }
 
 function vCards() {
+  if (UI.errRev && !UI.errRev.done) return vErrReview();
   ensureCards();
   const due = dueList();
   if (!UI.card || UI.card.done) {
@@ -1392,17 +1555,22 @@ function vCards() {
         ${UI.card && UI.card.done ? `<div class="fb ok">أنهيت الجلسة: <span class="num">${UI.card.ok}</span> صحيحة من <span class="num">${UI.card.seen}</span>.</div>` : ""}
         <button class="btn pri lg block" data-act="cardStart" ${due.length ? "" : "disabled"}>${due.length ? "ابدأ جلسة (" + Math.min(due.length, 25) + " بطاقة)" : "لا توجد بطاقات مستحقة، عد لاحقاً"}</button>
       </section>
+      ${errCard()}
+      ${storyCard()}
     </div>`;
   }
   const C = UI.card, k = C.q[0], w = WORDS[k];
-  const front = S.cardDir === "en" ? w.en : w.ar, back = S.cardDir === "en" ? w.ar : w.en;
+  const front = S.cardDir === "en" ? w.en : w.ar, back = S.cardDir === "en" ? w.ar : w.en, ex = exampleFor(w) || EXAI[w.key];
   return `<div class="stack">
     <div class="row between"><button class="btn ghost" data-act="cardEnd">إنهاء</button><span class="tiny num">متبقٍ ${C.q.length} · صحيح ${C.ok}</span></div>
     <section class="card lift flash" data-act="flip" role="button" aria-label="اقلب البطاقة" tabindex="0">
       <div class="front ${S.cardDir === "ar" ? "arf" : ""}">${esc(front)}</div>
       ${UI.flipped ? `<div class="back ${S.cardDir === "ar" ? "en" : ""}" style="${S.cardDir === "ar" ? "text-align:center;font-size:26px;color:var(--ink);font-weight:600" : ""}">${esc(back)}</div>` : `<div class="tiny">قلها بصوتك، ثم اضغط لتقلب</div>`}
       <div class="row" style="justify-content:center">${spk(w.en)}<span class="tiny">اليوم ${w.d}</span></div>
+      ${UI.flipped && UI.cardSaid ? `<div class="fb ${UI.cardSaid.ok ? "ok" : "warn"} small" style="text-align:center">قلت: <span class="en" style="display:inline">${esc(UI.cardSaid.said || "—")}</span> ${UI.cardSaid.ok ? "✓ صح" : "✗ قارنها بالصح"}</div>` : ""}
+      ${UI.flipped && ex ? `<div class="stack" style="gap:4px;border-top:1px solid var(--line);padding-top:10px;margin-top:4px"><div class="row" style="gap:8px;flex-wrap:nowrap;justify-content:center">${spk(ex[0])}<span class="en" style="font-size:16px">${hlWords(ex[0], [w.en])}</span></div>${ex[1] ? `<div class="tiny" style="text-align:center">${esc(ex[1])}</div>` : ""}</div>` : UI.flipped && store.ai ? `<div class="row" style="justify-content:center"><button class="btn ghost small" data-act="exAI" ${UI.exBusy ? "disabled" : ""}>${UI.exBusy ? "يكتب مثال…" : "اعمل لي مثال بالكلمة دي"}</button></div>` : ""}
     </section>
+    ${!UI.flipped && S.cardDir === "ar" ? `<div class="row" style="justify-content:center">${micBtn("card", "قولها بالإنجليزي")}</div>` : ""}
     ${UI.flipped ? `<div class="row" style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><button class="btn lg block" data-act="cardGrade" data-ok="0">لم أعرفها</button><button class="btn ok lg block" data-act="cardGrade" data-ok="1">عرفتها</button></div>
     <div class="row" style="justify-content:center"><a class="btn ghost ext small" href="${RES.youglish(w.en)}" target="_blank" rel="noopener">اسمعها من ناس حقيقيين</a><a class="btn ghost ext small" href="${RES.cambridgeDict(w.en)}" target="_blank" rel="noopener">قاموس كامبريدج</a></div>` : `<button class="btn pri lg block" data-act="flip">اقلب</button>`}
   </div>`;
@@ -1522,9 +1690,7 @@ function vProgress() {
         <div class="row"><button class="btn" data-act="testMail" data-k="testEmail">أرسل تذكيراً تجريبياً</button><button class="btn ghost" data-act="testMail" data-k="testReport">أرسل تقريراً تجريبياً</button></div>` : `<div class="small muted">سجّل الدخول لتفعيل الإيميلات.</div>`}
       </div>
       <div class="stack" style="gap:8px">
-        <h3>الذكاء الاصطناعي (Gemini المجاني)</h3>
-        <div class="small">${store.ai ? `<span class="tag read">مفعّل</span> المحادثة وتصحيح الكتابة وتحليل النطق تعمل.` : `<span class="tag min">غير مفعّل</span> خطوة واحدة: افتح <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener" class="en">aistudio.google.com/apikey</a> بنفس الإيميل، اضغط <b>Create API key</b>، انسخ المفتاح والصقه هنا.`}</div>
-        ${AUTH ? `<div class="row"><input type="password" id="gkey" class="en grow" dir="ltr" placeholder="${store.ai ? "مفتاح جديد (اختياري)" : "الصق مفتاح Gemini هنا"}" autocomplete="off" style="max-width:360px"><button class="btn pri" data-act="saveKey">${UI.keyBusy ? "يتحقق…" : "حفظ"}</button>${store.ai ? `<button class="btn" data-act="aiTest" ${UI.aiTestBusy ? "disabled" : ""}>${UI.aiTestBusy ? "يختبر…" : "اختبر Gemini"}</button>` : ""}</div>${UI.aiTest ? `<div class="fb ${UI.aiTest.ok ? "ok" : "bad"} small en" dir="ltr" style="text-align:left">${UI.aiTest.lines.map(esc).join("<br>")}</div>` : ""}${UI.keyMsg ? `<div class="fb ${UI.keyMsg[0]} small">${esc(UI.keyMsg[1])}</div>` : ""}<div class="tiny">المفتاح يُحفظ في حسابك على جوجل فقط ولا يظهر في الموقع.</div>` : ""}
+        ${aiSettings()}
       </div>
       <div class="row"><span>سرعة النطق</span><select id="rate2" data-act="rate">${[0.6, 0.75, 0.85, 1].map(r => `<option value="${r}" ${S.rate == r ? "selected" : ""}>${r}</option>`).join("")}</select><button class="btn" data-act="say" data-t="Hello! This is my voice. Can you hear me?">جرّب الصوت</button></div>
       <div class="tiny">صوت النطق: ${TTS.en ? esc(TTS.en.name) : "الافتراضي"}. لصوت أوضح استخدم Chrome أو Edge أو Safari.</div>
@@ -1532,6 +1698,24 @@ function vProgress() {
       ${UI.confirmReset ? `<div class="fb bad stack" style="gap:8px"><b>سيُحذف كل تقدمك نهائياً من كل أجهزتك.</b><div class="row"><button class="btn" data-act="reset" data-y="1" style="border-color:var(--bad);color:var(--bad)">نعم، ابدأ من جديد</button><button class="btn ghost" data-act="reset" data-y="0">إلغاء</button></div></div>` : `<button class="btn ghost" data-act="reset" style="align-self:flex-start;color:var(--bad)">ابدأ المسار من جديد</button>`}
     </section>
   </div>`;
+}
+
+function aiSettings() {
+  const on = id => store.providers.includes(id);
+  const order = store.primary ? [store.primary].concat(store.providers.filter(x => x !== store.primary)) : store.providers;
+  return `<h3>الذكاء الاصطناعي (مزودون مجانيون)</h3>
+        <div class="small">${store.ai ? `<span class="tag read">مفعّل</span> الترتيب الآن: <span class="en">${order.map(provName).join(" ← ")}</span>` : `<span class="tag min">غير مفعّل</span> أضف مفتاحاً واحداً على الأقل. ننصح بـ <b>Groq</b> أولاً لأنه الأسرع.`}</div>
+        <div class="tiny">أضف أكثر من مفتاح: لو مزود تأخر أو وصل للحد المجاني، الموقع ينتقل للي بعده تلقائياً ويؤجّل المزود المتعثر دقيقة. تحليل النطق يستخدم Gemini أولاً (يسمع الصوت)، وإلا Groq Whisper.</div>
+        ${AUTH ? `${AI_PROV.map(p => `<div class="stack" style="gap:6px;border:1px solid var(--line);border-radius:12px;padding:10px 12px">
+          <div class="row between"><b class="en">${p.name}</b>${on(p.id) ? `<span class="tag read">مفعّل</span>` : `<span class="tag min">غير مفعّل</span>`}</div>
+          <div class="tiny">${p.note} <a href="${p.url}" target="_blank" rel="noopener" class="en">${p.url.replace("https://", "")}</a></div>
+          <div class="row"><input type="password" id="key-${p.id}" class="en grow" dir="ltr" placeholder="${on(p.id) ? "مفتاح جديد (اختياري)" : "Paste your " + p.name + " API key"}" autocomplete="off" style="max-width:360px"><button class="btn pri small" data-act="saveKey" data-p="${p.id}" ${UI.keyBusy ? "disabled" : ""}>${UI.keyBusy === p.id ? "يتحقق…" : "حفظ"}</button>${on(p.id) ? `<button class="btn ghost small" data-act="delKey" data-p="${p.id}" ${UI.keyBusy ? "disabled" : ""}>حذف</button>` : ""}</div>
+          ${UI.keyMsg && UI.keyMsg[2] === p.id ? `<div class="fb ${UI.keyMsg[0]} small">${esc(UI.keyMsg[1])}</div>` : ""}
+        </div>`).join("")}
+        ${store.providers.length > 1 ? `<label class="ck">المزود المفضّل <select id="ai-primary" data-act="setPrimary"><option value="">تلقائي (الأسرع أولاً)</option>${store.providers.map(id => `<option value="${id}" ${store.primary === id ? "selected" : ""}>${provName(id)}</option>`).join("")}</select></label>` : ""}
+        ${store.ai ? `<div class="row"><button class="btn" data-act="aiTest" ${UI.aiTestBusy ? "disabled" : ""}>${UI.aiTestBusy ? "يختبر كل المزودين…" : "اختبر كل المزودين وقِس السرعة"}</button></div>` : ""}
+        ${UI.aiTest ? `<div class="fb ${UI.aiTest.ok ? "ok" : "bad"} small en" dir="ltr" style="text-align:left">${UI.aiTest.lines.map(esc).join("<br>")}</div>` : ""}
+        <div class="tiny">المفاتيح تُحفظ في حسابك على جوجل فقط ولا تظهر في الموقع.</div>` : ""}`;
 }
 
 function vGuide() {
@@ -1560,7 +1744,7 @@ function vGuide() {
     <section class="card stack">
       <h2>الصوت والنطق</h2>
       <div class="small">${dictHelp()}</div>
-      <div class="small"><b>ثلاث طرق لقياس نطقك:</b> (1) «اضغط وتكلم»: يحوّل كلامك لنص ويقارنه بالجملة الصحيحة فوراً. (2) «سجّل صوتك وقارن»: تسمع صوتك وبجانبه النطق الصحيح. (3) «حلّل نطقي بالذكاء الاصطناعي»: Gemini يسمع التسجيل ويقول لك أي كلمة نطقتها خطأ وكيف تصلحها بالعربي.</div>
+      <div class="small"><b>ثلاث طرق لقياس نطقك:</b> (1) «اضغط وتكلم»: يحوّل كلامك لنص ويقارنه بالجملة الصحيحة فوراً. (2) «سجّل صوتك وقارن»: تسمع صوتك وبجانبه النطق الصحيح. (3) «حلّل نطقي بالذكاء الاصطناعي»: Gemini يسمع التسجيل (أو Groq Whisper يفرّغه) ويقول لك أي كلمة نطقتها خطأ وكيف تصلحها بالعربي.</div>
       <div class="small"><b>إن رفض المتصفح الميكروفون:</b> اضغط أيقونة القفل بجانب رابط الموقع، واختر «السماح» للميكروفون، ثم أعد تحميل الصفحة.</div>
     </section>
     <section class="card stack">
@@ -1636,13 +1820,13 @@ function vChat() {
     <div class="row between"><button class="btn ghost" data-act="chatExit">رجوع</button><span class="tiny">اليوم ${C.day} · ${esc(DAYS[C.day].topic)}</span></div>
     <div class="how small">${tagHTML("rep")} تكلم بالزر الأصفر أو اكتب ردك بالإنجليزية. الشريك يرد بصوت، والتصحيح يظهر تحت رده باللون البرتقالي.</div>
     <div class="chat" id="chatlog">
-      ${C.msgs.map(m => { if (m.role === "user") return `<div class="msg me en">${esc(m.content)}</div>`; const [reply, corr] = m.content.split(/\n?\s*Correction:\s*/); return `<div class="msg ai en"><div class="row" style="gap:8px;flex-wrap:nowrap;align-items:flex-start">${spk(reply)}<div>${esc(reply)}</div></div>${corr ? `<div class="corr"><b>تصحيح:</b> <span class="en" style="display:inline">${esc(corr)}</span></div>` : ""}</div>`; }).join("")}
+      ${C.msgs.map(m => { if (m.role === "user") return `<div class="msg me en">${esc(m.content)}</div>`; const [reply, corr] = m.content.split(/\n?\s*Correction:\s*/); return `<div class="msg ai en"><div class="row" style="gap:8px;flex-wrap:nowrap;align-items:flex-start">${spk(reply)}<div>${esc(reply)}</div></div>${corr ? `<div class="corr"><b>تصحيح:</b> <span class="en" style="display:inline">${esc(corr)}</span></div>` : ""}${m.via && m.via.provider ? `<div class="tiny muted" dir="ltr" style="text-align:left;opacity:.7">${esc(provName(m.via.provider))}${m.via.ms ? " · " + (m.via.ms / 1000).toFixed(1) + "s" : ""}</div>` : ""}</div>`; }).join("")}
       ${C.busy ? `<div class="msg ai small muted">${C.stream ? esc(C.stream) : "يفكر…"}</div>` : ""}
       ${C.err ? `<div class="fb warn small">${esc(C.err)}</div>` : ""}
     </div>
     ${store.ai ? `${C.msgs.length && !C.busy ? `<div class="row">${micBtn("chat", "اضغط وتكلم")}</div>` : ""}<textarea id="chat-in" class="en" rows="2" dir="ltr" placeholder="Type or dictate your answer…" ${C.busy ? "disabled" : ""}></textarea>
     <div class="row"><button class="btn pri" data-act="chatSend" ${C.busy ? "disabled" : ""}>${C.msgs.length ? "أرسل" : "ابدأ"}</button><span class="tiny num">ردودك: ${C.msgs.filter(m => m.role === "user").length}</span></div>`
-    : `<div class="fb warn">المحادثة تحتاج تفعيل Gemini المجاني (خطوة واحدة). <button class="btn small" data-act="go" data-go="progress#settings">افتح الإعدادات</button></div>`}
+    : `<div class="fb warn">المحادثة تحتاج تفعيل الذكاء الاصطناعي المجاني (خطوة واحدة). <button class="btn small" data-act="go" data-go="progress#settings">افتح الإعدادات</button></div>`}
   </div>`;
 }
 
@@ -1667,13 +1851,14 @@ function render() {
   if (!AUTH && UI.view !== "login") UI.view = "login";
   const views = { login: vLogin, today: vToday, lesson: vLesson, cards: vCards, listen: vListen, progress: vProgress, guide: vGuide, quiz: vQuiz, quizResult: vQuizResult, chat: vChat };
   const keep = document.activeElement && document.activeElement.id;
-  const drill = $("#drill-in") && $("#drill-in").value, wr = $("#write-in") && $("#write-in").value, qi = $("#q-in") && $("#q-in").value, ci = $("#chat-in") && $("#chat-in").value;
+  const drill = $("#drill-in") && $("#drill-in").value, wr = $("#write-in") && $("#write-in").value, qi = $("#q-in") && $("#q-in").value, ci = $("#chat-in") && $("#chat-in").value, ei = $("#err-in") && $("#err-in").value;
   document.getElementById("app").innerHTML = header() + guideBar() + `<main><div class="wrap">${views[UI.view]()}</div></main>` + (["quiz", "quizResult", "chat", "login"].includes(UI.view) ? "" : nav()) + (UI.toast ? `<div class="toast" role="status">${esc(UI.toast)}</div>` : "");
   setSync(store.kind);
   if (drill && $("#drill-in") && !UI.clearDrill) $("#drill-in").value = drill; UI.clearDrill = false;
   if (wr && $("#write-in") && !(UI.write && UI.write.text)) $("#write-in").value = wr;
   if (qi && $("#q-in") && !$("#q-in").disabled && !$("#q-in").value) $("#q-in").value = qi;
   if (ci && $("#chat-in") && !UI.clearChat) $("#chat-in").value = ci; UI.clearChat = false;
+  if (ei && $("#err-in")) $("#err-in").value = ei;
   if (keep && document.getElementById(keep)) { try { document.getElementById(keep).focus({ preventScroll: true }); } catch (e) {} }
   if (UI.view === "chat") { const l = $("#chatlog"); if (l) l.lastElementChild && l.lastElementChild.scrollIntoView({ block: "nearest" }); }
 }
@@ -1712,10 +1897,10 @@ const A = {
   plNext: () => { if (!PL.items.length) return; PL.i = Math.min(PL.i + 1, PL.items.length - 1); if (PL.on) { hush(); plRun(); } else render(); },
   plPrev: () => { if (!PL.items.length) return; PL.i = Math.max(PL.i - 1, 0); if (PL.on) { hush(); plRun(); } else render(); },
   cardDir: b => { S.cardDir = b.dataset.v; save(); },
-  cardStart: () => { const q = dueList().slice(0, 25); UI.card = { q, ok: 0, seen: 0, again: {}, done: false }; UI.flipped = false; render(); if (S.cardDir === "en" && q.length) say(WORDS[q[0]].en); },
+  cardStart: () => { UI.cardSaid = null; const q = dueList().slice(0, 25); UI.card = { q, ok: 0, seen: 0, again: {}, done: false }; UI.flipped = false; render(); if (S.cardDir === "en" && q.length) say(WORDS[q[0]].en); },
   flip: () => { if (!UI.card || UI.card.done) return; UI.flipped = !UI.flipped; render(); if (UI.flipped && S.cardDir === "ar") say(WORDS[UI.card.q[0]].en); },
   cardGrade: b => {
-    const C = UI.card, k = C.q.shift(), ok = b.dataset.ok === "1";
+    const C = UI.card, k = C.q.shift(), ok = b.dataset.ok === "1"; UI.cardSaid = null;
     C.seen++; if (ok) C.ok++;
     grade(k, ok);
     if (!ok && !C.again[k]) { C.again[k] = 1; C.q.push(k); }
@@ -1724,6 +1909,32 @@ const A = {
     save(); if (!C.done && S.cardDir === "en") say(WORDS[C.q[0]].en);
   },
   cardEnd: () => { UI.card.done = true; save(); },
+  exAI: async () => {
+    if (!UI.card || UI.exBusy) return; const w = WORDS[UI.card.q[0]];
+    UI.exBusy = true; render();
+    try { await aiExample(w); } catch (e) { toast(aiErr(e)); }
+    UI.exBusy = false; render();
+  },
+  errStart: () => { UI.errRev = { q: errsDue().slice(0, 15).map(e => e.id), ok: 0, seen: 0, again: {}, show: false, said: null, done: false }; render(); window.scrollTo(0, 0); },
+  errCheck: b => { const R = UI.errRev; if (!R) return; const v = (($("#err-in") || {}).value || "").trim(); R.said = b.dataset.skip || !v ? null : v; R.show = true; render(); },
+  errGrade: b => {
+    const R = UI.errRev, id = R.q.shift(), ok = b.dataset.ok === "1";
+    R.seen++; if (ok) R.ok++;
+    gradeErr(id, ok);
+    if (!ok && !R.again[id]) { R.again[id] = 1; R.q.push(id); }
+    R.show = false; R.said = null; logActivity();
+    if (!R.q.length) { R.done = true; toast("خلصت مراجعة أخطائك: " + R.ok + " من " + R.seen); }
+    save(); window.scrollTo(0, 0);
+  },
+  errEnd: () => { UI.errRev.done = true; save(); },
+  story: async () => {
+    const words = storyWords(); UI.story = { busy: true, words, a: {}, ar: false }; render();
+    try { const R = await aiStory(words); UI.story = { R, words, a: {}, ar: false }; logActivity(); save(false); }
+    catch (e) { UI.story = { err: aiErr(e), words, a: {} }; }
+    render();
+  },
+  stpick: b => { const T = UI.story; if (!T || !T.R) return; T.a[+b.dataset.q] = +b.dataset.i; render(); },
+  stAr: () => { const T = UI.story; if (T) { T.ar = !T.ar; render(); } },
   drillCheck: (b, alts) => {
     const d = +(b ? b.dataset.d : UI.day), P = phrasesOf(d), cur = UI.drill && UI.drill.d === d ? UI.drill : { d, i: 0, wins: 0 };
     const target = P[cur.i % P.length].en;
@@ -1738,6 +1949,8 @@ const A = {
   mic: b => {
     const ctx = b.dataset.ctx;
     if (ctx === "drill") micListen("drill", alts => { if (alts.length) A.drillCheck(null, alts); });
+    else if (ctx === "card") micListen("card", alts => { if (!UI.card || UI.card.done) return; const w = WORDS[UI.card.q[0]], r = bestOf(termOf(w.en), alts); UI.cardSaid = { said: r ? r.said : "", ok: !!r && r.score >= 80 }; UI.flipped = true; render(); say(w.en); });
+    else if (ctx === "err") micListen("err", alts => { if (!alts.length || !UI.errRev) return; const e = (S.errs || []).find(x => x.id === UI.errRev.q[0]); const r = e && bestOf(e.r, alts); const el = $("#err-in"); if (el && r) el.value = r.said; A.errCheck({ dataset: {} }); });
     else if (ctx === "quiz") micListen("quiz", alts => { if (!alts.length) return; const Z = UI.quiz, q = Z.qs[Z.i]; if (Z.answers[Z.i]) return; const r = bestOf(q.target, alts); recordAnswer(r.score >= 80 ? 1 : 0, 1, { said: r.said, score: r.score }); });
     else if (ctx === "chat") micListen("chat", alts => { if (!alts.length) return; const el = $("#chat-in"); if (el) el.value = alts[0]; A.chatSend(); });
   },
@@ -1764,6 +1977,7 @@ const A = {
     try {
       const res = await aiCorrect(task, text);
       UI.write = { d, text, res };
+      (res.mistakes || []).forEach(m => addErr(m.wrong, m.right, m.why_ar, "write"));
       S.journal = (S.journal || []).concat([{ day: d, text, res, at: Date.now() }]).slice(-40);
       markDone(d, "write"); logActivity(); save();
     } catch (e) { UI.write = { d, text, err: aiErr(e) }; render(); }
@@ -1776,7 +1990,7 @@ const A = {
     markDone(d, "write"); logActivity(); save();
   },
   // quiz
-  qpick: b => { const Z = UI.quiz, q = Z.qs[Z.i], i = +b.dataset.i; recordAnswer(i === q.ans ? 1 : 0, 1, { choice: i }); render(); if (q.hidden) say(q.audio); },
+  qpick: b => { const Z = UI.quiz, q = Z.qs[Z.i], i = +b.dataset.i; recordAnswer(i === q.ans ? 1 : 0, 1, { choice: i }); if (i !== q.ans && q.skill === "grammar" && q.main) addErr(q.main.replace("___", q.opts[i]), q.reveal, "", "quiz"); render(); if (q.hidden) say(q.audio); },
   qcheck: () => {
     const Z = UI.quiz, q = Z.qs[Z.i], v = ($("#q-in") || {}).value || "";
     if (!v.trim()) { toast(q.type === "speak" ? "قل الجملة بميكروفون الكيبورد أولاً" : "اكتب ما سمعته أولاً"); return; }
@@ -1791,6 +2005,7 @@ const A = {
       const res = await aiCorrect(q.prompt, text);
       Z.ws = { text, res }; const sc = Math.max(0, Math.min(10, +res.score || 0));
       recordAnswer(Math.round(sc / 10 * q.weight * 10) / 10, q.weight);
+      (res.mistakes || []).forEach(m => addErr(m.wrong, m.right, m.why_ar, "write"));
       S.journal = (S.journal || []).concat([{ day: UI.day, text, res, at: Date.now() }]).slice(-40); save(false);
       render();
     } catch (e) { Z.ws = { text, err: aiErr(e) }; render(); }
@@ -1814,7 +2029,9 @@ const A = {
     if (turns[turns.length - 1].role !== "user") turns.push({ role: "user", text: "(continue)" });
     try {
       const text = await aiText(turns, false);
-      C.msgs.push({ role: "assistant", content: text.trim() });
+      C.msgs.push({ role: "assistant", content: text.trim(), via: store.lastAI });
+      const corr = text.split(/\n?\s*Correction:\s*/)[1];
+      if (v && corr) { const [right, why] = corr.split(/\s+[—–-]\s+/); addErr(v, right.replace(/^["']|["']$/g, ""), why, "chat"); }
       C.busy = false;
       if (C.msgs.filter(m => m.role === "user").length >= 4) markDone(C.day, "chat");
       logActivity(); save(false); render();
@@ -1830,7 +2047,7 @@ const A = {
       UI.loginBusy = false;
       if (!j.ok) { AUTH = null; UI.loginErr = j.error === "auth" ? "الإيميل أو الرمز غير صحيح." : j.error === "locked" ? "محاولات خاطئة كثيرة. الدخول مقفول " + (j.minutes || 30) + " دقيقة للحماية." : "تعذّر الاتصال بالخادم."; render(); return; }
       try { localStorage.setItem(AUTH_K, JSON.stringify(AUTH)); } catch (e) {}
-      store.ai = !!j.ai; UI.view = "today"; render(); toast(j.firstTime ? "تم إنشاء حسابك. احفظ رمزك." : "أهلاً بعودتك"); connect();
+      setAI(j); UI.view = "today"; render(); toast(j.firstTime ? "تم إنشاء حسابك. احفظ رمزك." : "أهلاً بعودتك"); connect();
     } catch (e) { AUTH = null; UI.loginBusy = false; UI.loginErr = "تعذّر الاتصال بالخادم. تأكد من الإنترنت."; render(); }
   },
   guest: () => { UI.view = "today"; render(); },
@@ -1838,15 +2055,29 @@ const A = {
   testMail: async b => { if (!AUTH) return; await flush(); try { const j = await api(b.dataset.k); toast(j.ok ? "أُرسل. راجع بريدك (وقد يصل إلى الرسائل غير المرغوبة)." : "تعذّر الإرسال"); } catch (e) { toast("تعذّر الاتصال"); } },
   aiTest: async () => {
     UI.aiTestBusy = true; UI.aiTest = null; render();
-    try { const j = await api("aiTest"); UI.aiTest = { ok: !!j.ok, lines: j.results ? j.results.map(x => x.model + " → " + (x.code === 200 ? "OK" : x.code + " " + x.msg) + " (" + (x.ms / 1000).toFixed(1) + "s)") : [j.error || "error"] }; }
-    catch (e) { UI.aiTest = { ok: false, lines: [aiErr(e)] }; }
+    try {
+      const j = await api("aiTest");
+      const R = (j.results || []).slice().sort((x, y) => (y.code === 200) - (x.code === 200) || x.ms - y.ms);
+      UI.aiTest = { ok: !!j.ok, lines: R.length ? R.map((x, i) => (x.code === 200 && i === 0 ? "★ " : "") + x.name + (x.model ? " · " + x.model : "") + " → " + (x.code === 200 ? "OK" : x.msg) + " (" + (x.ms / 1000).toFixed(1) + "s)") : [aiErr(j)] };
+    } catch (e) { UI.aiTest = { ok: false, lines: [aiErr(e)] }; }
     UI.aiTestBusy = false; render();
   },
-  saveKey: async () => {
-    const key = (($("#gkey") || {}).value || "").trim(); if (!key) { UI.keyMsg = ["warn", "الصق المفتاح أولاً."]; render(); return; }
-    UI.keyBusy = true; UI.keyMsg = null; render();
-    try { const j = await api("setKey", { key }); store.ai = !!j.ai; UI.keyMsg = j.ok ? (j.warn ? ["warn", "تم حفظ المفتاح، لكن Gemini لم يرد الآن (" + j.warn + "). جرّب بعد دقيقة."] : ["ok", "تم تفعيل Gemini. المحادثة والتصحيح وتحليل النطق جاهزة."]) : ["bad", "المفتاح لم يعمل. تأكد أنك نسخته كاملاً." + (j.detail ? " (" + String(j.detail).slice(0, 160) + ")" : "")]; }
-    catch (e) { UI.keyMsg = ["bad", aiErr(e)]; }
+  saveKey: async b => {
+    const p = b.dataset.p, key = (($("#key-" + p) || {}).value || "").trim();
+    if (!key) { UI.keyMsg = ["warn", "الصق المفتاح أولاً.", p]; render(); return; }
+    UI.keyBusy = p; UI.keyMsg = null; render();
+    try {
+      const j = await api("setKey", { provider: p, key });
+      if (j.ok) setAI(j);
+      UI.keyMsg = j.ok ? (j.warn ? ["warn", "تم حفظ المفتاح، لكن " + provName(p) + " لم يرد الآن (" + j.warn + "). جرّب بعد دقيقة.", p] : ["ok", "تم تفعيل " + provName(p) + (j.model ? " (" + j.model + ")" : "") + ". يعمل الآن مع باقي المزودين كاحتياطي.", p]) : ["bad", "المفتاح لم يعمل. تأكد أنك نسخته كاملاً." + (j.detail ? " (" + String(j.detail).slice(0, 160) + ")" : ""), p];
+    } catch (e) { UI.keyMsg = ["bad", aiErr(e), p]; }
+    UI.keyBusy = false; render();
+  },
+  delKey: async b => {
+    const p = b.dataset.p;
+    UI.keyBusy = p; UI.keyMsg = null; render();
+    try { const j = await api("setKey", { provider: p, key: "" }); if (j.ok) setAI(j); UI.keyMsg = ["info", "تم حذف مفتاح " + provName(p) + ".", p]; }
+    catch (e) { UI.keyMsg = ["bad", aiErr(e), p]; }
     UI.keyBusy = false; render();
   },
   recVoice: () => {
@@ -1890,6 +2121,7 @@ async function uploadVoice(blob, mime) {
 document.addEventListener("change", async e => {
   const t = e.target;
   if (t.dataset && t.dataset.act === "rate") { A.rate(t); return; }
+  if (t.dataset && t.dataset.act === "setPrimary") { try { const j = await api("setPrimary", { provider: t.value }); if (j.ok) { setAI(j); toast("تم الحفظ"); } } catch (e) { toast("تعذّر الحفظ"); } render(); return; }
   if (t.dataset && t.dataset.act === "plOpt") { if (t.id === "pl-ar") UI.plAr = t.checked; if (t.id === "pl-shadow") UI.plShadow = t.checked; if (t.id === "pl-loop") UI.plLoop = t.checked; return; }
   if (t.dataset && t.dataset.act === "setOpt") {
     S.settings = Object.assign({ remind: true, remindHour: 20, report: true }, S.settings);
